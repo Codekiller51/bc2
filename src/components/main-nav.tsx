@@ -29,63 +29,63 @@ export function MainNav() {
             <Link
               to="/"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Home
             </Link>
             <Link
               to="/search"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Find Creatives
             </Link>
             <Link
               to="/blog"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Blog
             </Link>
             <Link
               to="/about"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               About
             </Link>
             <Link
               to="/testimonials"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Testimonials
             </Link>
             <Link
               to="/help"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Help
             </Link>
             <Link
               to="/contact"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Contact
             </Link>
             <Link
               to="/login"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Login
             </Link>
             <Link
               to="/register"
               onClick={() => setIsOpen(false)}
-              className="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="nav-link block"
             >
               Register
             </Link>
@@ -95,43 +95,43 @@ export function MainNav() {
       <nav className="hidden lg:flex gap-6 ml-6">
         <Link
           to="/"
-          className="text-sm font-medium transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+          className="nav-link"
         >
           Home
         </Link>
         <Link
           to="/search"
-          className="text-sm font-medium transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+          className="nav-link"
         >
           Find Creatives
         </Link>
         <Link
           to="/blog"
-          className="text-sm font-medium transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+          className="nav-link"
         >
           Blog
         </Link>
         <Link
           to="/about"
-          className="text-sm font-medium transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+          className="nav-link"
         >
           About
         </Link>
         <Link
           to="/testimonials"
-          className="text-sm font-medium transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+          className="nav-link"
         >
           Testimonials
         </Link>
         <Link
           to="/help"
-          className="text-sm font-medium transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+          className="nav-link"
         >
           Help
         </Link>
         <Link
           to="/contact"
-          className="text-sm font-medium transition-colors hover:text-emerald-600 dark:hover:text-emerald-400"
+          className="nav-link"
         >
           Contact
         </Link>

@@ -25,7 +25,7 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="nav-brand">
       <div className="container flex h-14 items-center">
         <Link to="/" className="flex items-center space-x-2">
           <img
@@ -53,7 +53,7 @@ export function SiteHeader() {
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full touch-target">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user.user_metadata?.avatar_url || "/placeholder-user.jpg"} alt={user.email} />
                       <AvatarFallback>{user.email ? user.email[0].toUpperCase() : 'U'}</AvatarFallback>
@@ -90,7 +90,7 @@ export function SiteHeader() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild>
+              <Button asChild className="btn-primary">
                 <Link to="/login">Sign In</Link>
               </Button>
             )}

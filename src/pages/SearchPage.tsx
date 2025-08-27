@@ -77,17 +77,17 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="container px-4 py-8 md:px-6 md:py-12">
+    <div className="container-brand section-padding">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-4">Find Creative Professionals</h1>
-        <p className="text-gray-500 dark:text-gray-400 mb-6">
+        <h1 className="text-h1 mb-4">Find Creative Professionals</h1>
+        <p className="text-body-lg text-muted-foreground mb-6">
           Discover verified creative talent across Tanzania based on your location and needs
         </p>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
-            <Input 
+            <Input
               placeholder="Search by name, skill, or keyword" 
-              className="w-full"
+              className="form-input w-full"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -209,14 +209,15 @@ export default function SearchPage() {
                   onClick={() => {
                     loadCreatives()
                   }}
+                  className="btn-primary"
                 >
                   Apply Filters
                 </Button>
               </div>
             </SheetContent>
           </Sheet>
-          <Button 
-            className="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+          <Button
+            className="btn-primary w-full md:w-auto"
             onClick={handleSearch}
           >
             <Search className="h-4 w-4 mr-2" />
@@ -248,8 +249,8 @@ export default function SearchPage() {
 
       {!loading && searchResults.length === 0 && (
         <div className="text-center py-12">
-          <h3 className="text-xl font-semibold mb-2">No creatives found</h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+          <h3 className="text-h3 mb-2">No creatives found</h3>
+          <p className="text-body text-muted-foreground mb-4">
             Try adjusting your search criteria or browse all available creatives
           </p>
           <Button
@@ -260,7 +261,7 @@ export default function SearchPage() {
               loadCreatives()
             }}
             variant="outline"
-            className="border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-400 dark:text-emerald-400 dark:hover:bg-emerald-950"
+            className="btn-outline"
           >
             Clear Filters
           </Button>
@@ -289,7 +290,7 @@ export default function SearchPage() {
           <Button
             variant="outline"
             size="sm"
-            className="bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400"
+            className="bg-brand-50 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400"
           >
             1
           </Button>

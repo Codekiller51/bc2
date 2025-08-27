@@ -121,7 +121,7 @@ export function AIChatBot() {
       >
         <Button
           onClick={() => setIsOpen(!isOpen)}
-          className="h-14 w-14 rounded-full bg-emerald-600 hover:bg-emerald-700 shadow-lg"
+          className="h-14 w-14 rounded-full bg-brand-600 hover:bg-brand-700 shadow-brand-lg touch-target"
           size="icon"
         >
           {isOpen ? <X className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
@@ -139,7 +139,7 @@ export function AIChatBot() {
             transition={{ duration: 0.2 }}
           >
             <Card className="shadow-xl border-0">
-              <CardHeader className="bg-emerald-600 text-white rounded-t-lg">
+              <CardHeader className="bg-brand-600 text-white rounded-t-lg">
                 <CardTitle className="flex items-center gap-2">
                   <Bot className="h-5 w-5" />
                   Brand Connect Assistant
@@ -156,7 +156,7 @@ export function AIChatBot() {
                         <div
                           className={`max-w-[80%] rounded-lg p-3 ${
                             message.role === "user"
-                              ? "bg-emerald-600 text-white"
+                              ? "bg-brand-600 text-white"
                               : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           }`}
                         >
@@ -167,7 +167,7 @@ export function AIChatBot() {
                               <p className="text-sm">{message.content}</p>
                               <p
                                 className={`text-xs mt-1 ${
-                                  message.role === "user" ? "text-emerald-100" : "text-gray-500"
+                                  message.role === "user" ? "text-brand-100" : "text-gray-500"
                                 }`}
                               >
                                 {message.timestamp.toLocaleTimeString([], {
@@ -207,7 +207,7 @@ export function AIChatBot() {
                       onClick={sendMessage}
                       disabled={!input.trim() || isLoading}
                       size="icon"
-                      className="bg-emerald-600 hover:bg-emerald-700"
+                      className="btn-primary"
                     >
                       <Send className="h-4 w-4" />
                     </Button>

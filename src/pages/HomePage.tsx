@@ -42,37 +42,35 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950">
-        <div className="container px-4 md:px-6">
+      <section className="hero-section">
+        <div className="container-brand">
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                <h1 className="text-display text-balance">
                   Connect with Tanzania&apos;s Top Creative Talent
                 </h1>
-                <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
+                <p className="max-w-[600px] text-body-lg text-muted-foreground">
                   Find verified graphic designers, photographers, videographers, and digital marketers in your region.
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Link
-                  to="/register"
-                  className="inline-flex h-10 items-center justify-center rounded-md bg-emerald-600 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-700 disabled:pointer-events-none disabled:opacity-50 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus-visible:ring-emerald-600"
-                >
+                <Link to="/register">
+                  <Button className="btn-primary btn-lg w-full sm:w-auto">
                   Join as a Client
+                  </Button>
                 </Link>
-                <Link
-                  to="/register"
-                  className="inline-flex h-10 items-center justify-center rounded-md border border-emerald-600 bg-white px-8 text-sm font-medium text-emerald-600 shadow-sm transition-colors hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-700 disabled:pointer-events-none disabled:opacity-50 dark:border-emerald-600 dark:bg-transparent dark:text-emerald-600 dark:hover:bg-emerald-950 dark:hover:text-emerald-500 dark:focus-visible:ring-emerald-600"
-                >
+                <Link to="/register">
+                  <Button className="btn-outline btn-lg w-full sm:w-auto">
                   Join as a Creative
+                  </Button>
                 </Link>
               </div>
-              <div className="mt-6 bg-white dark:bg-gray-950 p-4 rounded-lg shadow-sm">
+              <div className="mt-6 card-brand">
                 <div className="flex flex-col gap-2">
-                  <div className="text-sm font-medium">Find Creative Talent</div>
+                  <div className="text-body font-medium">Find Creative Talent</div>
                   <div className="grid gap-4 sm:grid-cols-3">
                     <Select defaultValue="service">
                       <SelectTrigger>
@@ -97,7 +95,7 @@ export default function HomePage() {
                         <SelectItem value="mbeya">Mbeya</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Button className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700">
+                    <Button className="btn-primary">
                       <Search className="mr-2 h-4 w-4" />
                       Search
                     </Button>
@@ -119,12 +117,12 @@ export default function HomePage() {
       </section>
 
       {/* Featured Categories */}
-      <section className="w-full py-12 md:py-16 lg:py-20">
-        <div className="container px-4 md:px-6">
+      <section className="section-padding">
+        <div className="container-brand">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Creative Services</h2>
-              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              <h2 className="text-h1 text-balance">Creative Services</h2>
+              <p className="max-w-[900px] text-body-lg text-muted-foreground">
                 Discover top creative professionals across Tanzania in these categories
               </p>
             </div>
@@ -159,41 +157,41 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="w-full py-12 md:py-16 lg:py-20 bg-gray-50 dark:bg-gray-900">
-        <div className="container px-4 md:px-6">
+      <section className="feature-section">
+        <div className="container-brand">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">How It Works</h2>
-              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              <h2 className="text-h1 text-balance">How It Works</h2>
+              <p className="max-w-[900px] text-body-lg text-muted-foreground">
                 Connect with creative professionals in just a few simple steps
               </p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-            <div className="flex flex-col items-center text-center space-y-2 p-6 bg-white dark:bg-gray-950 rounded-lg shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900">
-                <Search className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="card-feature flex flex-col items-center text-center space-y-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900">
+                <Search className="h-6 w-6 text-brand-600 dark:text-brand-400" />
               </div>
-              <h3 className="text-xl font-bold">Search</h3>
-              <p className="text-gray-500 dark:text-gray-400">
+              <h3 className="text-h3">Search</h3>
+              <p className="text-body-sm text-muted-foreground">
                 Find creative professionals based on your location and service needs
               </p>
             </div>
-            <div className="flex flex-col items-center text-center space-y-2 p-6 bg-white dark:bg-gray-950 rounded-lg shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900">
-                <Users className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="card-feature flex flex-col items-center text-center space-y-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900">
+                <Users className="h-6 w-6 text-brand-600 dark:text-brand-400" />
               </div>
-              <h3 className="text-xl font-bold">Connect</h3>
-              <p className="text-gray-500 dark:text-gray-400">
+              <h3 className="text-h3">Connect</h3>
+              <p className="text-body-sm text-muted-foreground">
                 Review portfolios, ratings, and contact verified professionals
               </p>
             </div>
-            <div className="flex flex-col items-center text-center space-y-2 p-6 bg-white dark:bg-gray-950 rounded-lg shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900">
-                <CheckCircle className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="card-feature flex flex-col items-center text-center space-y-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900">
+                <CheckCircle className="h-6 w-6 text-brand-600 dark:text-brand-400" />
               </div>
-              <h3 className="text-xl font-bold">Collaborate</h3>
-              <p className="text-gray-500 dark:text-gray-400">
+              <h3 className="text-h3">Collaborate</h3>
+              <p className="text-body-sm text-muted-foreground">
                 Hire and work with the best creative talent in your region
               </p>
             </div>
@@ -202,12 +200,12 @@ export default function HomePage() {
       </section>
 
       {/* Featured Creatives */}
-      <section className="w-full py-12 md:py-16 lg:py-20">
-        <div className="container px-4 md:px-6">
+      <section className="section-padding">
+        <div className="container-brand">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Featured Creatives</h2>
-              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              <h2 className="text-h1 text-balance">Featured Creatives</h2>
+              <p className="max-w-[900px] text-body-lg text-muted-foreground">
                 Discover top-rated creative professionals across Tanzania
               </p>
             </div>
@@ -237,7 +235,7 @@ export default function HomePage() {
           <div className="flex justify-center mt-8">
             <Link
               to="/search"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-500 dark:hover:text-emerald-400"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-500 dark:hover:text-brand-400 transition-colors"
             >
               View all creatives
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -247,12 +245,12 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="w-full py-12 md:py-16 lg:py-20 bg-gray-50 dark:bg-gray-900">
-        <div className="container px-4 md:px-6">
+      <section className="feature-section">
+        <div className="container-brand">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">What Our Users Say</h2>
-              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              <h2 className="text-h1 text-balance">What Our Users Say</h2>
+              <p className="max-w-[900px] text-body-lg text-muted-foreground">
                 Hear from clients and creative professionals who use Brand Connect
               </p>
             </div>
@@ -260,28 +258,28 @@ export default function HomePage() {
           <div className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+                <div className="text-h1 font-bold text-brand-600 dark:text-brand-400">
                   {stats.totalCreatives}+
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">Creative Professionals</p>
+                <p className="text-body-sm text-muted-foreground">Creative Professionals</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+                <div className="text-h1 font-bold text-brand-600 dark:text-brand-400">
                   {stats.totalProjects}+
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">Successful Projects</p>
+                <p className="text-body-sm text-muted-foreground">Successful Projects</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+                <div className="text-h1 font-bold text-brand-600 dark:text-brand-400">
                   {stats.totalClients}+
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">Happy Clients</p>
+                <p className="text-body-sm text-muted-foreground">Happy Clients</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+                <div className="text-h1 font-bold text-brand-600 dark:text-brand-400">
                   {stats.averageRating}
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">Average Rating</p>
+                <p className="text-body-sm text-muted-foreground">Average Rating</p>
               </div>
             </div>
           </div>
@@ -289,27 +287,25 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="w-full py-12 md:py-16 lg:py-20 bg-emerald-600 dark:bg-emerald-800">
-        <div className="container px-4 md:px-6">
+      <section className="cta-section">
+        <div className="container-brand">
           <div className="flex flex-col items-center justify-center space-y-4 text-center text-white">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Ready to Connect?</h2>
-              <p className="max-w-[900px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <h2 className="text-h1 text-balance">Ready to Connect?</h2>
+              <p className="max-w-[900px] text-body-lg">
                 Join Brand Connect today and discover the best creative talent across Tanzania
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Link
-                to="/register"
-                className="inline-flex h-10 items-center justify-center rounded-md bg-white px-8 text-sm font-medium text-emerald-600 shadow transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white disabled:pointer-events-none disabled:opacity-50"
-              >
+              <Link to="/register">
+                <Button className="bg-white text-brand-600 hover:bg-gray-100 btn-lg">
                 Join as a Client
+                </Button>
               </Link>
-              <Link
-                to="/register"
-                className="inline-flex h-10 items-center justify-center rounded-md border border-white bg-transparent px-8 text-sm font-medium text-white shadow-sm transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white disabled:pointer-events-none disabled:opacity-50"
-              >
+              <Link to="/register">
+                <Button className="border border-white bg-transparent text-white hover:bg-white/10 btn-lg">
                 Join as a Creative
+                </Button>
               </Link>
             </div>
           </div>

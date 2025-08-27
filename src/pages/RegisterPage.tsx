@@ -168,10 +168,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)] py-12">
-      <Card className="mx-auto max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 mobile-padding">
+      <Card className="card-brand mx-auto max-w-md w-full">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Create an Account</CardTitle>
+          <CardTitle className="text-h2 text-center">Create an Account</CardTitle>
           <CardDescription className="text-center">
             Join Brand Connect to find or offer creative services across Tanzania
           </CardDescription>
@@ -201,41 +201,45 @@ export default function RegisterPage() {
             </TabsList>
             <TabsContent value="client" className="space-y-4 pt-4">
               <div className="space-y-2">
-                <Label htmlFor="client-name">Full Name</Label>
-                <Input 
+                <Label htmlFor="client-name" className="form-label">Full Name</Label>
+                <Input
                   id="client-name" 
                   placeholder="Enter your full name"
+                  className="form-input"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="client-email">Email</Label>
-                <Input 
+                <Label htmlFor="client-email" className="form-label">Email</Label>
+                <Input
                   id="client-email" 
                   type="email" 
                   placeholder="Enter your email"
+                  className="form-input"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="client-phone">Phone Number</Label>
-                <Input 
+                <Label htmlFor="client-phone" className="form-label">Phone Number</Label>
+                <Input
                   id="client-phone" 
                   placeholder="Enter your phone number"
+                  className="form-input"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="client-location">Location</Label>
-                <Input 
+                <Label htmlFor="client-location" className="form-label">Location</Label>
+                <Input
                   id="client-location" 
                   placeholder="Enter your city/region"
+                  className="form-input"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   required
@@ -243,13 +247,14 @@ export default function RegisterPage() {
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="client-password">Password</Label>
+                  <Label htmlFor="client-password" className="form-label">Password</Label>
                 </div>
                 <div className="relative">
                   <Input
                     id="client-password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
+                    className="form-input"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
@@ -272,70 +277,75 @@ export default function RegisterPage() {
                   <input
                     type="checkbox"
                     id="terms"
-                    className="h-4 w-4 rounded border-gray-300"
+                    className="h-4 w-4 rounded border-input"
                     checked={formData.acceptedTerms}
                     onChange={(e) => setFormData({ ...formData, acceptedTerms: e.target.checked })}
                     required
                   />
-                  <label htmlFor="terms" className="text-sm text-gray-600">
+                  <label htmlFor="terms" className="text-body-sm text-muted-foreground">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
+                    <Link to="/terms" className="text-brand-600 hover:text-brand-700 hover:underline transition-colors">Terms of Service</Link>
                     {" "}and{" "}
-                    <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+                    <Link to="/privacy" className="text-brand-600 hover:text-brand-700 hover:underline transition-colors">Privacy Policy</Link>
                   </label>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-caption text-muted-foreground">
                   By registering, you agree to receive marketing communications and updates as outlined in our Privacy Policy.
                 </p>
               </div>
             </TabsContent>
             <TabsContent value="creative" className="space-y-4 pt-4">
               <div className="space-y-2">
-                <Label htmlFor="creative-name">Full Name</Label>
-                <Input 
+                <Label htmlFor="creative-name" className="form-label">Full Name</Label>
+                <Input
                   id="creative-name" 
                   placeholder="Enter your full name"
+                  className="form-input"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="creative-email">Email</Label>
-                <Input 
+                <Label htmlFor="creative-email" className="form-label">Email</Label>
+                <Input
                   id="creative-email" 
                   type="email" 
                   placeholder="Enter your email"
+                  className="form-input"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="creative-phone">Phone Number</Label>
-                <Input 
+                <Label htmlFor="creative-phone" className="form-label">Phone Number</Label>
+                <Input
                   id="creative-phone" 
                   placeholder="Enter your phone number"
+                  className="form-input"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="creative-location">Location</Label>
-                <Input 
+                <Label htmlFor="creative-location" className="form-label">Location</Label>
+                <Input
                   id="creative-location" 
                   placeholder="Enter your city/region"
+                  className="form-input"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="creative-profession">Profession</Label>
-                <Input 
+                <Label htmlFor="creative-profession" className="form-label">Profession</Label>
+                <Input
                   id="creative-profession" 
                   placeholder="e.g. Graphic Designer, Photographer"
+                  className="form-input"
                   value={formData.profession}
                   onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
                   required
@@ -343,13 +353,14 @@ export default function RegisterPage() {
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="creative-password">Password</Label>
+                  <Label htmlFor="creative-password" className="form-label">Password</Label>
                 </div>
                 <div className="relative">
                   <Input
                     id="creative-password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
+                    className="form-input"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
@@ -372,19 +383,19 @@ export default function RegisterPage() {
                   <input
                     type="checkbox"
                     id="terms-creative"
-                    className="h-4 w-4 rounded border-gray-300"
+                    className="h-4 w-4 rounded border-input"
                     checked={formData.acceptedTerms}
                     onChange={(e) => setFormData({ ...formData, acceptedTerms: e.target.checked })}
                     required
                   />
-                  <label htmlFor="terms-creative" className="text-sm text-gray-600">
+                  <label htmlFor="terms-creative" className="text-body-sm text-muted-foreground">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
+                    <Link to="/terms" className="text-brand-600 hover:text-brand-700 hover:underline transition-colors">Terms of Service</Link>
                     {" "}and{" "}
-                    <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+                    <Link to="/privacy" className="text-brand-600 hover:text-brand-700 hover:underline transition-colors">Privacy Policy</Link>
                   </label>
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-caption text-muted-foreground">
                   By registering, you agree to receive marketing communications and updates as outlined in our Privacy Policy.
                 </p>
               </div>
@@ -392,18 +403,18 @@ export default function RegisterPage() {
           </Tabs>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button 
+            <Button
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+            className="btn-primary w-full"
             disabled={isLoading}
           >
             {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
-          <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-4 text-center text-body-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+              className="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
             >
               Sign in
             </Link>

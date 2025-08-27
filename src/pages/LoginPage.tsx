@@ -72,10 +72,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)] py-12">
-      <Card className="mx-auto max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 mobile-padding">
+      <Card className="card-brand mx-auto max-w-md w-full">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
+          <CardTitle className="text-h2 text-center">Sign In</CardTitle>
           <CardDescription className="text-center">
             Enter your email and password to access your account
           </CardDescription>
@@ -89,11 +89,12 @@ export default function LoginPage() {
               </Alert>
             )}
             <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input 
+            <Label htmlFor="email" className="form-label">Email</Label>
+            <Input
               id="email" 
               type="email" 
               placeholder="Enter your email"
+              className="form-input"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
@@ -101,19 +102,20 @@ export default function LoginPage() {
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="form-label">Password</Label>
               <Link
                 to="/forgot-password"
-                className="text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+                className="text-body-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
               >
                 Forgot password?
               </Link>
             </div>
             <div className="relative">
-              <Input 
+              <Input
                 id="password" 
                 type={showPassword ? "text" : "password"} 
                 placeholder="Enter your password"
+                className="form-input"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
@@ -131,34 +133,34 @@ export default function LoginPage() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Checkbox 
+            <Checkbox
               id="remember" 
               checked={formData.remember}
               onCheckedChange={(checked) => setFormData({ ...formData, remember: checked as boolean })}
             />
-            <Label htmlFor="remember" className="text-sm font-normal">
+            <Label htmlFor="remember" className="text-body-sm font-normal">
               Remember me
             </Label>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col">
-          <Button 
+          <Button
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+            className="btn-primary w-full"
             disabled={isLoading}
           >
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
-          <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-4 text-center text-body-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
               to="/register"
-              className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+              className="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
             >
               Create an account
             </Link>
           </p>
-</CardFooter>
+        </CardFooter>
         </form>
       </Card>
     </div>
