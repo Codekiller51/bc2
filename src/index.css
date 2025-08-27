@@ -264,7 +264,7 @@
   }
   
   .card-creative {
-    @apply card-interactive overflow-hidden group;
+    @apply card-interactive overflow-hidden;
     @apply bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/30;
     @apply dark:from-gray-900 dark:via-emerald-950/30 dark:to-teal-950/30;
   }
@@ -279,7 +279,7 @@
     @apply card-base p-8 bg-gradient-to-br from-white via-gray-50 to-emerald-50/30;
     @apply dark:from-gray-900 dark:via-gray-800 dark:to-emerald-950/30;
     @apply border-2 border-emerald-200/50 dark:border-emerald-800/50;
-    @apply shadow-2xl hover:shadow-3xl transition-all duration-500;
+    @apply shadow-2xl hover:shadow-brand-xl transition-all duration-500;
   }
 
   /* Form System */
