@@ -32,11 +32,11 @@ export function TestimonialCard({ testimonial, index }: TestimonialCardProps) {
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
     >
-      <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow">
-        <CardContent className="p-6">
+      <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700">
+        <CardContent className="p-6 space-y-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
-              <div className="relative h-12 w-12 rounded-full overflow-hidden mr-4">
+              <div className="relative h-10 w-10 rounded-full overflow-hidden mr-3">
                 <img
                   src={testimonial.image || "/placeholder.svg"}
                   alt={testimonial.name}
@@ -44,13 +44,13 @@ export function TestimonialCard({ testimonial, index }: TestimonialCardProps) {
                 />
               </div>
               <div>
-                <h3 className="font-bold">{testimonial.name}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {testimonial.role}, {testimonial.company}
                 </p>
               </div>
             </div>
-            <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">
+            <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400 text-xs px-2 py-1 rounded-full">
               {testimonial.category}
             </Badge>
           </div>
@@ -65,8 +65,8 @@ export function TestimonialCard({ testimonial, index }: TestimonialCardProps) {
           </div>
 
           <div className="relative mb-4">
-            <Quote className="absolute -top-2 -left-2 h-6 w-6 text-emerald-200 dark:text-emerald-800 rotate-180" />
-            <p className="text-gray-600 dark:text-gray-300 relative z-10 pl-4 line-clamp-4">{testimonial.content}</p>
+            <Quote className="absolute -top-1 -left-1 h-5 w-5 text-emerald-200 dark:text-emerald-800 rotate-180" />
+            <p className="text-gray-600 dark:text-gray-300 relative z-10 pl-3 text-sm leading-relaxed">{testimonial.content}</p>
           </div>
 
           <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
@@ -74,14 +74,14 @@ export function TestimonialCard({ testimonial, index }: TestimonialCardProps) {
             <span>{testimonial.location}</span>
           </div>
         </CardContent>
-        <CardFooter className="p-6 pt-0 flex justify-between">
+        <CardFooter className="p-6 pt-0 flex justify-between gap-2">
           <Button variant="ghost" size="sm" className="text-emerald-600 dark:text-emerald-400">
             Read Full Story
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="flex items-center gap-1 border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-400 dark:text-emerald-400 dark:hover:bg-emerald-950"
+            className="flex items-center gap-1 border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-400 dark:text-emerald-400 dark:hover:bg-emerald-950 rounded-md"
           >
             <Play className="h-3 w-3" />
             Watch Video

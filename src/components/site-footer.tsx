@@ -11,30 +11,35 @@ export function SiteFooter() {
   }
 
   return (
-    <footer className="relative bg-gray-900 text-white overflow-hidden">
+    <footer className="relative bg-gray-900 text-white overflow-hidden mt-auto">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-dot-pattern opacity-10" />
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.1) 2px, transparent 0), radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.1) 2px, transparent 0)',
+          backgroundSize: '100px 100px'
+        }} />
+      </div>
       
-      <div className="container-brand relative z-10">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
         {/* Newsletter Section */}
         <motion.div 
-          className="py-16 border-b border-gray-800"
+          className="py-12 md:py-16 border-b border-gray-800"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
           <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-h3 mb-4">Stay Updated</h3>
-            <p className="text-body-lg text-gray-300 mb-8">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">Stay Updated</h3>
+            <p className="text-lg text-gray-300 mb-6 md:mb-8">
               Get the latest updates on new creative professionals, success stories, and platform features
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <Input 
                 placeholder="Enter your email" 
-                className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-brand-400"
+                className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-emerald-400 focus:ring-emerald-400/20 rounded-lg"
               />
-              <Button className="bg-brand-600 hover:bg-brand-700 text-white font-semibold">
+              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
                 Subscribe
               </Button>
             </div>
@@ -42,7 +47,7 @@ export function SiteFooter() {
         </motion.div>
         
         {/* Main Footer Content */}
-        <div className="py-16">
+        <div className="py-12 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
             {/* Brand Section */}
             <motion.div 
@@ -53,7 +58,7 @@ export function SiteFooter() {
               viewport={{ once: true }}
             >
               <Link to="/" className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-xl">BC</span>
                 </div>
                 <div>
@@ -79,7 +84,7 @@ export function SiteFooter() {
                     href={social.href}
                     whileHover={{ scale: 1.1, y: -2 }}
                     transition={{ duration: 0.2 }}
-                    className="w-10 h-10 bg-white/10 hover:bg-brand-600 rounded-xl flex items-center justify-center transition-colors duration-300"
+                    className="w-10 h-10 bg-white/10 hover:bg-emerald-600 rounded-lg flex items-center justify-center transition-colors duration-300"
                   >
                     <social.icon className="h-5 w-5" />
                     <span className="sr-only">{social.label}</span>
@@ -96,7 +101,7 @@ export function SiteFooter() {
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
             >
-              <h4 className="text-lg font-semibold text-white">For Clients</h4>
+              <h4 className="text-lg font-semibold text-white mb-4">For Clients</h4>
               <nav className="flex flex-col space-y-3">
                 {[
                   { href: "/search", label: "Find Creatives" },
@@ -108,7 +113,7 @@ export function SiteFooter() {
                   <Link 
                     key={link.href}
                     to={link.href} 
-                    className="text-gray-300 hover:text-brand-400 transition-colors duration-300 text-sm"
+                    className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 text-sm hover:underline"
                   >
                     {link.label}
                   </Link>
@@ -124,7 +129,7 @@ export function SiteFooter() {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <h4 className="text-lg font-semibold text-white">For Creatives</h4>
+              <h4 className="text-lg font-semibold text-white mb-4">For Creatives</h4>
               <nav className="flex flex-col space-y-3">
                 {[
                   { href: "/register", label: "Join as Creative" },
@@ -136,7 +141,7 @@ export function SiteFooter() {
                   <Link 
                     key={link.href}
                     to={link.href} 
-                    className="text-gray-300 hover:text-brand-400 transition-colors duration-300 text-sm"
+                    className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 text-sm hover:underline"
                   >
                     {link.label}
                   </Link>
@@ -152,7 +157,7 @@ export function SiteFooter() {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              <h4 className="text-lg font-semibold text-white">Company</h4>
+              <h4 className="text-lg font-semibold text-white mb-4">Company</h4>
               <nav className="flex flex-col space-y-3">
                 {[
                   { href: "/about", label: "About Us" },
@@ -164,7 +169,7 @@ export function SiteFooter() {
                   <Link 
                     key={link.href}
                     to={link.href} 
-                    className="text-gray-300 hover:text-brand-400 transition-colors duration-300 text-sm"
+                    className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 text-sm hover:underline"
                   >
                     {link.label}
                   </Link>
@@ -174,15 +179,15 @@ export function SiteFooter() {
               {/* Contact Info */}
               <div className="space-y-3 pt-4">
                 <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <Mail className="w-4 h-4 text-brand-400" />
+                  <Mail className="w-4 h-4 text-emerald-400" />
                   <span>hello@brandconnect.co.tz</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <Phone className="w-4 h-4 text-brand-400" />
+                  <Phone className="w-4 h-4 text-emerald-400" />
                   <span>+255 123 456 789</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <MapPin className="w-4 h-4 text-brand-400" />
+                  <MapPin className="w-4 h-4 text-emerald-400" />
                   <span>Dar es Salaam, Tanzania</span>
                 </div>
               </div>
@@ -192,7 +197,7 @@ export function SiteFooter() {
         
         {/* Bottom Bar */}
         <motion.div 
-          className="border-t border-gray-800 py-8"
+          className="border-t border-gray-800 py-6 md:py-8"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
@@ -208,7 +213,7 @@ export function SiteFooter() {
                 <Link to="/terms" className="hover:text-brand-400 transition-colors">
                   Terms of Service
                 </Link>
-                <Link to="/cookies" className="hover:text-brand-400 transition-colors">
+                <Link to="/cookies" className="hover:text-emerald-400 transition-colors hover:underline">
                   Cookie Policy
                 </Link>
               </div>
@@ -221,9 +226,9 @@ export function SiteFooter() {
               
               <Button
                 onClick={scrollToTop}
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full"
+                variant="outline"
+                size="icon"
+                className="text-gray-400 hover:text-white hover:bg-white/10 border-gray-600 hover:border-gray-500 rounded-full w-8 h-8"
               >
                 <ArrowUp className="w-4 h-4" />
               </Button>

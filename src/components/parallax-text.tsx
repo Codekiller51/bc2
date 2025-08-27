@@ -15,9 +15,10 @@ import { wrap } from "@motionone/utils"
 interface ParallaxProps {
   children: string
   baseVelocity: number
+  className?: string
 }
 
-export function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
+export function ParallaxText({ children, baseVelocity = 100, className = "" }: ParallaxProps) {
   const baseX = useMotionValue(0)
   const { scrollY } = useScroll()
   const scrollVelocity = useVelocity(scrollY)
@@ -63,8 +64,8 @@ export function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
    * dynamically generated number of children.
    */
   return (
-    <div className="overflow-hidden whitespace-nowrap flex flex-nowrap">
-      <motion.div className="text-xl font-medium flex whitespace-nowrap flex-nowrap" style={{ x }}>
+    <div className={`overflow-hidden whitespace-nowrap flex flex-nowrap ${className}`}>
+      <motion.div className="text-xl font-semibold flex whitespace-nowrap flex-nowrap text-white" style={{ x }}>
         <span className="block mr-6">{children} </span>
         <span className="block mr-6">{children} </span>
         <span className="block mr-6">{children} </span>

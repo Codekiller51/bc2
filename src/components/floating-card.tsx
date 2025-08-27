@@ -12,7 +12,7 @@ interface FloatingCardProps {
 export function FloatingCard({ children, delay = 0, className = "" }: FloatingCardProps) {
   return (
     <motion.div
-      className={className}
+      className={`${className} relative z-10`}
       initial={{ opacity: 0, y: 20 }}
       animate={{
         opacity: 1,
@@ -36,6 +36,7 @@ export function FloatingCard({ children, delay = 0, className = "" }: FloatingCa
             ease: "easeInOut",
           },
         }}
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
       >
         {children}
       </motion.div>

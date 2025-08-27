@@ -13,20 +13,20 @@ export function InteractiveMap() {
   ]
 
   return (
-    <div className="relative w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900 to-teal-900 rounded-2xl overflow-hidden">
+    <div className="relative w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/50 dark:to-teal-900/50 rounded-2xl overflow-hidden border border-emerald-200 dark:border-emerald-800">
       {/* Tanzania outline (simplified) */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-20"
+        className="absolute inset-0 w-full h-full opacity-30"
         viewBox="0 0 400 400"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
           d="M50 100 L350 100 L350 300 L200 350 L50 300 Z"
-          stroke="currentColor"
+          stroke="#059669"
           strokeWidth="2"
-          fill="currentColor"
-          opacity="0.1"
+          fill="#059669"
+          opacity="0.05"
         />
       </svg>
 
@@ -43,7 +43,7 @@ export function InteractiveMap() {
         >
           <div className="relative group">
             <motion.div
-              className="w-6 h-6 bg-emerald-600 rounded-full flex items-center justify-center shadow-lg"
+              className="w-6 h-6 bg-emerald-600 rounded-full flex items-center justify-center shadow-lg border-2 border-white"
               animate={{
                 scale: [1, 1.2, 1],
                 transition: {
@@ -57,7 +57,7 @@ export function InteractiveMap() {
             </motion.div>
 
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
               {location.name}
             </div>
           </div>
@@ -72,7 +72,7 @@ export function InteractiveMap() {
             cx={location.x}
             cy={location.y}
             r="0"
-            fill="rgba(16, 185, 129, 0.3)"
+            fill="rgba(16, 185, 129, 0.2)"
             initial={{ r: 0 }}
             animate={{
               r: [0, 30, 0],

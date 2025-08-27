@@ -32,20 +32,20 @@ export function SiteHeader() {
     switch (role) {
       case 'admin':
         return (
-          <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+          <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-xs font-bold">
             <Crown className="w-3 h-3 mr-1" />
             Admin
           </Badge>
         )
       case 'creative':
         return (
-          <Badge className="bg-gradient-to-r from-brand-500 to-teal-500 text-white border-0">
+          <Badge className="bg-gradient-to-r from-brand-500 to-teal-500 text-white border-0 text-xs font-bold">
             Creative
           </Badge>
         )
       default:
         return (
-          <Badge className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0">
+          <Badge className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 text-xs font-bold">
             Client
           </Badge>
         )
@@ -54,12 +54,12 @@ export function SiteHeader() {
 
   return (
     <motion.header 
-      className="nav-brand border-b border-gray-200/50 dark:border-gray-700/50"
+      className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-gray-200/50 dark:border-gray-700/50 shadow-sm"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="container-brand flex h-18 items-center justify-between">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3 group">
           <motion.div
@@ -67,16 +67,16 @@ export function SiteHeader() {
             transition={{ duration: 0.2 }}
             className="relative"
           >
-            <div className="w-12 h-12 bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-              <span className="text-white font-bold text-xl">BC</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+              <span className="text-white font-bold text-lg">BC</span>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-400 to-brand-500 rounded-2xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity" />
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300" />
           </motion.div>
           <div className="hidden sm:block">
-            <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-brand-800 bg-clip-text text-transparent dark:from-white dark:to-brand-200">
+            <span className="text-lg font-bold bg-gradient-to-r from-gray-900 to-emerald-800 bg-clip-text text-transparent dark:from-white dark:to-emerald-200">
               Brand Connect
             </span>
-            <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+            <div className="text-xs text-gray-500 dark:text-gray-400 font-normal">
               Creative Marketplace
             </div>
           </div>
@@ -97,32 +97,32 @@ export function SiteHeader() {
           )}
           
           {loading ? (
-            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
           ) : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-12 w-12 rounded-full border-2 border-transparent hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-300">
-                  <Avatar className="h-10 w-10">
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full border-2 border-transparent hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-300">
+                  <Avatar className="h-8 w-8">
                     <AvatarImage 
                       src={user.avatar_url || "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100"} 
                       alt={user.name} 
                     />
-                    <AvatarFallback className="bg-brand-100 dark:bg-brand-900 text-brand-700 dark:text-brand-300 font-semibold">
+                    <AvatarFallback className="bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 font-semibold text-sm">
                       {user.name ? user.name[0].toUpperCase() : 'U'}
                     </AvatarFallback>
                   </Avatar>
                   
                   {/* Online Status Indicator */}
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full" />
                 </Button>
               </DropdownMenuTrigger>
               
-              <DropdownMenuContent className="w-80 p-4" align="end" forceMount>
+              <DropdownMenuContent className="w-72 p-3" align="end" forceMount>
                 {/* User Info Header */}
-                <div className="flex items-center gap-4 mb-4 p-3 bg-gradient-to-r from-brand-50 to-teal-50 dark:from-brand-950 dark:to-teal-950 rounded-xl">
-                  <Avatar className="h-12 w-12">
+                <div className="flex items-center gap-3 mb-3 p-3 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 rounded-lg">
+                  <Avatar className="h-10 w-10">
                     <AvatarImage src={user.avatar_url} alt={user.name} />
-                    <AvatarFallback className="bg-brand-100 dark:bg-brand-900 text-brand-700 dark:text-brand-300 font-semibold">
+                    <AvatarFallback className="bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 font-semibold">
                       {user.name ? user.name[0].toUpperCase() : 'U'}
                     </AvatarFallback>
                   </Avatar>
@@ -150,49 +150,49 @@ export function SiteHeader() {
                         user.role === 'creative' ? '/dashboard/creative' :
                         '/dashboard'
                       }
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-950 transition-colors"
+                      className="flex items-center gap-3 p-2 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors cursor-pointer"
                     >
-                      <div className="w-8 h-8 bg-brand-100 dark:bg-brand-900 rounded-lg flex items-center justify-center">
-                        <User className="w-4 h-4 text-brand-600 dark:text-brand-400" />
+                      <div className="w-6 h-6 bg-emerald-100 dark:bg-emerald-900 rounded-md flex items-center justify-center">
+                        <User className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       </div>
-                      <span className="font-medium">Dashboard</span>
+                      <span className="text-sm font-medium">Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
                   
                   <DropdownMenuItem asChild>
                     <Link 
                       to="/profile"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-950 transition-colors"
+                      className="flex items-center gap-3 p-2 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors cursor-pointer"
                     >
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                        <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-md flex items-center justify-center">
+                        <User className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                       </div>
-                      <span className="font-medium">My Profile</span>
+                      <span className="text-sm font-medium">My Profile</span>
                     </Link>
                   </DropdownMenuItem>
                   
                   <DropdownMenuItem asChild>
                     <Link 
                       to="/chat"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-950 transition-colors"
+                      className="flex items-center gap-3 p-2 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors cursor-pointer"
                     >
-                      <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                        <MessageSquare className="w-4 h-4 text-green-600 dark:text-green-400" />
+                      <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-md flex items-center justify-center">
+                        <MessageSquare className="w-3 h-3 text-green-600 dark:text-green-400" />
                       </div>
-                      <span className="font-medium">Messages</span>
-                      <Badge className="ml-auto bg-green-500 text-white text-xs">3</Badge>
+                      <span className="text-sm font-medium">Messages</span>
+                      <Badge className="ml-auto bg-green-500 text-white text-xs px-1.5 py-0.5">3</Badge>
                     </Link>
                   </DropdownMenuItem>
                   
                   <DropdownMenuItem asChild>
                     <Link 
                       to="/profile/edit"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-950 transition-colors"
+                      className="flex items-center gap-3 p-2 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors cursor-pointer"
                     >
-                      <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                        <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      <div className="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
+                        <Settings className="w-3 h-3 text-gray-600 dark:text-gray-400" />
                       </div>
-                      <span className="font-medium">Settings</span>
+                      <span className="text-sm font-medium">Settings</span>
                     </Link>
                   </DropdownMenuItem>
                 </div>
@@ -202,24 +202,24 @@ export function SiteHeader() {
                 {/* Logout */}
                 <DropdownMenuItem 
                   onClick={handleSignOut}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-950 text-red-600 dark:text-red-400 transition-colors cursor-pointer"
+                  className="flex items-center gap-3 p-2 rounded-md hover:bg-red-50 dark:hover:bg-red-950 text-red-600 dark:text-red-400 transition-colors cursor-pointer"
                 >
-                  <div className="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
-                    <LogOut className="w-4 h-4" />
+                  <div className="w-6 h-6 bg-red-100 dark:bg-red-900 rounded-md flex items-center justify-center">
+                    <LogOut className="w-3 h-3" />
                   </div>
-                  <span className="font-medium">Sign Out</span>
+                  <span className="text-sm font-medium">Sign Out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-3">
               <Link to="/login">
-                <Button variant="ghost" className="font-medium">
+                <Button variant="ghost" className="font-medium text-sm">
                   Sign In
                 </Button>
               </Link>
               <Link to="/register">
-                <Button className="professional-button">
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                   Get Started
                 </Button>
               </Link>
