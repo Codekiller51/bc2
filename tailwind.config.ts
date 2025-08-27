@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss"
+import tailwindcssAnimate from "tailwindcss-animate"
 
 const config = {
   darkMode: ["class"],
@@ -7,6 +8,7 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+    "./styles/**/*.{css}",
     "*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
@@ -206,7 +208,7 @@ const config = {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
+    tailwindcssAnimate,
     function({ addUtilities }: any) {
       const newUtilities = {
         '.text-balance': {
