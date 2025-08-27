@@ -141,3 +141,15 @@ html {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #059669;
 }
+
+/* Additional utilities from globals.css */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Font family override */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
