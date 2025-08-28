@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/components/enhanced-auth-provider'
 import { InlineLoading } from '@/components/ui/global-loading'
+import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
+import { formatRelativeTime } from '@/lib/utils/format'
 
 export default function DashboardMessagesPage() {
   const { user } = useAuth()
@@ -24,57 +26,38 @@ export default function DashboardMessagesPage() {
   }, [user])
 
   const loadConversations = async () => {
+    if (!user) return
+
     try {
       setLoading(true)
-      // Mock data for now - replace with actual API call
-      const mockConversations = [
-        {
-          id: 1,
+      const userConversations = await UnifiedDatabaseService.getConversations(user.id)
+      
+      // Transform the data to match the expected format
+      const transformedConversations = userConversations.map(conv => {
+        const otherUser = conv.client_id === user.id ? conv.creative : conv.client
+        return {
+          id: conv.id,
           participant: {
-            name: 'Sarah Johnson',
-            avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
-            status: 'online'
+            name: otherUser?.name || 'Unknown User',
+            avatar: otherUser?.avatar_url || 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
+            status: 'online' // TODO: Implement real online status
           },
           lastMessage: {
-            content: 'Thanks for the amazing logo design! When can we schedule the next project?',
-            timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-            isRead: false
+            content: 'Start a conversation...', // TODO: Get actual last message
+            timestamp: new Date(conv.last_message_at),
+            isRead: true // TODO: Implement read status
           },
-          unreadCount: 2
-        },
-        {
-          id: 2,
-          participant: {
-            name: 'Michael Chen',
-            avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
-            status: 'offline'
-          },
-          lastMessage: {
-            content: 'The photography session was perfect. Here are the final edited photos.',
-            timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-            isRead: true
-          },
-          unreadCount: 0
+          unreadCount: 0 // TODO: Calculate actual unread count
         }
-      ]
-      setConversations(mockConversations)
+      })
+      
+      setConversations(transformedConversations)
     } catch (error) {
       console.error('Failed to load conversations:', error)
+      // Fallback to empty array on error
+      setConversations([])
     } finally {
       setLoading(false)
-    }
-  }
-
-  const formatTime = (date: Date) => {
-    const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-    
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes}m ago`
-    } else if (diffInMinutes < 1440) {
-      return `${Math.floor(diffInMinutes / 60)}h ago`
-    } else {
-      return date.toLocaleDateString()
     }
   }
 
@@ -164,7 +147,7 @@ export default function DashboardMessagesPage() {
                               {conversation.participant.name}
                             </h4>
                             <span className="text-xs text-gray-500">
-                              {formatTime(conversation.lastMessage.timestamp)}
+                              {formatRelativeTime(conversation.lastMessage.timestamp)}
                             </span>
                           </div>
                           <div className="flex items-center justify-between">
@@ -219,7 +202,7 @@ export default function DashboardMessagesPage() {
                       <div className="max-w-xs lg:max-w-md px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                         <p className="text-sm">{selectedConversation.lastMessage.content}</p>
                         <span className="text-xs text-gray-500 mt-1 block">
-                          {formatTime(selectedConversation.lastMessage.timestamp)}
+                          {formatRelativeTime(selectedConversation.lastMessage.timestamp)}
                         </span>
                       </div>
                     </div>

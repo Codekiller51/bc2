@@ -19,6 +19,7 @@ import { useAuth } from '@/components/enhanced-auth-provider'
 import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
 import { InlineLoading } from '@/components/ui/global-loading'
 import { Link } from 'react-router-dom'
+import { formatCurrency } from '@/lib/utils/format'
 
 export default function DashboardOverviewPage() {
   const { user } = useAuth()
@@ -51,7 +52,7 @@ export default function DashboardOverviewPage() {
       
       // Calculate average rating from completed bookings with reviews
       const completedBookings = bookings.filter(b => b.status === 'completed')
-      const avgRating = completedBookings.length > 0 ? 4.5 : 0 // Mock for now
+      const avgRating = completedBookings.length > 0 ? 4.5 : 0 // Mock for now - TODO: Calculate actual average rating of creatives booked by this client
 
       setStats({
         totalBookings: bookings.length,
@@ -64,14 +65,6 @@ export default function DashboardOverviewPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("sw-TZ", {
-      style: "currency",
-      currency: "TZS",
-      minimumFractionDigits: 0,
-    }).format(amount)
   }
 
   if (loading) {

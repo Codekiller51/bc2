@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Clock, User, MapPin, DollarSign, Filter, Search } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -10,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuth } from '@/components/enhanced-auth-provider'
 import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
 import { InlineLoading } from '@/components/ui/global-loading'
+import { formatCurrency } from '@/lib/utils/format'
 
 export default function DashboardBookingsPage() {
   const { user } = useAuth()
@@ -47,14 +49,6 @@ export default function DashboardBookingsPage() {
       case 'cancelled': return 'bg-red-100 text-red-800'
       default: return 'bg-gray-100 text-gray-800'
     }
-  }
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("sw-TZ", {
-      style: "currency",
-      currency: "TZS",
-      minimumFractionDigits: 0,
-    }).format(amount)
   }
 
   if (loading) {
@@ -123,9 +117,11 @@ export default function DashboardBookingsPage() {
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Start exploring creative professionals and book your first service
               </p>
-              <Button className="btn-primary">
-                Browse Creatives
-              </Button>
+              <Link to="/search">
+                <Button className="btn-primary">
+                  Browse Creatives
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         ) : (
@@ -152,7 +148,7 @@ export default function DashboardBookingsPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400">
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4" />
-                          <span>{booking.creative_name}</span>
+                          <span>{booking.creative?.title || 'Creative Professional'}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
@@ -160,7 +156,7 @@ export default function DashboardBookingsPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="h-4 w-4" />
-                          <span>{booking.booking_time}</span>
+                          <span>{booking.start_time} - {booking.end_time}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <DollarSign className="h-4 w-4" />
