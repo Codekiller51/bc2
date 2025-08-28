@@ -21,7 +21,7 @@ const dayNames = [
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday",
+import { AvailabilityCalendar } from '@/components/availability-calendar'
 ]
 
 export function AvailabilitySettings({ creativeId }: AvailabilitySettingsProps) {
@@ -124,7 +124,7 @@ export function AvailabilitySettings({ creativeId }: AvailabilitySettingsProps) 
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
             Availability Settings
-          </CardTitle>
+        <AvailabilityCalendar creativeId={profile.id} />
         </CardHeader>
         <CardContent>
           <div className="space-y-6">

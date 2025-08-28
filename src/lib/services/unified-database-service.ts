@@ -1023,6 +1023,205 @@ export class UnifiedDatabaseService {
   }
 
   // =============================================
+  // SERVICE MANAGEMENT
+  // =============================================
+
+  static async createService(serviceData: {
+    creative_id: string
+    name: string
+    description?: string
+    price: number
+    duration: number
+    category?: string
+    active?: boolean
+  }): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('services')
+        .insert(serviceData)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async updateService(
+    serviceId: string,
+    updates: {
+      name?: string
+      description?: string
+      price?: number
+      duration?: number
+      category?: string
+      active?: boolean
+    }
+  ): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('services')
+        .update(updates)
+        .eq('id', serviceId)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async deleteService(serviceId: string): Promise<void> {
+    try {
+      const { error } = await this.supabase
+        .from('services')
+        .delete()
+        .eq('id', serviceId)
+
+      if (error) throw error
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async getServices(creativeId: string): Promise<any[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from('services')
+        .select('*')
+        .eq('creative_id', creativeId)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  // =============================================
+  // AVAILABILITY MANAGEMENT
+  // =============================================
+
+  static async getCreativeAvailability(creativeId: string): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('creative_availability')
+        .select('*')
+        .eq('creative_id', creativeId)
+        .maybeSingle()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async updateCreativeAvailability(
+    creativeId: string,
+    availabilityData: {
+      recurring_availability: Record<string, any>
+      buffer_time: number
+    }
+  ): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('creative_availability')
+        .upsert({
+          creative_id: creativeId,
+          ...availabilityData,
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  // =============================================
+  // ADMIN FUNCTIONS
+  // =============================================
+
+  static async approveCreativeProfile(profileId: string, adminId: string): Promise<void> {
+    try {
+      const { error } = await this.supabase
+        .from('creative_profiles')
+        .update({
+          approval_status: 'approved',
+          approved_by: adminId,
+          approved_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', profileId)
+
+      if (error) throw error
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async rejectCreativeProfile(profileId: string, adminId: string): Promise<void> {
+    try {
+      const { error } = await this.supabase
+        .from('creative_profiles')
+        .update({
+          approval_status: 'rejected',
+          approved_by: adminId,
+          approved_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', profileId)
+
+      if (error) throw error
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async getPlatformAnalytics(dateRange?: { from: string; to: string }) {
+    try {
+      let bookingsQuery = this.supabase.from('bookings').select('*')
+      let creativesQuery = this.supabase.from('creative_profiles').select('*')
+      let clientsQuery = this.supabase.from('client_profiles').select('*')
+
+      if (dateRange) {
+        bookingsQuery = bookingsQuery.gte('created_at', dateRange.from).lte('created_at', dateRange.to)
+        creativesQuery = creativesQuery.gte('created_at', dateRange.from).lte('created_at', dateRange.to)
+        clientsQuery = clientsQuery.gte('created_at', dateRange.from).lte('created_at', dateRange.to)
+      }
+
+      const [bookingsResult, creativesResult, clientsResult] = await Promise.all([
+        bookingsQuery,
+        creativesQuery,
+        clientsQuery
+      ])
+
+      const totalRevenue = bookingsResult.data
+        ?.filter(b => b.status === 'completed')
+        .reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0
+
+      return {
+        totalBookings: bookingsResult.data?.length || 0,
+        totalCreatives: creativesResult.data?.length || 0,
+        totalClients: clientsResult.data?.length || 0,
+        totalRevenue,
+        completedBookings: bookingsResult.data?.filter(b => b.status === 'completed').length || 0,
+        pendingApprovals: creativesResult.data?.filter(c => c.approval_status === 'pending').length || 0
+      }
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+  // =============================================
   // UTILITY METHODS
   // =============================================
 
