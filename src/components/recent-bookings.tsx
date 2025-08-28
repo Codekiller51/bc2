@@ -17,7 +17,6 @@ export function RecentBookings() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (user) {
@@ -90,8 +89,6 @@ export function RecentBookings() {
   return (
     <div className="space-y-4">
       {bookings.map((booking, index) => (
-        const otherUser = booking.client_id === user?.id ? booking.creative : booking.client
-        
         <motion.div
           key={booking.id}
           initial={{ opacity: 0, y: 20 }}
@@ -99,18 +96,22 @@ export function RecentBookings() {
           transition={{ duration: 0.3, delay: index * 0.1 }}
           className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
         >
+          {(() => {
+            const otherUser = booking.client_id === user?.id ? booking.creative : booking.client
+            return (
+              <>
           <div className="flex items-center gap-3">
-                <AvatarImage 
-                  src={otherUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${otherUser?.full_name || otherUser?.title || 'User'}&backgroundColor=059669&textColor=ffffff`} 
-                  alt={otherUser?.full_name || otherUser?.title || "User"} 
-                />
-              <AvatarImage src={booking.client?.avatar_url || "/placeholder.svg"} alt={booking.client?.name} />
+            <Avatar>
+              <AvatarImage 
+                src={otherUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${otherUser?.full_name || otherUser?.title || 'User'}&backgroundColor=059669&textColor=ffffff`} 
+                alt={otherUser?.full_name || otherUser?.title || "User"} 
+              />
               <AvatarFallback>
                 <User className="h-4 w-4" />
               </AvatarFallback>
             </Avatar>
-                <p className="font-medium">{otherUser?.full_name || otherUser?.title || "Unknown User"}</p>
-              <p className="font-medium">{booking.client?.name || "Unknown Client"}</p>
+            <div>
+              <p className="font-medium">{otherUser?.full_name || otherUser?.title || "Unknown User"}</p>
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                 <Calendar className="h-3 w-3" />
                 <span>{new Date(booking.booking_date).toLocaleDateString()}</span>
@@ -123,9 +124,9 @@ export function RecentBookings() {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                <DollarSign className="h-4 w-4" />
+                <span className="font-semibold">
                     {formatCurrency(booking.total_amount || 0)}
-                    minimumFractionDigits: 0,
-                  }).format(booking.total_amount)}
                 </span>
               </div>
               <Badge className={getStatusColor(booking.status)}>{booking.status}</Badge>
@@ -134,6 +135,9 @@ export function RecentBookings() {
               <Eye className="h-4 w-4" />
             </Button>
           </div>
+              </>
+            )
+          })()}
         </motion.div>
       ))}
 
