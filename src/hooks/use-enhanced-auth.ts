@@ -217,12 +217,12 @@ export function useEnhancedAuth() {
     if (!user) return false
     
     // Check if essential profile information is present
-    const hasBasicInfo = user.name && user.phone && user.location
+    const hasBasicInfo = user.name && user.location
     
     // For creative users, also check if they have professional details
     if (user.role === 'creative') {
-      // This would be checked when we implement creative dashboard
-      return hasBasicInfo
+      // For creatives, we need approval status to be approved as well
+      return hasBasicInfo && user.approved
     }
     
     // For clients, basic info is sufficient

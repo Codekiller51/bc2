@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { MessageSquare, Search, User, Clock, Send } from 'lucide-react'
+import { MessageSquare, Search, User, Clock, Send, AlertTriangle } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ export default function DashboardMessagesPage() {
   const { user } = useAuth()
   const [conversations, setConversations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedConversation, setSelectedConversation] = useState(null)
 
@@ -30,6 +31,7 @@ export default function DashboardMessagesPage() {
 
     try {
       setLoading(true)
+      setError(null)
       const userConversations = await UnifiedDatabaseService.getConversations(user.id)
       
       // Transform the data to match the expected format
@@ -38,8 +40,8 @@ export default function DashboardMessagesPage() {
         return {
           id: conv.id,
           participant: {
-            name: otherUser?.name || 'Unknown User',
-            avatar: otherUser?.avatar_url || 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
+            name: otherUser?.full_name || otherUser?.title || 'Unknown User',
+            avatar: otherUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${otherUser?.full_name || 'User'}&backgroundColor=059669&textColor=ffffff`,
             status: 'online' // TODO: Implement real online status
           },
           lastMessage: {
@@ -54,18 +56,36 @@ export default function DashboardMessagesPage() {
       setConversations(transformedConversations)
     } catch (error) {
       console.error('Failed to load conversations:', error)
-      // Fallback to empty array on error
-      setConversations([])
+      setError('Failed to load conversations. Please try again.')
     } finally {
       setLoading(false)
     }
   }
+
+  const filteredConversations = conversations.filter(conv =>
+    !searchTerm || conv.participant.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   if (loading) {
     return (
       <div className="container px-4 py-8 md:px-6 md:py-12">
         <div className="flex justify-center py-12">
           <InlineLoading size="lg" message="Loading your messages..." />
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container px-4 py-8 md:px-6 md:py-12">
+        <div className="text-center py-12">
+          <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-4" />
+          <h2 className="text-2xl font-semibold mb-2">Error Loading Messages</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
+          <Button onClick={loadConversations} className="btn-primary">
+            Try Again
+          </Button>
         </div>
       </div>
     )
@@ -105,19 +125,22 @@ export default function DashboardMessagesPage() {
               </div>
             </CardHeader>
             <CardContent className="p-0">
-              {conversations.length === 0 ? (
+              {filteredConversations.length === 0 ? (
                 <div className="p-6 text-center">
                   <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    No messages yet
+                    {conversations.length === 0 ? 'No messages yet' : 'No conversations found'}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Start a conversation with a creative professional
+                    {conversations.length === 0 
+                      ? 'Start a conversation with a creative professional'
+                      : 'Try adjusting your search criteria'
+                    }
                   </p>
                 </div>
               ) : (
                 <div className="space-y-1">
-                  {conversations.map((conversation, index) => (
+                  {filteredConversations.map((conversation, index) => (
                     <motion.div
                       key={conversation.id}
                       initial={{ opacity: 0, x: -20 }}
@@ -147,7 +170,7 @@ export default function DashboardMessagesPage() {
                               {conversation.participant.name}
                             </h4>
                             <span className="text-xs text-gray-500">
-                              {formatRelativeTime(conversation.lastMessage.timestamp)}
+                              {formatRelativeTime(conversation.lastMessage.timestamp.toISOString())}
                             </span>
                           </div>
                           <div className="flex items-center justify-between">
@@ -202,7 +225,7 @@ export default function DashboardMessagesPage() {
                       <div className="max-w-xs lg:max-w-md px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                         <p className="text-sm">{selectedConversation.lastMessage.content}</p>
                         <span className="text-xs text-gray-500 mt-1 block">
-                          {formatRelativeTime(selectedConversation.lastMessage.timestamp)}
+                          {formatRelativeTime(selectedConversation.lastMessage.timestamp.toISOString())}
                         </span>
                       </div>
                     </div>

@@ -68,7 +68,7 @@ function AppContent() {
     if (location.pathname === '/profile/complete') return
     
     // Don't redirect if on auth pages
-    const authPages = ['/login', '/register', '/forgot-password', '/auth/callback', '/auth/reset-password']
+    const authPages = ['/login', '/register', '/forgot-password', '/auth/callback', '/auth/reset-password', '/']
     if (authPages.includes(location.pathname)) return
     
     // Redirect to profile completion if profile is incomplete

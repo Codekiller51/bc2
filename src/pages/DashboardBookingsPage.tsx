@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Clock, User, MapPin, DollarSign, Filter, Search } from 'lucide-react'
+import { Calendar, Clock, User, MapPin, DollarSign, Filter, Search, AlertTriangle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -17,6 +17,7 @@ export default function DashboardBookingsPage() {
   const { user } = useAuth()
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -31,10 +32,12 @@ export default function DashboardBookingsPage() {
 
     try {
       setLoading(true)
+      setError(null)
       const userBookings = await UnifiedDatabaseService.getBookings({ userId: user.id })
       setBookings(userBookings)
     } catch (error) {
       console.error('Failed to load bookings:', error)
+      setError('Failed to load bookings. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -51,11 +54,34 @@ export default function DashboardBookingsPage() {
     }
   }
 
+  const filteredBookings = bookings.filter(booking => {
+    const matchesFilter = filter === 'all' || booking.status === filter
+    const matchesSearch = !searchTerm || 
+      booking.service?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booking.creative?.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    return matchesFilter && matchesSearch
+  })
+
   if (loading) {
     return (
       <div className="container px-4 py-8 md:px-6 md:py-12">
         <div className="flex justify-center py-12">
           <InlineLoading size="lg" message="Loading your bookings..." />
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container px-4 py-8 md:px-6 md:py-12">
+        <div className="text-center py-12">
+          <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-4" />
+          <h2 className="text-2xl font-semibold mb-2">Error Loading Bookings</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
+          <Button onClick={loadBookings} className="btn-primary">
+            Try Again
+          </Button>
         </div>
       </div>
     )
@@ -107,25 +133,40 @@ export default function DashboardBookingsPage() {
 
       {/* Bookings List */}
       <div className="space-y-4">
-        {bookings.length === 0 ? (
+        {filteredBookings.length === 0 ? (
           <Card className="professional-card">
             <CardContent className="p-12 text-center">
               <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                No bookings yet
+                {bookings.length === 0 ? 'No bookings yet' : 'No bookings match your filters'}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Start exploring creative professionals and book your first service
+                {bookings.length === 0 
+                  ? 'Start exploring creative professionals and book your first service'
+                  : 'Try adjusting your search criteria or filters'
+                }
               </p>
-              <Link to="/search">
-                <Button className="btn-primary">
-                  Browse Creatives
+              {bookings.length === 0 ? (
+                <Link to="/search">
+                  <Button className="btn-primary">
+                    Browse Creatives
+                  </Button>
+                </Link>
+              ) : (
+                <Button 
+                  onClick={() => {
+                    setFilter('all')
+                    setSearchTerm('')
+                  }}
+                  className="btn-outline"
+                >
+                  Clear Filters
                 </Button>
-              </Link>
+              )}
             </CardContent>
           </Card>
         ) : (
-          bookings.map((booking, index) => (
+          filteredBookings.map((booking, index) => (
             <motion.div
               key={booking.id}
               initial={{ opacity: 0, y: 20 }}
@@ -138,7 +179,7 @@ export default function DashboardBookingsPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          {booking.service_name}
+                          {booking.service?.name || 'Service'}
                         </h3>
                         <Badge className={getStatusColor(booking.status)}>
                           {booking.status.replace('_', ' ')}
@@ -161,16 +202,18 @@ export default function DashboardBookingsPage() {
                         <div className="flex items-center gap-2">
                           <DollarSign className="h-4 w-4" />
                           <span className="font-semibold text-emerald-600">
-                            {formatCurrency(booking.total_amount)}
+                            {formatCurrency(booking.total_amount || 0)}
                           </span>
                         </div>
                       </div>
                     </div>
                     
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        View Details
-                      </Button>
+                      <Link to={`/booking/${booking.id}`}>
+                        <Button variant="outline" size="sm">
+                          View Details
+                        </Button>
+                      </Link>
                       {booking.status === 'pending' && (
                         <Button variant="destructive" size="sm">
                           Cancel
