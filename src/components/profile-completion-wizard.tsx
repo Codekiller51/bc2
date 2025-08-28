@@ -25,7 +25,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useAuth } from "@/components/enhanced-auth-provider"
-import { AvatarUploadService } from "@/lib/services/avatar-upload-service"
+import { AvatarUploadService } from "../../lib/services/avatar-upload-service"
 import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import { toast } from "sonner"
 
