@@ -14,6 +14,7 @@ import { useRealTimeBookings } from "@/hooks/use-real-time-data"
 import { useOptimisticBookings } from "@/lib/hooks/use-optimistic-updates"
 import { ApiErrorHandler } from "@/lib/api/error-handler"
 import type { Booking } from "@/lib/database/types"
+import { formatCurrency } from "@/lib/utils/format"
 
 interface EnhancedBookingListProps {
   userId?: string
@@ -221,11 +222,7 @@ export function EnhancedBookingList({ userId, filters }: EnhancedBookingListProp
                     <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
                       <DollarSign className="h-4 w-4" />
                       <span className="font-semibold">
-                        {new Intl.NumberFormat("sw-TZ", {
-                          style: "currency",
-                          currency: "TZS",
-                          minimumFractionDigits: 0,
-                        }).format(booking.total_amount)}
+                        {formatCurrency(booking.total_amount)}
                       </span>
                     </div>
                     <Badge className={getStatusColor(booking.status)}>

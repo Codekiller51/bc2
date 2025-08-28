@@ -1,4 +1,5 @@
 import type { Notification } from "@/lib/database/types"
+import { formatCurrency } from "@/lib/utils/format"
 
 export class EnhancedNotificationService {
   // Email notifications
@@ -143,7 +144,7 @@ export class EnhancedNotificationService {
     const emailContent = `
       <h2>Payment Receipt</h2>
       <p>Thank you for your payment!</p>
-      <p><strong>Amount:</strong> ${new Intl.NumberFormat("sw-TZ", { style: "currency", currency: "TZS" }).format(payment.amount)}</p>
+      <p><strong>Amount:</strong> ${formatCurrency(payment.amount)}</p>
       <p><strong>Transaction ID:</strong> ${payment.transaction_id}</p>
       <p><strong>Booking ID:</strong> ${booking.id}</p>
       <p>Your payment has been processed successfully.</p>

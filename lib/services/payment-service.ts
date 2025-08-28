@@ -1,4 +1,5 @@
 import type { Payment } from "@/lib/database/types"
+import { formatCurrency } from "@/lib/utils/format"
 
 export interface PaymentIntent {
   id: string
@@ -76,10 +77,7 @@ export class PaymentService {
   }
 
   static formatCurrency(amount: number, currency = "TZS"): string {
-    return new Intl.NumberFormat("sw-TZ", {
-      style: "currency",
-      currency: currency,
-      minimumFractionDigits: 0,
-    }).format(amount)
+    // Use the shared utility function for consistent currency formatting
+    return formatCurrency(amount, currency)
   }
 }

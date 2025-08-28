@@ -30,6 +30,13 @@ export const createClient = () => {
         flowType: 'pkce',
         storage: typeof window !== 'undefined' ? window.localStorage : undefined,
         storageKey: 'supabase.auth.token'
+      },
+      // Fix timer compatibility in WebContainer
+      global: {
+        fetch: globalThis.fetch,
+        Headers: globalThis.Headers,
+        Request: globalThis.Request,
+        Response: globalThis.Response
       }
     })
     

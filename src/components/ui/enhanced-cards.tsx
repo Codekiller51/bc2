@@ -4,6 +4,7 @@ import React from "react"
 import { motion } from "framer-motion"
 import { ArrowRight, ExternalLink, Star, TrendingUp, Award, Shield } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { formatCurrency, formatDuration } from "@/lib/utils/format"
 
 // =============================================
 // PROFESSIONAL CARD VARIANTS
@@ -239,19 +240,8 @@ export function ServiceCard({
   onSelect,
   className
 }: ServiceCardProps) {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("sw-TZ", {
-      style: "currency",
-      currency: "TZS",
-      minimumFractionDigits: 0,
-    }).format(amount)
-  }
+import { formatCurrency, formatDuration } from "@/lib/utils/format"
 
-  const formatDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`
-  }
 
   return (
     <motion.div

@@ -21,14 +21,21 @@ export default defineConfig({
   },
   define: {
     global: 'globalThis',
-    // Fix timer issues in WebContainer
+    // Fix timer compatibility issues in WebContainer
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    'process.nextTick': 'globalThis.queueMicrotask',
+    'process.hrtime': 'performance.now',
   },
   optimizeDeps: {
-    exclude: ['fsevents']
+    exclude: ['fsevents'],
+    include: ['react', 'react-dom', '@supabase/supabase-js']
   },
   esbuild: {
-    // Fix timer compatibility issues
-    target: 'es2020'
+    target: 'es2020',
+    // Fix timer and process compatibility
+    define: {
+      'process.nextTick': 'queueMicrotask',
+      'process.hrtime': 'performance.now'
+    }
   }
 })

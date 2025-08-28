@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
-import { MapPin, Star, Award, Verified, Eye, Heart } from "lucide-react"
+import { MapPin, Star, Award, Verified, Eye, Heart, ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
+import { formatCurrency } from "@/lib/utils/format"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -168,11 +169,7 @@ export function CreativeCard({
             {hourlyRate && (
               <div className="text-center">
                 <div className="text-base font-bold text-gray-900 dark:text-white">
-                  {new Intl.NumberFormat("sw-TZ", {
-                    style: "currency",
-                    currency: "TZS",
-                    minimumFractionDigits: 0,
-                  }).format(hourlyRate)}
+                  {formatCurrency(hourlyRate)}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">per hour</div>
               </div>

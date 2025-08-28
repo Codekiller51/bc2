@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { formatCurrency } from "@/lib/utils/format"
 
 const sampleData = [
   { month: "Jan", revenue: 850000, bookings: 45 },
@@ -18,14 +19,7 @@ export function RevenueChart() {
   const [timeRange, setTimeRange] = useState("6months")
   const [data, setData] = useState(sampleData)
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("sw-TZ", {
-      style: "currency",
-      currency: "TZS",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value)
-  }
+
 
   return (
     <Card>

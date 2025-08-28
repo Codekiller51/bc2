@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { Service } from "@/lib/database/types"
+import { formatCurrency, formatDuration } from "@/lib/utils/format"
 
 interface ServiceSelectorProps {
   services: Service[]
@@ -15,26 +16,10 @@ interface ServiceSelectorProps {
 }
 
 export function ServiceSelector({ services, onServiceSelect, selectedService }: ServiceSelectorProps) {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("sw-TZ", {
-      style: "currency",
-      currency: "TZS",
-      minimumFractionDigits: 0,
-    }).format(amount)
-  }
+import { formatCurrency } from "@/lib/utils/format"
 
-  const formatDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
 
-    if (hours > 0 && mins > 0) {
-      return `${hours}h ${mins}m`
-    } else if (hours > 0) {
-      return `${hours}h`
-    } else {
-      return `${mins}m`
-    }
-  }
+
 
   return (
     <div className="space-y-4">

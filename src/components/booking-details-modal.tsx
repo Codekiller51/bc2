@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { Booking } from "@/lib/database/types"
+import { formatCurrency } from "@/lib/utils/format"
 
 interface BookingDetailsModalProps {
   booking: Booking
@@ -149,11 +150,7 @@ export function BookingDetailsModal({ booking, open, onClose, onStatusUpdate }: 
                 <div>
                   <p className="text-sm text-gray-500">Total Amount</p>
                   <p className="font-medium text-emerald-600">
-                    {new Intl.NumberFormat("sw-TZ", {
-                      style: "currency",
-                      currency: "TZS",
-                      minimumFractionDigits: 0,
-                    }).format(booking.total_amount)}
+                    {formatCurrency(booking.total_amount)}
                   </p>
                 </div>
               </div>
