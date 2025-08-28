@@ -105,7 +105,7 @@ export function NotificationSystem() {
             </div>
           ) : (
             <div className="space-y-4">
-              notifications.map((notification) => (
+              {notifications.map((notification) => (
                 <div
                   key={notification.id}
                   className={`flex items-start gap-4 p-4 rounded-lg ${!notification.read_at ? 'bg-muted' : ''}`}
@@ -132,7 +132,8 @@ export function NotificationSystem() {
                     </Button>
                   )}
                 </div>
-              ))
+              ))}
+            </div>
             </div>
           )}
           

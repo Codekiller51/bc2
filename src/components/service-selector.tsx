@@ -16,10 +16,6 @@ interface ServiceSelectorProps {
 }
 
 export function ServiceSelector({ services, onServiceSelect, selectedService }: ServiceSelectorProps) {
-import { formatCurrency } from "@/lib/utils/format"
-
-
-
 
   return (
     <div className="space-y-4">

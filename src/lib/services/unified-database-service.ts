@@ -1,12 +1,18 @@
 import { supabase } from '@/lib/supabase/client'
 import { ApiErrorHandler } from '@/lib/api/error-handler'
+import { PostgrestResponse, PostgrestSingleResponse, PostgrestFilterBuilder } from '@supabase/supabase-js'
+import type { Database } from '@supabase/supabase-js'
 import type { 
   User, 
   CreativeProfile, 
   Booking, 
   Conversation, 
   Message, 
-  Notification 
+  Notification,
+  Service,
+  PortfolioItem,
+  Review,
+  Payment
 } from '@/lib/database/types'
 
 /**
@@ -15,6 +21,10 @@ import type {
  */
 export class UnifiedDatabaseService {
   private static supabase = supabase
+
+  private static getTable<T extends keyof Database['public']['Tables']>(table: T) {
+    return this.supabase.from(table) as PostgrestFilterBuilder<Database['public']['Tables'][T]>
+  }
 
   // =============================================
   // USER MANAGEMENT
@@ -54,9 +64,8 @@ export class UnifiedDatabaseService {
       }
 
       // Try client profile first
-      const { data: clientProfile, error: clientError } = await this.supabase
-        .from('client_profiles')
-        .select('*')
+      const { data: clientProfile, error: clientError } = await this.getTable('client_profiles')
+        .select()
         .eq('id', user.id)
         .maybeSingle()
 
@@ -83,9 +92,8 @@ export class UnifiedDatabaseService {
       }
 
       // Try creative profile
-      const { data: creativeProfile, error: creativeError } = await this.supabase
-        .from('creative_profiles')
-        .select('*')
+      const { data: creativeProfile, error: creativeError } = await this.getTable('creative_profiles')
+        .select()
         .eq('user_id', user.id)
         .maybeSingle()
 
@@ -136,9 +144,8 @@ export class UnifiedDatabaseService {
       const users: User[] = []
 
       // Get client profiles
-      const { data: clientProfiles, error: clientError } = await this.supabase
-        .from('client_profiles')
-        .select('*')
+      const { data: clientProfiles, error: clientError } = await this.getTable('client_profiles')
+        .select()
 
       if (!clientError && clientProfiles) {
         clientProfiles.forEach(profile => {
@@ -161,9 +168,8 @@ export class UnifiedDatabaseService {
       }
 
       // Get creative profiles
-      const { data: creativeProfiles, error: creativeError } = await this.supabase
-        .from('creative_profiles')
-        .select('*')
+      const { data: creativeProfiles, error: creativeError } = await this.getTable('creative_profiles')
+        .select()
 
       if (!creativeError && creativeProfiles) {
         creativeProfiles.forEach(profile => {
@@ -216,8 +222,7 @@ export class UnifiedDatabaseService {
     limit?: number
   }): Promise<CreativeProfile[]> {
     try {
-      let query = this.supabase
-        .from('creative_profiles')
+      let query = this.getTable('creative_profiles')
         .select(`
           *,
           services(*),
@@ -266,8 +271,7 @@ export class UnifiedDatabaseService {
 
   static async getFeaturedCreatives(limit: number = 3): Promise<CreativeProfile[]> {
     try {
-      const { data, error } = await this.supabase
-        .from('creative_profiles')
+      const { data, error } = await this.getTable('creative_profiles')
         .select(`
           *,
           services(*),
@@ -286,8 +290,7 @@ export class UnifiedDatabaseService {
 
   static async getCreativeProfileById(id: string): Promise<CreativeProfile | null> {
     try {
-      const { data, error } = await this.supabase
-        .from('creative_profiles')
+      const { data, error } = await this.getTable('creative_profiles')
         .select(`
           *,
           services(*),
@@ -309,8 +312,7 @@ export class UnifiedDatabaseService {
 
   static async getCreativeProfileByUserId(userId: string): Promise<CreativeProfile | null> {
     try {
-      const { data, error } = await this.supabase
-        .from('creative_profiles')
+      const { data, error } = await this.getTable('creative_profiles')
         .select(`
           *,
           services(*),
@@ -331,8 +333,7 @@ export class UnifiedDatabaseService {
     updates: Partial<CreativeProfile>
   ): Promise<CreativeProfile> {
     try {
-      const { data, error } = await this.supabase
-        .from('creative_profiles')
+      const { data, error } = await this.getTable('creative_profiles')
         .update({
           ...updates,
           updated_at: new Date().toISOString()
@@ -356,8 +357,7 @@ export class UnifiedDatabaseService {
     hourly_rate?: number
   }): Promise<CreativeProfile> {
     try {
-      const { data, error } = await this.supabase
-        .from('creative_profiles')
+      const { data, error } = await this.getTable('creative_profiles')
         .insert({
           user_id: userData.user_id,
           title: userData.title,
@@ -396,8 +396,7 @@ export class UnifiedDatabaseService {
     }
   ) {
     try {
-      const { data, error } = await this.supabase
-        .from('client_profiles')
+      const { data, error } = await this.getTable('client_profiles')
         .update({
           ...updates,
           updated_at: new Date().toISOString()
@@ -421,8 +420,7 @@ export class UnifiedDatabaseService {
     location?: string
   }) {
     try {
-      const { data, error } = await this.supabase
-        .from('client_profiles')
+      const { data, error } = await this.getTable('client_profiles')
         .insert({
           id: userData.id,
           email: userData.email,
@@ -450,8 +448,7 @@ export class UnifiedDatabaseService {
     creativeId?: string
   }): Promise<Booking[]> {
     try {
-      let query = this.supabase
-        .from('bookings')
+      let query = this.getTable('bookings')
         .select(`
           *,
           client:client_profiles(*),
@@ -495,8 +492,7 @@ export class UnifiedDatabaseService {
         throw new Error('User not authenticated')
       }
 
-      const { data, error } = await this.supabase
-        .from('bookings')
+      const { data, error } = await this.getTable('bookings')
         .insert({
           ...bookingData,
           client_id: user.id,
@@ -522,8 +518,7 @@ export class UnifiedDatabaseService {
     status: string
   ): Promise<Booking> {
     try {
-      const { data, error } = await this.supabase
-        .from('bookings')
+      const { data, error } = await this.getTable('bookings')
         .update({ 
           status, 
           updated_at: new Date().toISOString() 
@@ -550,8 +545,7 @@ export class UnifiedDatabaseService {
 
   static async getConversations(userId: string): Promise<Conversation[]> {
     try {
-      const { data, error } = await this.supabase
-        .from('conversations')
+      const { data, error } = await this.getTable('conversations')
         .select(`
           *,
           client:client_profiles(*),
@@ -594,8 +588,7 @@ export class UnifiedDatabaseService {
     status: string
   }): Promise<Conversation> {
     try {
-      const { data: conversation, error } = await this.supabase
-        .from('conversations')
+      const { data: conversation, error } = await this.getTable('conversations')
         .insert({
           ...data,
           last_message_at: new Date().toISOString()
@@ -612,8 +605,7 @@ export class UnifiedDatabaseService {
 
   static async getMessages(conversationId: string): Promise<Message[]> {
     try {
-      const { data, error } = await this.supabase
-        .from('messages')
+      const { data, error } = await this.getTable('messages')
         .select(`
           *,
           sender:auth.users(*)
@@ -623,8 +615,7 @@ export class UnifiedDatabaseService {
 
       if (error) {
         // Fallback to basic message fetch if auth.users join fails
-        const { data: basicMessages, error: basicError } = await this.supabase
-          .from('messages')
+        const { data: basicMessages, error: basicError } = await this.getTable('messages')
           .select('*')
           .eq('conversation_id', conversationId)
           .order('created_at', { ascending: true })
@@ -641,8 +632,7 @@ export class UnifiedDatabaseService {
 
   static async getAllMessages(): Promise<Message[]> {
     try {
-      const { data, error } = await this.supabase
-        .from('messages')
+      const { data, error } = await this.getTable('messages')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100)
@@ -661,8 +651,7 @@ export class UnifiedDatabaseService {
     message_type: string
   }): Promise<Message> {
     try {
-      const { data, error } = await this.supabase
-        .from('messages')
+      const { data, error } = await this.getTable('messages')
         .insert(messageData)
         .select('*')
         .single()
@@ -670,8 +659,7 @@ export class UnifiedDatabaseService {
       if (error) throw error
 
       // Update conversation last_message_at
-      await this.supabase
-        .from('conversations')
+      await this.getTable('conversations')
         .update({ last_message_at: new Date().toISOString() })
         .eq('id', messageData.conversation_id)
 
@@ -686,8 +674,7 @@ export class UnifiedDatabaseService {
     userId: string
   ): Promise<boolean> {
     try {
-      const { error } = await this.supabase
-        .from('messages')
+      const { error } = await this.getTable('messages')
         .update({ read_at: new Date().toISOString() })
         .eq('conversation_id', conversationId)
         .neq('sender_id', userId)
@@ -725,8 +712,7 @@ export class UnifiedDatabaseService {
     notificationData: Partial<Notification>
   ): Promise<Notification> {
     try {
-      const { data, error } = await this.supabase
-        .from('notifications')
+      const { data, error } = await this.getTable('notifications')
         .insert(notificationData)
         .select()
         .single()
@@ -740,8 +726,7 @@ export class UnifiedDatabaseService {
 
   static async markNotificationAsRead(notificationId: string): Promise<void> {
     try {
-      const { error } = await this.supabase
-        .from('notifications')
+      const { error } = await this.getTable('notifications')
         .update({ read_at: new Date().toISOString() })
         .eq('id', notificationId)
 
@@ -763,8 +748,7 @@ export class UnifiedDatabaseService {
     comment?: string
   }): Promise<any> {
     try {
-      const { data, error } = await this.supabase
-        .from('reviews')
+      const { data, error } = await this.getTable('reviews')
         .insert(reviewData)
         .select()
         .single()
@@ -778,8 +762,7 @@ export class UnifiedDatabaseService {
 
   static async getReviews(creativeId: string): Promise<any[]> {
     try {
-      const { data, error } = await this.supabase
-        .from('reviews')
+      const { data, error } = await this.getTable('reviews')
         .select(`
           *,
           client:client_profiles(full_name, avatar_url)
@@ -796,8 +779,7 @@ export class UnifiedDatabaseService {
 
   static async getTestimonials(limit: number = 6): Promise<any[]> {
     try {
-      const { data, error } = await this.supabase
-        .from('reviews')
+      const { data, error } = await this.getTable('reviews')
         .select(`
           *,
           client:client_profiles(full_name, avatar_url, location),
@@ -821,19 +803,15 @@ export class UnifiedDatabaseService {
   static async getCreativeStats(): Promise<any> {
     try {
       const [creativesResult, bookingsResult, clientsResult, avgRatingResult] = await Promise.all([
-        this.supabase
-          .from('creative_profiles')
+        this.getTable('creative_profiles')
           .select('id', { count: 'exact' })
           .eq('approval_status', 'approved'),
-        this.supabase
-          .from('bookings')
+        this.getTable('bookings')
           .select('id', { count: 'exact' })
           .eq('status', 'completed'),
-        this.supabase
-          .from('client_profiles')
+        this.getTable('client_profiles')
           .select('id', { count: 'exact' }),
-        this.supabase
-          .from('creative_profiles')
+        this.getTable('creative_profiles')
           .select('rating')
           .eq('approval_status', 'approved')
       ])
@@ -868,11 +846,11 @@ export class UnifiedDatabaseService {
         pendingApprovals,
         totalRevenue
       ] = await Promise.all([
-        this.supabase.from('bookings').select('count', { count: 'exact' }),
-        this.supabase.from('creative_profiles').select('count', { count: 'exact' }),
-        this.supabase.from('client_profiles').select('count', { count: 'exact' }),
-        this.supabase.from('creative_profiles').select('count', { count: 'exact' }).eq('approval_status', 'pending'),
-        this.supabase.from('bookings').select('total_amount').eq('status', 'completed')
+        this.getTable('bookings').select('count', { count: 'exact' }),
+        this.getTable('creative_profiles').select('count', { count: 'exact' }),
+        this.getTable('client_profiles').select('count', { count: 'exact' }),
+        this.getTable('creative_profiles').select('count', { count: 'exact' }).eq('approval_status', 'pending'),
+        this.getTable('bookings').select('total_amount').eq('status', 'completed')
       ])
 
       const revenue = totalRevenue.data?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0
@@ -959,19 +937,11 @@ export class UnifiedDatabaseService {
   // PORTFOLIO MANAGEMENT
   // =============================================
 
-  static async createPortfolioItem(itemData: {
-    creative_id: string
-    title: string
-    description?: string
-    image_url?: string
-    category?: string
-    project_url?: string
-  }): Promise<PortfolioItem> {
+  static async createPortfolioItem(itemData: Omit<PortfolioItem, 'id' | 'created_at'>): Promise<PortfolioItem> {
     try {
-      const { data, error } = await this.supabase
-        .from('portfolio_items')
+      const { data, error } = await this.getTable('portfolio_items')
         .insert(itemData)
-        .select('*')
+        .select()
         .single()
 
       if (error) throw error
@@ -986,11 +956,10 @@ export class UnifiedDatabaseService {
     updates: Partial<PortfolioItem>
   ): Promise<PortfolioItem> {
     try {
-      const { data, error } = await this.supabase
-        .from('portfolio_items')
+      const { data, error } = await this.getTable('portfolio_items')
         .update(updates)
         .eq('id', id)
-        .select('*')
+        .select()
         .single()
 
       if (error) throw error
@@ -1002,8 +971,7 @@ export class UnifiedDatabaseService {
 
   static async deletePortfolioItem(id: string): Promise<void> {
     try {
-      const { error } = await this.supabase
-        .from('portfolio_items')
+      const { error } = await this.getTable('portfolio_items')
         .delete()
         .eq('id', id)
 
@@ -1017,22 +985,14 @@ export class UnifiedDatabaseService {
   // SERVICE MANAGEMENT
   // =============================================
 
-  static async createService(serviceData: {
-    creative_id: string
-    name: string
-    description?: string
-    price: number
-    duration: number
-    category?: string
-  }): Promise<Service> {
+  static async createService(serviceData: Omit<Service, 'id' | 'created_at' | 'active'>): Promise<Service> {
     try {
-      const { data, error } = await this.supabase
-        .from('services')
+      const { data, error } = await this.getTable('services')
         .insert({
           ...serviceData,
           active: true
         })
-        .select('*')
+        .select()
         .single()
 
       if (error) throw error
@@ -1047,11 +1007,10 @@ export class UnifiedDatabaseService {
     updates: Partial<Service>
   ): Promise<Service> {
     try {
-      const { data, error } = await this.supabase
-        .from('services')
+      const { data, error } = await this.getTable('services')
         .update(updates)
         .eq('id', id)
-        .select('*')
+        .select()
         .single()
 
       if (error) throw error
@@ -1063,8 +1022,7 @@ export class UnifiedDatabaseService {
 
   static async deleteService(id: string): Promise<void> {
     try {
-      const { error } = await this.supabase
-        .from('services')
+      const { error } = await this.getTable('services')
         .delete()
         .eq('id', id)
 
@@ -1074,60 +1032,7 @@ export class UnifiedDatabaseService {
     }
   }
 
-  // Portfolio Management
-  static async createPortfolioItem(itemData: {
-    creative_id: string
-    title: string
-    description?: string
-    image_url?: string
-    category?: string
-    project_url?: string
-  }): Promise<PortfolioItem> {
-    try {
-      const { data, error } = await this.supabase
-        .from('portfolio_items')
-        .insert(itemData)
-        .select('*')
-        .single()
 
-      if (error) throw error
-      return data
-    } catch (error) {
-      throw ApiErrorHandler.handle('Failed to create portfolio item', error)
-    }
-  }
-
-  static async updatePortfolioItem(
-    id: string,
-    updates: Partial<PortfolioItem>
-  ): Promise<PortfolioItem> {
-    try {
-      const { data, error } = await this.supabase
-        .from('portfolio_items')
-        .update(updates)
-        .eq('id', id)
-        .select('*')
-        .single()
-
-      if (error) throw error
-      return data
-    } catch (error) {
-      throw ApiErrorHandler.handle('Failed to update portfolio item', error)
-    }
-  }
-
-  static async deletePortfolioItem(id: string): Promise<void> {
-    try {
-      const { error } = await this.supabase
-        .from('portfolio_items')
-        .delete()
-        .eq('id', id)
-
-      if (error) throw error
-    } catch (error) {
-      throw ApiErrorHandler.handle('Failed to delete portfolio item', error)
-    }
-  }
 
   // Availability Management
   static async updateAvailability(
@@ -1145,8 +1050,7 @@ export class UnifiedDatabaseService {
         updates.availability_schedule = schedule
       }
 
-      const { error } = await this.supabase
-        .from('creative_profiles')
+      const { error } = await this.getTable('creative_profiles')
         .update(updates)
         .eq('id', creativeId)
 
@@ -1156,37 +1060,12 @@ export class UnifiedDatabaseService {
     }
   }
 
-  // Review System
-  static async createReview(reviewData: {
-    booking_id: string
-    client_id: string
-    creative_id: string
-    rating: number
-    comment?: string
-  }): Promise<Review> {
-    try {
-      const { data, error } = await this.supabase
-        .from('reviews')
-        .insert(reviewData)
-        .select('*, client:client_profiles(*)')
-        .single()
 
-      if (error) throw error
-
-      // Update creative's rating
-      await this.updateCreativeRating(reviewData.creative_id)
-
-      return data
-    } catch (error) {
-      throw ApiErrorHandler.handle('Failed to create review', error)
-    }
-  }
 
   private static async updateCreativeRating(creativeId: string): Promise<void> {
     try {
       // Get all reviews for the creative
-      const { data: reviews, error: reviewsError } = await this.supabase
-        .from('reviews')
+      const { data: reviews, error: reviewsError } = await this.getTable('reviews')
         .select('rating')
         .eq('creative_id', creativeId)
 
@@ -1197,8 +1076,7 @@ export class UnifiedDatabaseService {
       const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0
 
       // Update creative profile
-      const { error: updateError } = await this.supabase
-        .from('creative_profiles')
+      const { error: updateError } = await this.getTable('creative_profiles')
         .update({
           rating: averageRating,
           reviews_count: reviews.length
@@ -1214,9 +1092,8 @@ export class UnifiedDatabaseService {
 
   static async getServices(creativeId: string): Promise<any[]> {
     try {
-      const { data, error } = await this.supabase
-        .from('services')
-        .select('*')
+      const { data, error } = await this.getTable('services')
+        .select()
         .eq('creative_id', creativeId)
         .order('created_at', { ascending: false })
 
@@ -1233,8 +1110,7 @@ export class UnifiedDatabaseService {
 
   static async getCreativeAvailability(creativeId: string): Promise<any> {
     try {
-      const { data, error } = await this.supabase
-        .from('creative_availability')
+      const { data, error } = await this.getTable('creative_availability')
         .select('*')
         .eq('creative_id', creativeId)
         .maybeSingle()
@@ -1254,8 +1130,7 @@ export class UnifiedDatabaseService {
     }
   ): Promise<any> {
     try {
-      const { data, error } = await this.supabase
-        .from('creative_availability')
+      const { data, error } = await this.getTable('creative_availability')
         .upsert({
           creative_id: creativeId,
           ...availabilityData,
@@ -1277,8 +1152,7 @@ export class UnifiedDatabaseService {
 
   static async approveCreativeProfile(profileId: string, adminId: string): Promise<void> {
     try {
-      const { error } = await this.supabase
-        .from('creative_profiles')
+      const { error } = await this.getTable('creative_profiles')
         .update({
           approval_status: 'approved',
           approved_by: adminId,
@@ -1295,8 +1169,7 @@ export class UnifiedDatabaseService {
 
   static async rejectCreativeProfile(profileId: string, adminId: string): Promise<void> {
     try {
-      const { error } = await this.supabase
-        .from('creative_profiles')
+      const { error } = await this.getTable('creative_profiles')
         .update({
           approval_status: 'rejected',
           approved_by: adminId,
@@ -1313,9 +1186,9 @@ export class UnifiedDatabaseService {
 
   static async getPlatformAnalytics(dateRange?: { from: string; to: string }) {
     try {
-      let bookingsQuery = this.supabase.from('bookings').select('*')
-      let creativesQuery = this.supabase.from('creative_profiles').select('*')
-      let clientsQuery = this.supabase.from('client_profiles').select('*')
+      let bookingsQuery = this.getTable('bookings').select('*')
+      let creativesQuery = this.getTable('creative_profiles').select('*')
+      let clientsQuery = this.getTable('client_profiles').select('*')
 
       if (dateRange) {
         bookingsQuery = bookingsQuery.gte('created_at', dateRange.from).lte('created_at', dateRange.to)

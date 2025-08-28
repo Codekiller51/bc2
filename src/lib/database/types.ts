@@ -1,3 +1,69 @@
+export type Database = {
+  public: {
+    Tables: {
+      client_profiles: {
+        Row: User
+        Insert: Omit<User, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<User, 'id'>>
+      }
+      creative_profiles: {
+        Row: CreativeProfile
+        Insert: Omit<CreativeProfile, 'id' | 'created_at' | 'updated_at' | 'rating' | 'reviews_count' | 'completed_projects'>
+        Update: Partial<Omit<CreativeProfile, 'id'>>
+      }
+      services: {
+        Row: Service
+        Insert: Omit<Service, 'id' | 'created_at'>
+        Update: Partial<Omit<Service, 'id'>>
+      }
+      bookings: {
+        Row: Booking
+        Insert: Omit<Booking, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<Booking, 'id'>>
+      }
+      conversations: {
+        Row: Conversation
+        Insert: Omit<Conversation, 'id' | 'created_at' | 'last_message_at'>
+        Update: Partial<Omit<Conversation, 'id'>>
+      }
+      messages: {
+        Row: Message
+        Insert: Omit<Message, 'id' | 'created_at'>
+        Update: Partial<Omit<Message, 'id'>>
+      }
+      notifications: {
+        Row: Notification
+        Insert: Omit<Notification, 'id' | 'created_at'>
+        Update: Partial<Omit<Notification, 'id'>>
+      }
+      portfolio_items: {
+        Row: PortfolioItem
+        Insert: Omit<PortfolioItem, 'id' | 'created_at'>
+        Update: Partial<Omit<PortfolioItem, 'id'>>
+      }
+      payments: {
+        Row: Payment
+        Insert: Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>
+        Update: Partial<Omit<Payment, 'id'>>
+      }
+      reviews: {
+        Row: Review
+        Insert: Omit<Review, 'id' | 'created_at'>
+        Update: Partial<Omit<Review, 'id'>>
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+  }
+}
+
 export interface User {
   id: string
   email: string

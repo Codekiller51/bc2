@@ -311,9 +311,9 @@ export function EnhancedSearchFilters({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">Any project size</SelectItem>
-            <SelectItem value="small">Small (< TZS 100,000)</SelectItem>
-            <SelectItem value="medium">Medium (TZS 100,000 - 500,000)</SelectItem>
-            <SelectItem value="large">Large (> TZS 500,000)</SelectItem>
+            <SelectItem value="small">Small - Less than TZS 100,000</SelectItem>
+            <SelectItem value="medium">Medium - TZS 100,000 to 500,000</SelectItem>
+            <SelectItem value="large">Large - More than TZS 500,000</SelectItem>
           </SelectContent>
         </Select>
       </div>

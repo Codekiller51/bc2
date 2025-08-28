@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
+import { AvailabilityCalendar } from '@/components/availability-calendar'
 
 interface AvailabilitySettingsProps {
   creativeId: string
@@ -21,7 +22,7 @@ const dayNames = [
   "Wednesday",
   "Thursday",
   "Friday",
-import { AvailabilityCalendar } from '@/components/availability-calendar'
+  "Saturday"
 ]
 
 export function AvailabilitySettings({ creativeId }: AvailabilitySettingsProps) {
@@ -33,8 +34,7 @@ export function AvailabilitySettings({ creativeId }: AvailabilitySettingsProps) 
     start: string
     end: string
     isAvailable: boolean
-  }>>({}
-  )
+  }>>({})
 
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -124,9 +124,10 @@ export function AvailabilitySettings({ creativeId }: AvailabilitySettingsProps) 
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
             Availability Settings
-        <AvailabilityCalendar creativeId={profile.id} />
+          </CardTitle>
         </CardHeader>
         <CardContent>
+          <AvailabilityCalendar creativeId={creativeId} />
           <div className="space-y-6">
             {/* Buffer Time Setting */}
             <div className="space-y-2">

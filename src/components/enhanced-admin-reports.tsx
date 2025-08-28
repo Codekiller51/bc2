@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { DateRange } from "react-day-picker"
 import { motion } from "framer-motion"
 import { 
   FileText, 
@@ -57,10 +58,21 @@ interface ReportData {
   }
 }
 
+const convertToCSV = (data: any): string => {
+  if (Array.isArray(data)) {
+    const headers = Object.keys(data[0] || {})
+    const rows = data.map(item => headers.map(header => item[header]).join(','))
+    return [headers.join(','), ...rows].join('\n')
+  } else {
+    const entries = Object.entries(data)
+    return entries.map(([key, value]) => `${key},${value}`).join('\n')
+  }
+}
+
 export function EnhancedAdminReports() {
   const [loading, setLoading] = useState(false)
   const [reportType, setReportType] = useState('financial')
-  const [dateRange, setDateRange] = useState(undefined)
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [reportData, setReportData] = useState<ReportData | null>(null)
   const [generatingPDF, setGeneratingPDF] = useState(false)
 
@@ -144,7 +156,7 @@ export function EnhancedAdminReports() {
         const data = reportData[reportType as keyof ReportData]
         const content = format === 'json' 
           ? JSON.stringify(data, null, 2)
-          : this.convertToCSV(data)
+          : convertToCSV(data)
         
         const blob = new Blob([content], { 
           type: format === 'json' ? 'application/json' : 'text/csv' 
@@ -168,16 +180,7 @@ export function EnhancedAdminReports() {
     }
   }
 
-  private convertToCSV(data: any): string {
-    if (Array.isArray(data)) {
-      const headers = Object.keys(data[0] || {})
-      const rows = data.map(item => headers.map(header => item[header]).join(','))
-      return [headers.join(','), ...rows].join('\n')
-    } else {
-      const entries = Object.entries(data)
-      return entries.map(([key, value]) => `${key},${value}`).join('\n')
-    }
-  }
+
 
   const getReportIcon = (type: string) => {
     switch (type) {
