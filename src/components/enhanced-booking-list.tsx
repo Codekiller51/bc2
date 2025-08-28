@@ -44,7 +44,7 @@ export function EnhancedBookingList({ userId, filters }: EnhancedBookingListProp
     applyOptimisticUpdates,
     updateBookingOptimistically,
     hasPendingUpdate
-  } = useOptimisticBookings()
+  } = useOptimisticBookings<Booking>()
 
   // Load initial bookings
   const loadBookings = useCallback(async () => {
@@ -88,11 +88,23 @@ export function EnhancedBookingList({ userId, filters }: EnhancedBookingListProp
   }, [realtimeBookings])
 
   // Handle booking status update
-  const handleStatusUpdate = async (bookingId: string, newStatus: string) => {
+  const handleStatusUpdate = async (bookingId: string, newStatus: Booking['status']) => {
     try {
       await updateBookingOptimistically(
         bookingId,
-        { status: newStatus, updated_at: new Date().toISOString() },
+        { 
+          id: bookingId,
+          status: newStatus, 
+          updated_at: new Date().toISOString(),
+          client_id: '',
+          creative_id: '',
+          service_id: '',
+          booking_date: '',
+          start_time: '',
+          end_time: '',
+          total_amount: 0,
+          created_at: new Date().toISOString()
+        } as Booking,
         () => EnhancedDatabaseService.updateBookingStatus(bookingId, newStatus)
       )
     } catch (error) {
@@ -101,7 +113,7 @@ export function EnhancedBookingList({ userId, filters }: EnhancedBookingListProp
   }
 
   // Apply optimistic updates to bookings
-  const displayBookings = applyOptimisticUpdates(bookings)
+  const displayBookings = applyOptimisticUpdates<Booking>(bookings)
 
   const getStatusColor = (status: string) => {
     switch (status) {
