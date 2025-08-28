@@ -170,10 +170,10 @@ export default function DashboardOverviewPage() {
                 <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-xl">
                   <Users className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
-            </CardContent>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -198,9 +198,9 @@ export default function DashboardOverviewPage() {
                 </div>
               </div>
             </CardContent>
+          </Card>
         </motion.div>
       </div>
-          </Card>
       {/* Quick Actions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -237,8 +237,8 @@ export default function DashboardOverviewPage() {
               </Link>
             </div>
           </CardContent>
+        </Card>
       </motion.div>
-        </motion.div>
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <motion.div
@@ -257,7 +257,7 @@ export default function DashboardOverviewPage() {
               <RecentBookings />
             </CardContent>
           </Card>
-      </div>
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
