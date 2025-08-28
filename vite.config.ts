@@ -13,9 +13,21 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    hmr: {
+      port: 3001
+    }
   },
   define: {
     global: 'globalThis',
+    // Fix timer issues in WebContainer
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
   },
+  optimizeDeps: {
+    exclude: ['fsevents']
+  },
+  esbuild: {
+    // Fix timer compatibility issues
+    target: 'es2020'
+  }
 })
