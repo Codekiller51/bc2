@@ -963,62 +963,53 @@ export class UnifiedDatabaseService {
     creative_id: string
     title: string
     description?: string
+    image_url?: string
     category?: string
     project_url?: string
-    image_url?: string
-  }): Promise<any> {
+  }): Promise<PortfolioItem> {
     try {
       const { data, error } = await this.supabase
         .from('portfolio_items')
         .insert(itemData)
-        .select()
+        .select('*')
         .single()
 
       if (error) throw error
       return data
     } catch (error) {
-      throw ApiErrorHandler.handle(error)
+      throw ApiErrorHandler.handle('Failed to create portfolio item', error)
     }
   }
 
   static async updatePortfolioItem(
-    itemId: string,
-    updates: {
-      title?: string
-      description?: string
-      category?: string
-      project_url?: string
-      image_url?: string
-    }
-  ): Promise<any> {
+    id: string,
+    updates: Partial<PortfolioItem>
+  ): Promise<PortfolioItem> {
     try {
       const { data, error } = await this.supabase
         .from('portfolio_items')
-        .update({
-          ...updates,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', itemId)
-        .select()
+        .update(updates)
+        .eq('id', id)
+        .select('*')
         .single()
 
       if (error) throw error
       return data
     } catch (error) {
-      throw ApiErrorHandler.handle(error)
+      throw ApiErrorHandler.handle('Failed to update portfolio item', error)
     }
   }
 
-  static async deletePortfolioItem(itemId: string): Promise<void> {
+  static async deletePortfolioItem(id: string): Promise<void> {
     try {
       const { error } = await this.supabase
         .from('portfolio_items')
         .delete()
-        .eq('id', itemId)
+        .eq('id', id)
 
       if (error) throw error
     } catch (error) {
-      throw ApiErrorHandler.handle(error)
+      throw ApiErrorHandler.handle('Failed to delete portfolio item', error)
     }
   }
 
@@ -1033,60 +1024,193 @@ export class UnifiedDatabaseService {
     price: number
     duration: number
     category?: string
-    active?: boolean
-  }): Promise<any> {
+  }): Promise<Service> {
     try {
       const { data, error } = await this.supabase
         .from('services')
-        .insert(serviceData)
-        .select()
+        .insert({
+          ...serviceData,
+          active: true
+        })
+        .select('*')
         .single()
 
       if (error) throw error
       return data
     } catch (error) {
-      throw ApiErrorHandler.handle(error)
+      throw ApiErrorHandler.handle('Failed to create service', error)
     }
   }
 
   static async updateService(
-    serviceId: string,
-    updates: {
-      name?: string
-      description?: string
-      price?: number
-      duration?: number
-      category?: string
-      active?: boolean
-    }
-  ): Promise<any> {
+    id: string,
+    updates: Partial<Service>
+  ): Promise<Service> {
     try {
       const { data, error } = await this.supabase
         .from('services')
         .update(updates)
-        .eq('id', serviceId)
-        .select()
+        .eq('id', id)
+        .select('*')
         .single()
 
       if (error) throw error
       return data
     } catch (error) {
-      throw ApiErrorHandler.handle(error)
+      throw ApiErrorHandler.handle('Failed to update service', error)
     }
   }
 
-  static async deleteService(serviceId: string): Promise<void> {
+  static async deleteService(id: string): Promise<void> {
     try {
       const { error } = await this.supabase
         .from('services')
         .delete()
-        .eq('id', serviceId)
+        .eq('id', id)
 
       if (error) throw error
     } catch (error) {
-      throw ApiErrorHandler.handle(error)
+      throw ApiErrorHandler.handle('Failed to delete service', error)
     }
   }
+
+  // Portfolio Management
+  static async createPortfolioItem(itemData: {
+    creative_id: string
+    title: string
+    description?: string
+    image_url?: string
+    category?: string
+    project_url?: string
+  }): Promise<PortfolioItem> {
+    try {
+      const { data, error } = await this.supabase
+        .from('portfolio_items')
+        .insert(itemData)
+        .select('*')
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle('Failed to create portfolio item', error)
+    }
+  }
+
+  static async updatePortfolioItem(
+    id: string,
+    updates: Partial<PortfolioItem>
+  ): Promise<PortfolioItem> {
+    try {
+      const { data, error } = await this.supabase
+        .from('portfolio_items')
+        .update(updates)
+        .eq('id', id)
+        .select('*')
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle('Failed to update portfolio item', error)
+    }
+  }
+
+  static async deletePortfolioItem(id: string): Promise<void> {
+    try {
+      const { error } = await this.supabase
+        .from('portfolio_items')
+        .delete()
+        .eq('id', id)
+
+      if (error) throw error
+    } catch (error) {
+      throw ApiErrorHandler.handle('Failed to delete portfolio item', error)
+    }
+  }
+
+  // Availability Management
+  static async updateAvailability(
+    creativeId: string,
+    status: string,
+    schedule?: {
+      day: string
+      start_time: string
+      end_time: string
+    }[]
+  ): Promise<void> {
+    try {
+      const updates: any = { availability_status: status }
+      if (schedule) {
+        updates.availability_schedule = schedule
+      }
+
+      const { error } = await this.supabase
+        .from('creative_profiles')
+        .update(updates)
+        .eq('id', creativeId)
+
+      if (error) throw error
+    } catch (error) {
+      throw ApiErrorHandler.handle('Failed to update availability', error)
+    }
+  }
+
+  // Review System
+  static async createReview(reviewData: {
+    booking_id: string
+    client_id: string
+    creative_id: string
+    rating: number
+    comment?: string
+  }): Promise<Review> {
+    try {
+      const { data, error } = await this.supabase
+        .from('reviews')
+        .insert(reviewData)
+        .select('*, client:client_profiles(*)')
+        .single()
+
+      if (error) throw error
+
+      // Update creative's rating
+      await this.updateCreativeRating(reviewData.creative_id)
+
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle('Failed to create review', error)
+    }
+  }
+
+  private static async updateCreativeRating(creativeId: string): Promise<void> {
+    try {
+      // Get all reviews for the creative
+      const { data: reviews, error: reviewsError } = await this.supabase
+        .from('reviews')
+        .select('rating')
+        .eq('creative_id', creativeId)
+
+      if (reviewsError) throw reviewsError
+
+      // Calculate average rating
+      const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0)
+      const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0
+
+      // Update creative profile
+      const { error: updateError } = await this.supabase
+        .from('creative_profiles')
+        .update({
+          rating: averageRating,
+          reviews_count: reviews.length
+        })
+        .eq('id', creativeId)
+
+      if (updateError) throw updateError
+    } catch (error) {
+      throw ApiErrorHandler.handle('Failed to update creative rating', error)
+    }
+  }
+
 
   static async getServices(creativeId: string): Promise<any[]> {
     try {

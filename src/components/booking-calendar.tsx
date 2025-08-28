@@ -303,3 +303,85 @@ export function BookingCalendar({
     </div>
   )
 }
+
+  const checkTimeSlotAvailability = async (date: string, timeSlot: string) => {
+    try {
+      const [start, end] = timeSlot.split(' - ')
+      const bookingDate = new Date(date)
+      
+      const { data: existingBookings, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('creative_id', creativeId)
+        .eq('booking_date', date)
+        .in('status', ['pending', 'confirmed'])
+
+      if (error) throw error
+
+      // Check for booking conflicts
+      const hasConflict = existingBookings.some(booking => {
+        const bookingStart = parse(booking.start_time, 'HH:mm', bookingDate)
+        const bookingEnd = parse(booking.end_time, 'HH:mm', bookingDate)
+        const slotStart = parse(start, 'HH:mm', bookingDate)
+        const slotEnd = parse(end, 'HH:mm', bookingDate)
+
+        return isWithinInterval(slotStart, { start: bookingStart, end: bookingEnd }) ||
+               isWithinInterval(slotEnd, { start: bookingStart, end: bookingEnd }) ||
+               isWithinInterval(bookingStart, { start: slotStart, end: slotEnd })
+      })
+
+      return !hasConflict
+    } catch (err) {
+      console.error('Error checking time slot availability:', err)
+      return false
+    }
+  }
+
+  useEffect(() => {
+    if (selectedDate && recurringAvailability) {
+      const date = new Date(selectedDate)
+      const slots = generateTimeSlots(date)
+      
+      // Filter out unavailable slots
+      Promise.all(slots.map(async slot => ({
+        slot,
+        available: await checkTimeSlotAvailability(selectedDate, slot)
+      })))
+      .then(results => {
+        setAvailableSlots(results.filter(r => r.available).map(r => r.slot))
+      })
+    }
+  }, [selectedDate, recurringAvailability, bufferTime])
+
+  // Subscribe to real-time booking updates
+  useEffect(() => {
+    if (!creativeId) return
+
+    const subscription = supabase
+      .channel('booking_updates')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'bookings',
+        filter: `creative_id=eq.${creativeId}`
+      }, () => {
+        // Refresh available slots when bookings change
+        if (selectedDate) {
+          const date = new Date(selectedDate)
+          const slots = generateTimeSlots(date)
+          
+          Promise.all(slots.map(async slot => ({
+            slot,
+            available: await checkTimeSlotAvailability(selectedDate, slot)
+          })))
+          .then(results => {
+            setAvailableSlots(results.filter(r => r.available).map(r => r.slot))
+          })
+        }
+      })
+      .subscribe()
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [creativeId, selectedDate])

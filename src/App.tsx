@@ -51,6 +51,7 @@ import AdminSettingsPage from '@/pages/AdminSettingsPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage from '@/pages/ResetPasswordPage'
 import AuthCallbackPage from '@/pages/AuthCallbackPage'
+import VerifyEmail from '@/pages/auth/verify'
 import TermsPage from '@/pages/TermsPage'
 import PrivacyPage from '@/pages/PrivacyPage'
 import NotFoundPage from '@/pages/NotFoundPage'
@@ -134,6 +135,7 @@ function AppContent() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          <Route path="/auth/verify" element={<VerifyEmail />} />
           
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />

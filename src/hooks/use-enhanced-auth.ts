@@ -75,7 +75,20 @@ export function useEnhancedAuth() {
         password: credentials.password,
       })
 
-      if (error) throw error
+      if (error) {
+        if (error.message.includes('Email not confirmed')) {
+          // Resend verification email
+          await supabase.auth.resend({
+            type: 'signup',
+            email: credentials.email,
+            options: {
+              emailRedirectTo: `${window.location.origin}/auth/verify`
+            }
+          })
+          throw new Error('Please verify your email address. A new verification email has been sent.')
+        }
+        throw error
+      }
 
       const userName = data.user?.user_metadata?.full_name || 'User'
       toast.success(`Welcome back, ${userName}!`)
@@ -86,8 +99,6 @@ export function useEnhancedAuth() {
       
       if (error.message.includes('Invalid login credentials')) {
         errorMessage = 'Invalid email or password'
-      } else if (error.message.includes('Email not confirmed')) {
-        errorMessage = 'Please verify your email address'
       } else {
         errorMessage = error.message
       }
@@ -109,6 +120,7 @@ export function useEnhancedAuth() {
         email: data.email,
         password: data.password,
         options: {
+          emailRedirectTo: `${window.location.origin}/auth/verify`,
           data: {
             full_name: data.name,
             phone: data.phone,
@@ -124,9 +136,9 @@ export function useEnhancedAuth() {
       if (error) throw error
 
       if (data.userType === 'creative') {
-        toast.success('Account created successfully! Your profile will be reviewed by our admin team.')
+        toast.success('Account created successfully! Please check your email to verify your account. Your profile will be reviewed by our admin team.')
       } else {
-        toast.success('Account created successfully!')
+        toast.success('Account created successfully! Please check your email to verify your account.')
       }
       
       return { success: true }
