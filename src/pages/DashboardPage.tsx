@@ -3,6 +3,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useAuth } from '@/components/enhanced-auth-provider'
+import { InlineLoading } from '@/components/ui/global-loading'
 
 export default function DashboardPage() {
   const { user, loading, isProfileComplete } = useAuth()
@@ -24,18 +25,20 @@ export default function DashboardPage() {
     
     // Redirect based on user role
     if (user.role === 'admin') {
-      navigate('/admin')
+      navigate('/admin', { replace: true })
     } else if (user.role === 'creative') {
-      navigate('/dashboard/creative')
+      navigate('/dashboard/creative', { replace: true })
     } else {
-      navigate('/dashboard/overview')
+      navigate('/dashboard/overview', { replace: true })
     }
   }, [user, loading, isProfileComplete, navigate])
   
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      <div className="container px-4 py-8 md:px-6 md:py-12">
+        <div className="flex justify-center py-12">
+          <InlineLoading size="lg" message="Loading dashboard..." />
+        </div>
       </div>
     )
   }

@@ -2,6 +2,7 @@ import * as React from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useAuth } from "@/components/enhanced-auth-provider"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -10,8 +11,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export function MainNav() {
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
+  const { user } = useAuth()
 
-  const navigationItems = [
+  const getNavigationItems = () => {
+    const baseItems = [
     { href: "/", label: "Home" },
     { href: "/search", label: "Find Creatives" },
     { 
@@ -29,7 +32,30 @@ export function MainNav() {
     { href: "/about", label: "About" },
     { href: "/testimonials", label: "Success Stories" },
     { href: "/help", label: "Help" }
-  ]
+    ]
+
+    // Add authenticated user navigation
+    if (user) {
+      const dashboardItem = {
+        href: user.role === 'admin' ? '/admin' : 
+              user.role === 'creative' ? '/dashboard/creative' : 
+              '/dashboard/overview',
+        label: "Dashboard"
+      }
+      
+      const userItems = [
+        dashboardItem,
+        { href: "/chat", label: "Messages" },
+        { href: "/profile", label: "Profile" }
+      ]
+      
+      return [...baseItems.slice(0, 3), ...userItems, ...baseItems.slice(3)]
+    }
+
+    return baseItems
+  }
+
+  const navigationItems = getNavigationItems()
 
   const isActiveLink = (href: string) => {
     return location.pathname === href
