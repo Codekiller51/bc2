@@ -50,7 +50,7 @@ export default function LoginPage() {
       
       // Small delay to show the success message
       setTimeout(() => {
-        navigate(redirectTo)
+        navigate('/dashboard')
       }, 1000)
       
     } catch (error: any) {

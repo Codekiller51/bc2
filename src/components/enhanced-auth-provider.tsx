@@ -16,6 +16,7 @@ interface AuthContextType {
   isApproved: () => boolean
   isAuthenticated: () => boolean
   isAdmin: () => boolean
+  isProfileComplete: () => boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -35,7 +36,8 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
     auth.hasRole,
     auth.isApproved,
     auth.isAuthenticated,
-    auth.isAdmin
+    auth.isAdmin,
+    auth.isProfileComplete
   ])
 
   return (

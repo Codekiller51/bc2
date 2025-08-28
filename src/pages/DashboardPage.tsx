@@ -1,11 +1,11 @@
 'use client'
 
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@/components/enhanced-auth-provider'
 import { useEffect } from 'react'
+import { useAuth } from '@/components/enhanced-auth-provider'
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth()
+  const { user, loading, isProfileComplete } = useAuth()
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -13,6 +13,12 @@ export default function DashboardPage() {
     
     if (!user) {
       navigate('/login')
+      return
+    }
+    
+    // Check if profile is complete
+    if (!isProfileComplete()) {
+      navigate('/profile/complete')
       return
     }
     
@@ -24,7 +30,7 @@ export default function DashboardPage() {
     } else {
       navigate('/dashboard/overview')
     }
-  }, [user, loading, navigate])
+  }, [user, loading, isProfileComplete, navigate])
   
   if (loading) {
     return (

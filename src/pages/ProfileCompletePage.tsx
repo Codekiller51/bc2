@@ -1,19 +1,36 @@
+import { useAuth } from '@/components/enhanced-auth-provider'
+import { useNavigate } from 'react-router-dom'
+import { ProfileCompletionWizard } from '@/components/profile-completion-wizard'
+
 export default function ProfileCompletePage() {
+  const { user, loading } = useAuth()
+  const navigate = useNavigate()
+
+  const handleComplete = () => {
+    if (user?.role === 'creative') {
+      navigate('/dashboard/creative')
+    } else {
+      navigate('/dashboard/overview')
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-emerald-600"></div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    navigate('/login')
+    return null
+  }
+
   return (
-    <div className="container px-4 py-8 md:px-6 md:py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Complete Your Profile</h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400">
-          Finish setting up your profile to get started
-        </p>
-      </div>
-      
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-semibold mb-4">Coming Soon</h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          Profile completion functionality is being developed. Check back soon!
-        </p>
-      </div>
-    </div>
+    <ProfileCompletionWizard 
+      onComplete={handleComplete}
+      userType={user.role as 'client' | 'creative'}
+    />
   )
 }

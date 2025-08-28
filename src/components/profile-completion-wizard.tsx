@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { 
   User, 
@@ -37,7 +36,6 @@ interface ProfileCompletionWizardProps {
 
 export function ProfileCompletionWizard({ onComplete, userType }: ProfileCompletionWizardProps) {
   const { user, updateProfile } = useAuth()
-  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)

@@ -692,7 +692,6 @@
       padding: 6rem 0;
     }
   }
-  }
   
   .section-padding-sm {
     padding: 3rem 0;
@@ -1083,7 +1082,6 @@
   .focus-visible-only:focus-visible {
     box-shadow: 0 0 0 2px rgb(16 185 129), 0 0 0 4px rgb(16 185 129 / 0.2);
   }
-}
 
 @layer utilities {
   /* Text Utilities */

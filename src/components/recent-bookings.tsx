@@ -8,19 +8,25 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { EnhancedDatabaseService } from "@/lib/services/enhanced-database-service"
+import { useAuth } from "@/components/enhanced-auth-provider"
 import type { Booking } from "@/lib/database/types"
 
 export function RecentBookings() {
+  const { user } = useAuth()
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadRecentBookings()
-  }, [])
+    if (user) {
+      loadRecentBookings()
+    }
+  }, [user])
 
   const loadRecentBookings = async () => {
+    if (!user) return
+
     try {
-      const data = await EnhancedDatabaseService.getBookings()
+      const data = await EnhancedDatabaseService.getBookings({ userId: user.id })
       setBookings(data.slice(0, 5)) // Get latest 5 bookings
     } catch (error) {
       console.error("Failed to load recent bookings:", error)
