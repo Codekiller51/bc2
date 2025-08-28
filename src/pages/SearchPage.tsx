@@ -1,16 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, SlidersHorizontal } from "lucide-react"
+import { Search, SlidersHorizontal, MapPin, Star, Users } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import { CreativeCard } from "@/components/creative-card"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
+import { EnhancedSearchFilters } from "@/components/enhanced-search-filters"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import { InlineLoading } from "@/components/ui/global-loading"
 import type { CreativeProfile } from "@/lib/database/types"
@@ -19,51 +18,83 @@ export default function SearchPage() {
   const [searchResults, setSearchResults] = useState<CreativeProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedLocation, setSelectedLocation] = useState("all-locations")
-  const [selectedRating, setSelectedRating] = useState<number | null>(null)
-  const [selectedExperience, setSelectedExperience] = useState<string | null>(null)
-  const [priceRange, setPriceRange] = useState<number[]>([0])
-  const [selectedAvailability, setSelectedAvailability] = useState<string | null>(null)
+  const [sortBy, setSortBy] = useState("rating")
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  
+  const [filters, setFilters] = useState({
+    categories: [] as string[],
+    locations: [] as string[],
+    minRating: 0,
+    maxPrice: 500000,
+    experienceLevel: [] as string[],
+    availability: [] as string[],
+    skills: [] as string[],
+    responseTime: "",
+    projectSize: ""
+  })
 
   useEffect(() => {
     loadCreatives()
-  }, [selectedCategory, selectedLocation, selectedRating, selectedExperience, selectedAvailability])
+  }, [filters, sortBy])
 
   const loadCreatives = async () => {
     try {
       setLoading(true)
-      const filters: any = {}
+      const searchFilters: any = {}
       
-      if (selectedCategory !== "all") {
-        filters.category = selectedCategory
+      if (filters.categories.length > 0) {
+        searchFilters.categories = filters.categories
       }
       
-      if (selectedLocation !== "all-locations") {
-        filters.location = selectedLocation
+      if (filters.locations.length > 0) {
+        searchFilters.locations = filters.locations
       }
       
       if (searchQuery) {
-        filters.search = searchQuery
+        searchFilters.search = searchQuery
       }
 
-      if (selectedRating) {
-        filters.minRating = selectedRating
+      if (filters.minRating > 0) {
+        searchFilters.minRating = filters.minRating
       }
 
-      if (selectedExperience) {
-        filters.experienceLevel = selectedExperience
+      if (filters.maxPrice < 500000) {
+        searchFilters.maxPrice = filters.maxPrice
       }
 
-      if (priceRange[0] > 0) {
-        filters.maxPrice = priceRange[0] * 10000 // Convert slider value to actual price
+      if (filters.experienceLevel.length > 0) {
+        searchFilters.experienceLevel = filters.experienceLevel
       }
 
-      if (selectedAvailability) {
-        filters.availability = selectedAvailability
+      if (filters.availability.length > 0) {
+        searchFilters.availability = filters.availability
       }
       
-      const data = await UnifiedDatabaseService.getCreativeProfiles(filters)
+      if (filters.skills.length > 0) {
+        searchFilters.skills = filters.skills
+      }
+
+      let data = await UnifiedDatabaseService.getCreativeProfiles(searchFilters)
+      
+      // Apply sorting
+      switch (sortBy) {
+        case 'rating':
+          data = data.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+          break
+        case 'price-low':
+          data = data.sort((a, b) => (a.hourly_rate || 0) - (b.hourly_rate || 0))
+          break
+        case 'price-high':
+          data = data.sort((a, b) => (b.hourly_rate || 0) - (a.hourly_rate || 0))
+          break
+        case 'reviews':
+          data = data.sort((a, b) => (b.reviews_count || 0) - (a.reviews_count || 0))
+          break
+        case 'newest':
+          data = data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          break
+      }
+      
       setSearchResults(data)
     } catch (error) {
       console.error('Failed to load creatives:', error)
@@ -76,14 +107,42 @@ export default function SearchPage() {
     loadCreatives()
   }
 
+  const getActiveFilterCount = () => {
+    return filters.categories.length + 
+           filters.locations.length + 
+           filters.experienceLevel.length + 
+           filters.availability.length + 
+           filters.skills.length +
+           (filters.minRating > 0 ? 1 : 0) +
+           (filters.maxPrice < 500000 ? 1 : 0) +
+           (filters.responseTime ? 1 : 0) +
+           (filters.projectSize ? 1 : 0)
+  }
+
+  const clearAllFilters = () => {
+    setFilters({
+      categories: [],
+      locations: [],
+      minRating: 0,
+      maxPrice: 500000,
+      experienceLevel: [],
+      availability: [],
+      skills: [],
+      responseTime: "",
+      projectSize: ""
+    })
+  }
+
   return (
-    <div className="container-brand section-padding">
+    <div className="container px-4 py-8 md:px-6 md:py-12">
       <div className="mb-8">
         <h1 className="text-h1 mb-4">Find Creative Professionals</h1>
         <p className="text-body-lg text-muted-foreground mb-6">
           Discover verified creative talent across Tanzania based on your location and needs
         </p>
-        <div className="flex flex-col md:flex-row gap-4">
+        
+        {/* Search Bar */}
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
           <div className="flex-1">
             <Input
               placeholder="Search by name, skill, or keyword" 
@@ -93,129 +152,20 @@ export default function SearchPage() {
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
           </div>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <SelectValue placeholder="Service Type" />
+          
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-full lg:w-48">
+              <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Services</SelectItem>
-              <SelectItem value="Graphic Design">Graphic Design</SelectItem>
-              <SelectItem value="Photography">Photography</SelectItem>
-              <SelectItem value="Videography">Videography</SelectItem>
-              <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
+              <SelectItem value="rating">Highest Rated</SelectItem>
+              <SelectItem value="reviews">Most Reviews</SelectItem>
+              <SelectItem value="price-low">Price: Low to High</SelectItem>
+              <SelectItem value="price-high">Price: High to Low</SelectItem>
+              <SelectItem value="newest">Newest First</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <SelectValue placeholder="Location" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all-locations">All Locations</SelectItem>
-              <SelectItem value="dar-es-salaam">Dar es Salaam</SelectItem>
-              <SelectItem value="arusha">Arusha</SelectItem>
-              <SelectItem value="mwanza">Mwanza</SelectItem>
-              <SelectItem value="dodoma">Dodoma</SelectItem>
-              <SelectItem value="mbeya">Mbeya</SelectItem>
-            </SelectContent>
-          </Select>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" className="w-full md:w-auto">
-                <SlidersHorizontal className="h-4 w-4 mr-2" />
-                Filters
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Filter Results</SheetTitle>
-                <SheetDescription>Refine your search with additional filters</SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-6 py-6">
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Rating</h3>
-                  <div className="space-y-2">
-                    {[4, 3, 2, 1].map((rating) => (
-                      <div key={rating} className="flex items-center space-x-2">
-                        <Checkbox 
-                      id={`rating-${rating}`}
-                      checked={selectedRating === rating}
-                      onCheckedChange={(checked) => setSelectedRating(checked ? rating : null)}
-                    />
-                    <Label htmlFor={`rating-${rating}`} className="text-sm font-normal">
-                      {rating}+ Stars
-                    </Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Experience Level</h3>
-                  <div className="space-y-2">
-                    {["beginner", "intermediate", "expert"].map((level) => (
-                      <div key={level} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`level-${level}`}
-                          checked={selectedExperience === level}
-                          onCheckedChange={(checked) => setSelectedExperience(checked ? level : null)}
-                        />
-                        <Label htmlFor={`level-${level}`} className="text-sm font-normal">
-                          {level.charAt(0).toUpperCase() + level.slice(1)}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Price Range</h3>
-                  <div className="pt-4">
-                    <Slider 
-                      value={priceRange} 
-                      onValueChange={setPriceRange} 
-                      max={100} 
-                      step={1} 
-                    />
-                    <div className="flex justify-between mt-2">
-                      <span className="text-xs text-gray-500">Tsh {priceRange[0] * 10000}</span>
-                      <span className="text-xs text-gray-500">Tsh 1,000,000+</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Availability</h3>
-                  <div className="space-y-2">
-                    {[
-                      { label: "Available Now", value: "available" },
-                      { label: "Available This Week", value: "available_soon" },
-                      { label: "Available This Month", value: "busy" }
-                    ].map((item) => (
-                      <div key={item.value} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`availability-${item.value}`}
-                          checked={selectedAvailability === item.value}
-                          onCheckedChange={(checked) => setSelectedAvailability(checked ? item.value : null)}
-                        />
-                        <Label
-                          htmlFor={`availability-${item.value}`}
-                          className="text-sm font-normal"
-                        >
-                          {item.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <Button 
-                  className="mt-4 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700"
-                  onClick={() => {
-                    loadCreatives()
-                  }}
-                  className="btn-primary"
-                >
-                  Apply Filters
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+          
           <Button
             className="btn-primary w-full md:w-auto"
             onClick={handleSearch}
@@ -224,51 +174,131 @@ export default function SearchPage() {
             Search
           </Button>
         </div>
+        
+        {/* Active Filters Display */}
+        {getActiveFilterCount() > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {filters.categories.map(category => (
+              <Badge key={category} variant="secondary" className="cursor-pointer" onClick={() => {
+                setFilters(prev => ({
+                  ...prev,
+                  categories: prev.categories.filter(c => c !== category)
+                }))
+              }}>
+                {category} ×
+              </Badge>
+            ))}
+            {filters.locations.map(location => (
+              <Badge key={location} variant="secondary" className="cursor-pointer" onClick={() => {
+                setFilters(prev => ({
+                  ...prev,
+                  locations: prev.locations.filter(l => l !== location)
+                }))
+              }}>
+                📍 {location} ×
+              </Badge>
+            ))}
+            {filters.minRating > 0 && (
+              <Badge variant="secondary" className="cursor-pointer" onClick={() => {
+                setFilters(prev => ({ ...prev, minRating: 0 }))
+              }}>
+                ⭐ {filters.minRating}+ Stars ×
+              </Badge>
+            )}
+          </div>
+        )}
       </div>
 
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <InlineLoading size="lg" message="Searching for creative professionals..." />
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Filters Sidebar */}
+        <div className="lg:col-span-1">
+          <EnhancedSearchFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            onClearFilters={clearAllFilters}
+            activeFilterCount={getActiveFilterCount()}
+          />
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {searchResults.map((creative) => (
-            <CreativeCard
-              key={creative.id}
-              name={creative.title || 'Creative Professional'}
-              title={creative.category}
-              location={creative.location || 'Tanzania'}
-              rating={creative.rating || 0}
-              reviews={creative.reviews_count || 0}
-              imageSrc={creative.avatar_url || "/placeholder.svg?height=400&width=400"}
-              href={`/profile/${creative.id}`}
-            />
-          ))}
-        </div>
-      )}
+        
+        {/* Results */}
+        <div className="lg:col-span-3">
+          {/* Results Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-semibold">
+                {loading ? 'Searching...' : `${searchResults.length} Creative${searchResults.length !== 1 ? 's' : ''} Found`}
+              </h2>
+              {searchQuery && (
+                <p className="text-gray-600 dark:text-gray-400">
+                  Results for "{searchQuery}"
+                </p>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+              >
+                Grid
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+              >
+                List
+              </Button>
+            </div>
+          </div>
 
-      {!loading && searchResults.length === 0 && (
-        <div className="text-center py-12">
-          <h3 className="text-h3 mb-2">No creatives found</h3>
-          <p className="text-body text-muted-foreground mb-4">
-            Try adjusting your search criteria or browse all available creatives
-          </p>
-          <Button
-            onClick={() => {
-              setSearchQuery("")
-              setSelectedCategory("all")
-              setSelectedLocation("all-locations")
-              loadCreatives()
-            }}
-            variant="outline"
-            className="btn-outline"
-          >
-            Clear Filters
-          </Button>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <InlineLoading size="lg" message="Searching for creative professionals..." />
+            </div>
+          ) : searchResults.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">No creatives found</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Try adjusting your search criteria or browse all available creatives
+                </p>
+                <Button onClick={clearAllFilters} variant="outline">
+                  Clear All Filters
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className={viewMode === 'grid' 
+              ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" 
+              : "space-y-4"
+            }>
+              {searchResults.map((creative) => (
+                <CreativeCard
+                  key={creative.id}
+                  name={creative.title || 'Creative Professional'}
+                  title={creative.category}
+                  location={creative.location || 'Tanzania'}
+                  rating={creative.rating || 0}
+                  reviews={creative.reviews_count || 0}
+                  imageSrc={creative.avatar_url || "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400"}
+                  href={`/profile/${creative.id}`}
+                  hourlyRate={creative.hourly_rate}
+                  skills={creative.skills || []}
+                  completedProjects={creative.completed_projects || 0}
+                  verified={creative.approval_status === 'approved'}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
-      <div className="mt-8 flex justify-center">
+      {/* Pagination */}
+      {!loading && searchResults.length > 0 && (
+        <div className="mt-8 flex justify-center">
         <nav className="flex items-center space-x-2">
           <Button variant="outline" size="icon" disabled>
             <span className="sr-only">Previous page</span>
@@ -318,7 +348,8 @@ export default function SearchPage() {
             </svg>
           </Button>
         </nav>
-      </div>
+        </div>
+      )}
     </div>
   )
 }

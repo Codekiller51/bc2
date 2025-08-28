@@ -1,78 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Bell, Check, X } from 'lucide-react'
 import { useAuth } from '@/components/enhanced-auth-provider'
-import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
+import { useRealTimeNotifications } from '@/hooks/use-real-time-notifications'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
-
-type Notification = {
-  id: string
-  type: 'booking' | 'message' | 'system'
-  message: string
-  read: boolean
-  created_at: string
-  sender?: {
-    full_name: string
-    avatar_url: string
-  }
-  booking?: {
-    id: string
-    title: string
-    status: string
-  }
-}
+import { ConnectionStatusIndicator } from '@/components/connection-status-indicator'
 
 export function NotificationSystem() {
   const { user } = useAuth()
-  const [notifications, setNotifications] = useState<Notification[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchNotifications()
-      // Subscribe to real-time notifications
-      const subscription = UnifiedDatabaseService.subscribeToNotifications(user.id, () => {
-        fetchNotifications()
-        toast.success('You have a new notification')
-      })
-
-      return () => {
-        subscription.unsubscribe()
-      }
-    }
-  }, [user?.id])
-
-  const fetchNotifications = async () => {
-    if (!user?.id) return
-
-    try {
-      const data = await UnifiedDatabaseService.getNotifications(user.id)
-      setNotifications(data)
-      setUnreadCount(data.filter((n: Notification) => !n.read_at).length)
-    } catch (error) {
-      console.error('Error fetching notifications:', error)
-      toast.error('Failed to load notifications')
-    }
-  }
-
-  const markAsRead = async (id: string) => {
-    try {
-      await UnifiedDatabaseService.markNotificationAsRead(id)
-
-      setNotifications(notifications.map(n => 
-        n.id === id ? { ...n, read_at: new Date().toISOString() } : n
-      ))
-      setUnreadCount(prev => Math.max(0, prev - 1))
-    } catch (error) {
-      console.error('Error marking notification as read:', error)
-      toast.error('Failed to update notification')
-    }
-  }
+  const {
+    notifications,
+    unreadCount,
+    loading,
+    connectionStatus,
+    markAsRead,
+    markAllAsRead,
+    refresh
+  } = useRealTimeNotifications(user?.id)
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -85,6 +35,20 @@ export function NotificationSystem() {
     }
   }
 
+  const formatNotificationTime = (timestamp: string) => {
+    const date = new Date(timestamp)
+    const now = new Date()
+    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60)
+
+    if (diffInHours < 1) {
+      const diffInMinutes = Math.floor(diffInHours * 60)
+      return diffInMinutes < 1 ? "Just now" : `${diffInMinutes}m ago`
+    } else if (diffInHours < 24) {
+      return `${Math.floor(diffInHours)}h ago`
+    } else {
+      return date.toLocaleDateString()
+    }
+  }
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -102,15 +66,45 @@ export function NotificationSystem() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Notifications</SheetTitle>
+          <div className="flex items-center justify-between">
+            <SheetTitle>Notifications</SheetTitle>
+            <div className="flex items-center gap-2">
+              <ConnectionStatusIndicator status={connectionStatus} />
+              {unreadCount > 0 && (
+                <Button
+                  onClick={markAllAsRead}
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs"
+                >
+                  Mark all read
+                </Button>
+              )}
+            </div>
+          </div>
         </SheetHeader>
+        
         <ScrollArea className="h-[calc(100vh-8rem)] mt-4">
-          <div className="space-y-4">
-            {notifications.length === 0 ? (
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex items-start gap-4 p-4 rounded-lg">
+                  <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4 animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="space-y-4">
               <p className="text-center text-muted-foreground py-4">
                 No notifications yet
               </p>
-            ) : (
+            </div>
+          ) : (
+            <div className="space-y-4">
               notifications.map((notification) => (
                 <div
                   key={notification.id}
@@ -121,11 +115,11 @@ export function NotificationSystem() {
                     <p className="text-sm">{notification.message}</p>
                     {notification.data?.booking_id && (
                       <p className="text-xs text-muted-foreground mt-1">
-                        Booking ID: {notification.data.booking_id}
+                        Related to booking: {notification.data.booking_id}
                       </p>
                     )}
                     <p className="text-xs text-muted-foreground mt-1">
-                      {new Date(notification.created_at).toLocaleDateString()}
+                      {formatNotificationTime(notification.created_at)}
                     </p>
                   </div>
                   {!notification.read_at && (
@@ -139,7 +133,19 @@ export function NotificationSystem() {
                   )}
                 </div>
               ))
-            )}
+            </div>
+          )}
+          
+          {/* Refresh Button */}
+          <div className="mt-4 text-center">
+            <Button
+              onClick={refresh}
+              variant="ghost"
+              size="sm"
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Refresh'}
+            </Button>
           </div>
         </ScrollArea>
       </SheetContent>

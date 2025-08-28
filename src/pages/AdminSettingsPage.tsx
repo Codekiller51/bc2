@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Settings, DollarSign, Users, Bell, Shield, Save, AlertTriangle } from 'lucide-react'
+import { Settings, DollarSign, Users, Bell, Shield, Save, AlertTriangle, TestTube } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator'
 import { useAuth } from '@/components/enhanced-auth-provider'
 import { InlineLoading } from '@/components/ui/global-loading'
+import { AdminTestRunner } from '@/components/admin-test-runner'
 import { toast } from 'sonner'
 
 export default function AdminSettingsPage() {
@@ -385,12 +386,32 @@ export default function AdminSettingsPage() {
         </motion.div>
       </div>
 
+      {/* Test Runner Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.7 }}
+        className="lg:col-span-2"
+      >
+        <Card className="professional-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TestTube className="h-5 w-5" />
+              Platform Testing
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AdminTestRunner />
+          </CardContent>
+        </Card>
+      </motion.div>
+
       {/* Save Button */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="mt-8 flex justify-end"
+        className="mt-8 flex justify-end lg:col-span-2"
       >
         <Button
           onClick={handleSaveSettings}

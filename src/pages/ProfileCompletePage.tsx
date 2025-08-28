@@ -1,6 +1,6 @@
 import { useAuth } from '@/components/enhanced-auth-provider'
 import { useNavigate } from 'react-router-dom'
-import { ProfileCompletionWizard } from '@/components/profile-completion-wizard'
+import { EnhancedOnboardingFlow } from '@/components/enhanced-onboarding-flow'
 
 export default function ProfileCompletePage() {
   const { user, loading } = useAuth()
@@ -28,7 +28,7 @@ export default function ProfileCompletePage() {
   }
 
   return (
-    <ProfileCompletionWizard 
+    <EnhancedOnboardingFlow 
       onComplete={handleComplete}
       userType={user.role as 'client' | 'creative'}
     />
