@@ -141,11 +141,11 @@ export default function ProfilePage() {
               <div className="relative inline-block mb-6">
                 <Avatar className="h-32 w-32 mx-auto">
                   <AvatarImage 
-                    src={user.avatar_url || profile?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=059669&textColor=ffffff`} 
-                    alt={user.name} 
+                    src={user.avatar_url || profile?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${user.full_name}&backgroundColor=059669&textColor=ffffff`} 
+                    alt={user.full_name} 
                   />
                   <AvatarFallback className="text-2xl">
-                    {user.name.charAt(0)}
+                    {user.full_name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="absolute bottom-2 right-2">
@@ -154,7 +154,7 @@ export default function ProfilePage() {
               </div>
 
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                {user.name}
+                {user.full_name}
               </h2>
               
               <div className="space-y-2 mb-6">

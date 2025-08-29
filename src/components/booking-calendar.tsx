@@ -11,18 +11,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 interface BookingCalendarProps {
   creativeId: string
   onScheduleSelect: (date: string, timeSlot: string, timezone: string) => void
-  bufferTime?: number // Buffer time in minutes between bookings
-  recurringAvailability?: {
-    [key: string]: { // day of week (0-6, 0 is Sunday)
-      start: string // HH:mm format
-      end: string // HH:mm format
-      isAvailable: boolean
-    }
-  }
+}
+
+interface CreativeAvailability {
+  id: string;
+  creative_id: string;
+  recurring_availability: {
+    [key: string]: {
+      start: string;
+      end: string;
+      isAvailable: boolean;
+    };
+  };
+  buffer_time: number;
+}
+
+interface Booking {
+  id: string;
+  creative_id: string;
+  booking_date: string;
+  start_time: string;
+  end_time: string;
+  status: string;
 }
 
 import { format, addMinutes, parse, isWithinInterval } from "date-fns";
-import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
+import { toZonedTime, toUtc } from "date-fns-tz";
 
 export function BookingCalendar({ 
   creativeId, 
@@ -40,7 +54,7 @@ export function BookingCalendar({
 
   const generateTimeSlots = (date: Date) => {
     const dayOfWeek = date.getDay().toString()
-    const availability = recurringAvailability[dayOfWeek]
+    const availability = recurringAvailability?.[dayOfWeek]
     
     if (!availability || !availability.isAvailable) {
       return []
@@ -71,13 +85,13 @@ export function BookingCalendar({
           .from('creative_availability')
           .select('*')
           .eq('creative_id', creativeId)
-          .maybeSingle()
+          .maybeSingle<CreativeAvailability>()
 
         if (error) throw error
 
         if (data) {
-          setRecurringAvailability(data.recurring_availability || {})
-          setBufferTime(data.buffer_time || 30)
+          setRecurringAvailability(data.recurring_availability)
+          setBufferTime(data.buffer_time)
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred')
@@ -124,7 +138,7 @@ export function BookingCalendar({
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     const dayOfWeek = date.getDay().toString()
-    const availability = recurringAvailability[dayOfWeek]
+    const availability = recurringAvailability?.[dayOfWeek]
     return date >= today && availability?.isAvailable
   }
 
@@ -175,7 +189,89 @@ export function BookingCalendar({
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
   if (isLoading) {
-    return (
+    const checkTimeSlotAvailability = async (date: string, timeSlot: string) => {
+    try {
+      const [start, end] = timeSlot.split(' - ')
+      const bookingDate = new Date(date)
+      
+      const { data: existingBookings, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('creative_id', creativeId)
+        .eq('booking_date', date)
+        .in('status', ['pending', 'confirmed']) as { data: Booking[] | null, error: any }
+
+      if (error) throw error
+
+      // Check for booking conflicts
+      const hasConflict = existingBookings?.some(booking => {
+        const bookingStart = parse(booking.start_time, 'HH:mm', bookingDate)
+        const bookingEnd = parse(booking.end_time, 'HH:mm', bookingDate)
+        const slotStart = parse(start, 'HH:mm', bookingDate)
+        const slotEnd = parse(end, 'HH:mm', bookingDate)
+
+        return isWithinInterval(slotStart, { start: bookingStart, end: bookingEnd }) ||
+               isWithinInterval(slotEnd, { start: bookingStart, end: bookingEnd }) ||
+               isWithinInterval(bookingStart, { start: slotStart, end: slotEnd })
+      })
+
+      return !hasConflict
+    } catch (err) {
+      console.error('Error checking time slot availability:', err)
+      return false
+    }
+  }
+
+  useEffect(() => {
+    if (selectedDate && recurringAvailability) {
+      const date = new Date(selectedDate)
+      const slots = generateTimeSlots(date)
+      
+      // Filter out unavailable slots
+      Promise.all(slots.map(async slot => ({
+        slot,
+        available: await checkTimeSlotAvailability(selectedDate, slot)
+      })))
+      .then(results => {
+        setAvailableSlots(results.filter(r => r.available).map(r => r.slot))
+      })
+    }
+  }, [selectedDate, recurringAvailability, bufferTime])
+
+  // Subscribe to real-time booking updates
+  useEffect(() => {
+    if (!creativeId) return
+
+    const subscription = supabase
+      .channel('booking_updates')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'bookings',
+        filter: `creative_id=eq.${creativeId}`
+      }, () => {
+        // Refresh available slots when bookings change
+        if (selectedDate) {
+          const date = new Date(selectedDate)
+          const slots = generateTimeSlots(date)
+          
+          Promise.all(slots.map(async slot => ({
+            slot,
+            available: await checkTimeSlotAvailability(selectedDate, slot)
+          })))
+          .then(results => {
+            setAvailableSlots(results.filter(r => r.available).map(r => r.slot))
+          })
+        }
+      })
+      .subscribe()
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [creativeId, selectedDate])
+
+  return (
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
       </div>
@@ -303,85 +399,3 @@ export function BookingCalendar({
     </div>
   )
 }
-
-  const checkTimeSlotAvailability = async (date: string, timeSlot: string) => {
-    try {
-      const [start, end] = timeSlot.split(' - ')
-      const bookingDate = new Date(date)
-      
-      const { data: existingBookings, error } = await supabase
-        .from('bookings')
-        .select('*')
-        .eq('creative_id', creativeId)
-        .eq('booking_date', date)
-        .in('status', ['pending', 'confirmed'])
-
-      if (error) throw error
-
-      // Check for booking conflicts
-      const hasConflict = existingBookings.some(booking => {
-        const bookingStart = parse(booking.start_time, 'HH:mm', bookingDate)
-        const bookingEnd = parse(booking.end_time, 'HH:mm', bookingDate)
-        const slotStart = parse(start, 'HH:mm', bookingDate)
-        const slotEnd = parse(end, 'HH:mm', bookingDate)
-
-        return isWithinInterval(slotStart, { start: bookingStart, end: bookingEnd }) ||
-               isWithinInterval(slotEnd, { start: bookingStart, end: bookingEnd }) ||
-               isWithinInterval(bookingStart, { start: slotStart, end: slotEnd })
-      })
-
-      return !hasConflict
-    } catch (err) {
-      console.error('Error checking time slot availability:', err)
-      return false
-    }
-  }
-
-  useEffect(() => {
-    if (selectedDate && recurringAvailability) {
-      const date = new Date(selectedDate)
-      const slots = generateTimeSlots(date)
-      
-      // Filter out unavailable slots
-      Promise.all(slots.map(async slot => ({
-        slot,
-        available: await checkTimeSlotAvailability(selectedDate, slot)
-      })))
-      .then(results => {
-        setAvailableSlots(results.filter(r => r.available).map(r => r.slot))
-      })
-    }
-  }, [selectedDate, recurringAvailability, bufferTime])
-
-  // Subscribe to real-time booking updates
-  useEffect(() => {
-    if (!creativeId) return
-
-    const subscription = supabase
-      .channel('booking_updates')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'bookings',
-        filter: `creative_id=eq.${creativeId}`
-      }, () => {
-        // Refresh available slots when bookings change
-        if (selectedDate) {
-          const date = new Date(selectedDate)
-          const slots = generateTimeSlots(date)
-          
-          Promise.all(slots.map(async slot => ({
-            slot,
-            available: await checkTimeSlotAvailability(selectedDate, slot)
-          })))
-          .then(results => {
-            setAvailableSlots(results.filter(r => r.available).map(r => r.slot))
-          })
-        }
-      })
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [creativeId, selectedDate])

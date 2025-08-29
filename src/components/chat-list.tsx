@@ -40,7 +40,7 @@ export function ChatList({ currentUserId, onConversationSelect, selectedConversa
 
   const filteredConversations = conversations.filter((conversation) => {
     const otherUser = conversation.client_id === currentUserId ? conversation.creative : conversation.client
-    return otherUser?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    return otherUser?.full_name?.toLowerCase().includes(searchQuery.toLowerCase())
   })
 
   const formatLastMessageTime = (timestamp: string) => {
@@ -115,15 +115,15 @@ export function ChatList({ currentUserId, onConversationSelect, selectedConversa
                   >
                     <div className="relative">
                       <Avatar>
-                        <AvatarImage src={otherUser?.avatar_url || "/placeholder.svg"} alt={otherUser?.name} />
-                        <AvatarFallback>{otherUser?.name?.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={otherUser?.avatar_url || "/placeholder.svg"} alt={otherUser?.full_name} />
+                        <AvatarFallback>{otherUser?.full_name?.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full" />
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-medium truncate">{otherUser?.name}</h3>
+                        <h3 className="font-medium truncate">{otherUser?.full_name}</h3>
                         <span className="text-xs text-gray-500">
                           {formatLastMessageTime(conversation.last_message_at)}
                         </span>

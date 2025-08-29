@@ -148,7 +148,7 @@ export default function DashboardCreativePage() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome back, {user?.name}!
+            Welcome back, {user?.full_name}!
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Here's an overview of your creative business on Brand Connect

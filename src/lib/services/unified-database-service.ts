@@ -52,7 +52,7 @@ export class UnifiedDatabaseService {
         return {
           id: user.id,
           email: user.email || '',
-          name: user.user_metadata?.full_name || 'Admin',
+          full_name: user.user_metadata?.full_name || 'Admin',
           phone: user.user_metadata?.phone,
           role: 'admin',
           location: user.user_metadata?.location,
@@ -120,7 +120,7 @@ export class UnifiedDatabaseService {
       return {
         id: user.id,
         email: user.email || '',
-        name: user.user_metadata?.full_name || user.user_metadata?.name || 'User',
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || 'User',
         phone: user.user_metadata?.phone,
         role: user.user_metadata?.user_type || user.user_metadata?.role || 'client',
         location: user.user_metadata?.location,
@@ -198,7 +198,7 @@ export class UnifiedDatabaseService {
       if (filters?.search) {
         const searchLower = filters.search.toLowerCase()
         filteredUsers = filteredUsers.filter(user => 
-          user.name.toLowerCase().includes(searchLower) ||
+          user.full_name.toLowerCase().includes(searchLower) ||
           user.email.toLowerCase().includes(searchLower)
         )
       }

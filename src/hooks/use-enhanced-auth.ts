@@ -229,7 +229,7 @@ export function useEnhancedAuth() {
     if (!user) return false
     
     // Check if essential profile information is present
-    const hasBasicInfo = user.name && user.location
+    const hasBasicInfo = user.full_name && user.location
     
     // For creative users, also check if they have professional details
     if (user.role === 'creative') {

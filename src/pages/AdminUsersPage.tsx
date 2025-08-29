@@ -130,7 +130,7 @@ export default function AdminUsersPage() {
   const filteredUsers = users.filter(user => {
     const matchesFilter = filter === 'all' || user.role === filter
     const matchesSearch = !searchTerm || 
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
     return matchesFilter && matchesSearch
   })
@@ -240,18 +240,18 @@ export default function AdminUsersPage() {
                     <div className="flex items-center gap-4">
                       <Avatar className="h-12 w-12">
                         <AvatarImage 
-                          src={userData.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${userData.name}&backgroundColor=059669&textColor=ffffff`} 
-                          alt={userData.name} 
+                          src={userData.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${userData.full_name}&backgroundColor=059669&textColor=ffffff`} 
+                          alt={userData.full_name} 
                         />
                         <AvatarFallback>
-                          {userData.name.charAt(0)}
+                          {userData.full_name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-semibold text-gray-900 dark:text-white">
-                            {userData.name}
+                            {userData.full_name}
                           </h3>
                           {getRoleBadge(userData.role)}
                         </div>

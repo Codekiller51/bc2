@@ -265,8 +265,8 @@ export default function BookingDetailsPage() {
                 <div className="text-center mb-4">
                   <Avatar className="h-16 w-16 mx-auto mb-3">
                     <AvatarImage 
-                      src={otherUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${otherUser?.name || otherUser?.title}&backgroundColor=059669&textColor=ffffff`} 
-                      alt={otherUser?.name || otherUser?.title} 
+                      src={otherUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${otherUser?.full_name || otherUser?.title}&backgroundColor=059669&textColor=ffffff`} 
+                      alt={otherUser?.full_name || otherUser?.title} 
                     />
                     <AvatarFallback>
                       <User className="h-6 w-6" />
@@ -274,7 +274,7 @@ export default function BookingDetailsPage() {
                   </Avatar>
                   
                   <h3 className="font-semibold text-gray-900 dark:text-white">
-                    {otherUser?.name || otherUser?.title || 'User'}
+                    {otherUser?.full_name || otherUser?.title || 'User'}
                   </h3>
                   
                   {isCreative && otherUser?.company_name && (

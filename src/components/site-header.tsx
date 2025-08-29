@@ -105,10 +105,10 @@ export function SiteHeader() {
                   <Avatar className="h-8 w-8">
                     <AvatarImage 
                       src={user.avatar_url || "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100"} 
-                      alt={user.name} 
+                      alt={user.full_name} 
                     />
                     <AvatarFallback className="bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 font-semibold text-sm">
-                      {user.name ? user.name[0].toUpperCase() : 'U'}
+                      {user.full_name ? user.full_name[0].toUpperCase() : 'U'}
                     </AvatarFallback>
                   </Avatar>
                   
@@ -121,14 +121,14 @@ export function SiteHeader() {
                 {/* User Info Header */}
                 <div className="flex items-center gap-3 mb-3 p-3 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 rounded-lg">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={user.avatar_url} alt={user.name} />
+                    <AvatarImage src={user.avatar_url} alt={user.full_name} />
                     <AvatarFallback className="bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 font-semibold">
                       {user.name ? user.name[0].toUpperCase() : 'U'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                      {user.name}
+                      {user.full_name}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                       {user.email}

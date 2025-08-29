@@ -292,7 +292,7 @@ export function EnhancedSearchFilters({
             <SelectValue placeholder="Any response time" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Any response time</SelectItem>
+            <SelectItem value="all">Any response time</SelectItem>
             <SelectItem value="1hour">Within 1 hour</SelectItem>
             <SelectItem value="6hours">Within 6 hours</SelectItem>
             <SelectItem value="24hours">Within 24 hours</SelectItem>
@@ -310,7 +310,7 @@ export function EnhancedSearchFilters({
             <SelectValue placeholder="Any project size" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Any project size</SelectItem>
+            <SelectItem value="all">Any project size</SelectItem>
             <SelectItem value="small">Small - Less than TZS 100,000</SelectItem>
             <SelectItem value="medium">Medium - TZS 100,000 to 500,000</SelectItem>
             <SelectItem value="large">Large - More than TZS 500,000</SelectItem>

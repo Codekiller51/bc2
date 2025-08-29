@@ -284,7 +284,7 @@ export class EnhancedAuthService {
     }
   }
 
-  static async createAdminUser(email: string, password: string, name: string): Promise<AuthResult> {
+  static async createAdminUser(email: string, password: string, full_name: string): Promise<AuthResult> {
     try {
       const { data, error } = await supabase.auth.admin.createUser({
         email,
@@ -357,7 +357,7 @@ export class EnhancedAuthService {
 
   static getAuthHeaders(): Record<string, string> {
     return {
-      'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFocnh3anBmeGJtbmthZXZid3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNzI3NjUsImV4cCI6MjA2Njk0ODc2NX0.j3be54uL1cugIlbIcmi7eeS1ixrSUMBbnlxmpA-mXpA'}`,
       'Content-Type': 'application/json'
     }
   }

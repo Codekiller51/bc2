@@ -49,7 +49,7 @@ export function EnhancedOnboardingFlow({ onComplete, userType }: OnboardingFlowP
 
   const [profileData, setProfileData] = useState({
     // Basic Info
-    name: user?.name || "",
+    full_name: user?.full_name || "",
     phone: user?.phone || "",
     location: user?.location || "",
     avatar_url: user?.avatar_url || "",
@@ -88,7 +88,7 @@ export function EnhancedOnboardingFlow({ onComplete, userType }: OnboardingFlowP
     if (user) {
       setProfileData(prev => ({
         ...prev,
-        name: user.name || "",
+        full_name: user?.full_name || "",
         phone: user.phone || "",
         location: user.location || "",
         avatar_url: user.avatar_url || ""
@@ -201,7 +201,7 @@ export function EnhancedOnboardingFlow({ onComplete, userType }: OnboardingFlowP
 
       // Update user profile
       await updateProfile({
-        name: profileData.name,
+        full_name: profileData.full_name,
         phone: profileData.phone,
         location: profileData.location,
         avatar_url: avatarUrl

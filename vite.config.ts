@@ -14,28 +14,13 @@ export default defineConfig({
   server: {
     port: 3000,
     host: '0.0.0.0',
-    hmr: {
-      port: 3001,
-      clientPort: 3001
-    }
+    hmr: true
   },
   define: {
     global: 'globalThis',
-    // Fix timer compatibility issues in WebContainer
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-    'process.nextTick': 'globalThis.queueMicrotask',
-    'process.hrtime': 'performance.now',
   },
   optimizeDeps: {
     exclude: ['fsevents'],
     include: ['react', 'react-dom', '@supabase/supabase-js']
   },
-  esbuild: {
-    target: 'es2020',
-    // Fix timer and process compatibility
-    define: {
-      'process.nextTick': 'queueMicrotask',
-      'process.hrtime': 'performance.now'
-    }
-  }
 })

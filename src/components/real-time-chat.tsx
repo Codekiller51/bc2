@@ -135,11 +135,11 @@ export function RealTimeChat({ conversation, currentUserId }: RealTimeChatProps)
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src={otherUser?.avatar_url || "/placeholder.svg"} alt={otherUser?.name} />
-              <AvatarFallback>{otherUser?.name?.charAt(0)}</AvatarFallback>
+              <AvatarImage src={otherUser?.avatar_url || "/placeholder.svg"} alt={otherUser?.full_name} />
+              <AvatarFallback>{otherUser?.full_name?.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
-              <CardTitle className="text-lg">{otherUser?.name}</CardTitle>
+              <CardTitle className="text-lg">{otherUser?.full_name}</CardTitle>
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-xs">
                   {otherUser?.role === "creative" ? "Creative Professional" : "Client"}
@@ -234,8 +234,8 @@ export function RealTimeChat({ conversation, currentUserId }: RealTimeChatProps)
               <div className="flex justify-start">
                 <div className="flex items-center gap-2">
                   <Avatar className="h-6 w-6">
-                    <AvatarImage src={otherUser?.avatar_url || "/placeholder.svg"} alt={otherUser?.name} />
-                    <AvatarFallback className="text-xs">{otherUser?.name?.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={otherUser?.avatar_url || "/placeholder.svg"} alt={otherUser?.full_name} />
+                    <AvatarFallback className="text-xs">{otherUser?.full_name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
                     <div className="flex space-x-1">

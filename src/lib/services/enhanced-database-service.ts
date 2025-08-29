@@ -1,64 +1,74 @@
-import { supabase } from '@/lib/supabase/client'
-import type { 
-  User, 
-  CreativeProfile, 
-  Booking, 
-  Conversation, 
-  Message, 
-  Notification 
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import type {
+  User,
+  CreativeProfile,
+  Booking,
+  Conversation,
+  Message,
+  Notification,
+  Database
 } from '@/lib/database/types'
 
+const supabase = createClient<Database>(
+  import.meta.env.VITE_NEXT_PUBLIC_SUPABASE_URL!,
+  import.meta.env.VITE_NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+
 export class EnhancedDatabaseService {
-  private static supabase = supabase
+  private static supabase: SupabaseClient<Database> = supabase
 
   // User Management
   static async getCurrentUser(): Promise<User | null> {
-    const { data: { user }, error } = await this.supabase.auth.getUser()
-    if (error || !user) return null
+    const { data: { user }, error } = await this.supabase.auth.getUser();
+    if (error || !user) return null;
 
     // Get additional user data from profiles
-    const { data: profile } = await this.supabase
+    const { data: clientProfileData } = await this.supabase
       .from('client_profiles')
       .select('*')
       .eq('id', user.id)
-      .single()
+      .single();
 
-    if (profile) {
+    if (clientProfileData) {
+      const profile = clientProfileData as Database['public']['Tables']['client_profiles']['Row'];
       return {
         id: user.id,
         email: user.email!,
-        name: profile.full_name || 'User',
+        full_name: profile.full_name || 'User',
         phone: profile.phone,
         role: 'client',
         location: profile.location,
         verified: user.email_confirmed_at !== null,
+        approved: false,
         created_at: user.created_at,
         updated_at: profile.updated_at
-      }
+      };
     }
 
     // Check creative profile
-    const { data: creativeProfile } = await this.supabase
+    const { data: creativeProfileData } = await this.supabase
       .from('creative_profiles')
-      .select('*, user:users(*)')
+      .select('*, users(*)')
       .eq('user_id', user.id)
-      .single()
+      .single();
 
-    if (creativeProfile) {
+    if (creativeProfileData) {
+      const creativeProfile = creativeProfileData as Database['public']['Tables']['creative_profiles']['Row'] & { users: Database['public']['Tables']['users']['Row'] };
       return {
         id: user.id,
         email: user.email!,
-        name: creativeProfile.user?.name || 'Creative',
-        phone: creativeProfile.user?.phone,
+        full_name: creativeProfile.users?.full_name || 'Creative',
+        phone: creativeProfile.users?.phone,
         role: 'creative',
-        location: creativeProfile.user?.location,
+        location: creativeProfile.users?.location,
         verified: user.email_confirmed_at !== null,
+        approved: false,
         created_at: user.created_at,
         updated_at: creativeProfile.updated_at
-      }
+      };
     }
 
-    return null
+    return null;
   }
 
   // Creative Profiles
@@ -190,7 +200,6 @@ export class EnhancedDatabaseService {
   static async createBooking(bookingData: {
     creative_id: string
     service_id: string
-    booking_date: string
     start_time: string
     end_time: string
     total_amount: number
@@ -203,18 +212,14 @@ export class EnhancedDatabaseService {
 
     const { data, error } = await this.supabase
       .from('bookings')
-      .insert({
-        ...bookingData,
-        client_id: user.id,
-        status: 'pending'
-      })
+      .insert(bookingData as Database['public']['Tables']['bookings']['Insert'])
       .select(`
         *,
         client:client_profiles(*),
         creative:creative_profiles(*),
         service:services(*)
       `)
-      .single()
+      .single() as { data: Booking | null; error: Error | null }
 
     if (error) {
       throw new Error(`Failed to create booking: ${error.message}`)
@@ -316,12 +321,9 @@ export class EnhancedDatabaseService {
   }): Promise<Conversation> {
     const { data: conversation, error } = await this.supabase
       .from('conversations')
-      .insert({
-        ...data,
-        last_message_at: new Date().toISOString()
-      })
+      .insert(data as Database['public']['Tables']['conversations']['Insert'])
       .select('*')
-      .single()
+      .single() as { data: Conversation | null; error: Error | null }
 
     if (error) {
       throw new Error(`Failed to create conversation: ${error.message}`)
@@ -352,9 +354,9 @@ export class EnhancedDatabaseService {
   }): Promise<Message> {
     const { data, error } = await this.supabase
       .from('messages')
-      .insert(messageData)
+      .insert(messageData as Database['public']['Tables']['messages']['Insert'])
       .select('*')
-      .single()
+      .single() as { data: Message | null; error: Error | null }
 
     if (error) {
       throw new Error(`Failed to send message: ${error.message}`)
@@ -390,7 +392,7 @@ export class EnhancedDatabaseService {
 
   // Real-time Subscriptions
   static subscribeToMessages(
-    conversationId: string, 
+    conversationId: string,
     callback: (message: Message) => void
   ) {
     return this.supabase
@@ -444,9 +446,9 @@ export class EnhancedDatabaseService {
   ): Promise<Notification> {
     const { data, error } = await this.supabase
       .from('notifications')
-      .insert(notificationData)
+      .insert(notificationData as Database['public']['Tables']['notifications']['Insert'])
       .select()
-      .single()
+      .single() as { data: Notification | null; error: Error | null }
 
     if (error) {
       throw new Error(`Failed to create notification: ${error.message}`)
@@ -481,13 +483,30 @@ export class EnhancedDatabaseService {
       })
     }
 
-    const [bookingsResult, creativesResult, clientsResult] = await Promise.all(queries)
+    const [bookingsResult, creativesResult, clientsResult] = await Promise.all(queries);
+
+    const { count: pendingApprovalsCount } = await this.supabase
+      .from('creative_profiles')
+      .select('count', { count: 'exact' })
+      .eq('approval_status', 'pending')
+      .single();
+
+    const { data: totalRevenueData } = await this.supabase
+      .from('bookings')
+      .select('total_amount')
+      .eq('status', 'completed');
+
+    const totalRevenue = totalRevenueData?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0;
 
     return {
       totalBookings: bookingsResult.count || 0,
       totalCreatives: creativesResult.count || 0,
       totalClients: clientsResult.count || 0,
-    }
+      pendingApprovals: pendingApprovalsCount || 0,
+      totalRevenue: totalRevenue,
+      monthlyGrowth: 12.5, // This would be calculated from historical data
+      averageRating: 4.8 // This would be calculated from reviews
+    };
   }
 
   // Admin-specific functions
@@ -502,7 +521,7 @@ export class EnhancedDatabaseService {
       // Get client profiles - they have user data directly
       const { data: clientProfiles, error: clientError } = await this.supabase
         .from('client_profiles')
-        .select('*')
+        .select('*') as { data: User[] | null; error: Error | null }
 
       if (clientError) {
         console.warn('Could not fetch client profiles:', clientError.message)
@@ -511,7 +530,7 @@ export class EnhancedDatabaseService {
       // Get creative profiles with user relationship
       const { data: creativeProfiles, error: creativeError } = await this.supabase
         .from('creative_profiles')
-        .select('*')
+        .select('*') as { data: CreativeProfile[] | null; error: Error | null }
 
       if (creativeError) {
         console.warn('Could not fetch creative profiles:', creativeError.message)
@@ -521,9 +540,9 @@ export class EnhancedDatabaseService {
       if (clientProfiles) {
         clientProfiles.forEach(profile => {
           users.push({
-            id: profile.user_id || profile.id,
-            email: profile.email || 'N/A',
-            name: profile.full_name || 'Client User',
+            id: profile.id,
+            email: profile.email,
+            full_name: profile.full_name || 'Client User',
             phone: profile.phone,
             role: 'client',
             location: profile.location,
@@ -539,9 +558,9 @@ export class EnhancedDatabaseService {
       if (creativeProfiles) {
         creativeProfiles.forEach(profile => {
           users.push({
-            id: profile.user_id || profile.id,
+            id: profile.user_id,
             email: profile.email || 'N/A',
-            name: profile.title || 'Creative User',
+            full_name: profile.user?.full_name || profile.title || 'Creative User',
             phone: profile.phone,
             role: 'creative',
             location: profile.location,
@@ -568,7 +587,7 @@ export class EnhancedDatabaseService {
     if (filters?.search) {
       const searchLower = filters.search.toLowerCase()
       filteredUsers = filteredUsers.filter(user => 
-        user.name.toLowerCase().includes(searchLower) ||
+        user.full_name.toLowerCase().includes(searchLower) ||
         user.email.toLowerCase().includes(searchLower)
       )
     }
@@ -586,17 +605,9 @@ export class EnhancedDatabaseService {
   }) {
     const { data, error } = await this.supabase
       .from('client_profiles')
-      .insert({
-        id: userData.id,
-        email: userData.email,
-        full_name: userData.full_name,
-        phone: userData.phone,
-        location: userData.location,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
+      .insert(userData as Database['public']['Tables']['client_profiles']['Insert'])
       .select()
-      .single()
+      .single() as { data: User | null; error: Error | null }
 
     if (error) {
       throw new Error(`Failed to create client profile: ${error.message}`)
@@ -614,22 +625,9 @@ export class EnhancedDatabaseService {
   }) {
     const { data, error } = await this.supabase
       .from('creative_profiles')
-      .insert({
-        user_id: userData.user_id,
-        title: userData.title,
-        category: userData.category,
-        bio: userData.bio,
-        hourly_rate: userData.hourly_rate || 50000,
-        rating: 0,
-        reviews_count: 0,
-        completed_projects: 0,
-        approval_status: 'pending',
-        availability_status: 'available',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
+      .insert(userData as Database['public']['Tables']['creative_profiles']['Insert'])
       .select()
-      .single()
+      .single() as { data: CreativeProfile | null; error: Error | null }
 
     if (error) {
       throw new Error(`Failed to create creative profile: ${error.message}`)
@@ -648,13 +646,18 @@ export class EnhancedDatabaseService {
         totalRevenue
       ] = await Promise.all([
         this.supabase.from('bookings').select('count', { count: 'exact' }),
-        this.supabase.from('creative_profiles').select('count', { count: 'exact' }),
-        this.supabase.from('client_profiles').select('count', { count: 'exact' }),
-        this.supabase.from('creative_profiles').select('count', { count: 'exact' }).eq('approval_status', 'pending'),
-        this.supabase.from('bookings').select('total_amount').eq('status', 'completed')
+      this.supabase.from('creative_profiles').select('count', { count: 'exact' }),
+      this.supabase.from('client_profiles').select('count', { count: 'exact' }),
+      this.supabase.from('creative_profiles').select('count', { count: 'exact' }).eq('approval_status', 'pending'),
+      this.supabase.from('bookings').select('total_amount').eq('status', 'completed')
       ])
 
-      const revenue = totalRevenue.data?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0
+      const { data: totalRevenueData } = await this.supabase
+        .from('bookings')
+        .select('total_amount')
+        .eq('status', 'completed');
+
+      const revenue = totalRevenueData?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0;
 
       return {
         totalBookings: totalBookings.count || 0,
@@ -664,7 +667,7 @@ export class EnhancedDatabaseService {
         totalRevenue: revenue,
         monthlyGrowth: 12.5, // This would be calculated from historical data
         averageRating: 4.8 // This would be calculated from reviews
-      }
+      };
     } catch (error) {
       console.error('Error loading dashboard stats:', error)
       // Return default stats to prevent app crash
@@ -694,13 +697,10 @@ export class EnhancedDatabaseService {
   ) {
     const { data, error } = await this.supabase
       .from('client_profiles')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString()
-      })
+      .update(updates as Database['public']['Tables']['client_profiles']['Update'])
       .eq('id', userId)
       .select()
-      .single()
+      .single() as { data: Database['public']['Tables']['client_profiles']['Row'] | null }
 
     if (error) {
       throw new Error(`Failed to update client profile: ${error.message}`)
@@ -755,7 +755,7 @@ export class EnhancedDatabaseService {
 
   static async deleteAccount(userId: string) {
     // This would require admin privileges in a real app
-    const { error } = await this.supabase.auth.admin.deleteUser(userId)
+    const { error } = await this.supabase.auth.admin.deleteUser(userId);
 
     if (error) {
       throw new Error(`Failed to delete account: ${error.message}`)
@@ -822,15 +822,15 @@ export class EnhancedDatabaseService {
   }
 
   // Error handling utility
-  static handleSupabaseError(error: any): never {
+  static handleSupabaseError(error: any): Error {
     if (error.code === 'PGRST301') {
-      throw new Error('Unauthorized access')
+      return new Error('Unauthorized access');
     } else if (error.code === 'PGRST116') {
-      throw new Error('Resource not found')
+      return new Error('Resource not found');
     } else if (error.code === '23505') {
-      throw new Error('Duplicate entry')
+      return new Error('Duplicate entry');
     } else {
-      throw new Error(error.message || 'Database operation failed')
+      return new Error(error.message || 'Database operation failed');
     }
   }
 
@@ -841,12 +841,12 @@ export class EnhancedDatabaseService {
     creative_id: string
     rating: number
     comment?: string
-  }): Promise<any> {
+  }): Promise<Review> {
     const { data, error } = await this.supabase
       .from('reviews')
-      .insert(reviewData)
+      .insert(reviewData as Database['public']['Tables']['reviews']['Insert'])
       .select()
-      .single()
+      .single() as { data: Database['public']['Tables']['reviews']['Row'] | null }
 
     if (error) {
       throw new Error(`Failed to create review: ${error.message}`)
@@ -860,7 +860,7 @@ export class EnhancedDatabaseService {
       .from('reviews')
       .select(`
         *,
-        client:client_profiles(name, avatar_url)
+        client:client_profiles(full_name, avatar_url)
       `)
       .eq('creative_id', creativeId)
       .order('created_at', { ascending: false })

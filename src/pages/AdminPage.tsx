@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  Users, 
-  Calendar, 
-  DollarSign, 
-  TrendingUp, 
+import {
+  Users,
+  Calendar,
+  DollarSign,
+  TrendingUp,
   AlertTriangle,
   CheckCircle,
   Clock,
   MessageSquare,
   Award,
-  Shield
+  Shield,
+  UserPlus
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -35,7 +36,12 @@ export default function AdminPage() {
     monthlyGrowth: 0,
     averageRating: 0
   })
-  const [recentActivity, setRecentActivity] = useState([])
+  interface RecentActivityItem {
+    type: string;
+    message: string;
+    time: string;
+  }
+  const [recentActivity, setRecentActivity] = useState<RecentActivityItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -255,6 +261,12 @@ export default function AdminPage() {
                       {stats.pendingApprovals}
                     </Badge>
                   )}
+                </Button>
+              </Link>
+              <Link to="/admin/create-user">
+                <Button className="w-full btn-outline group">
+                  <UserPlus className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+                  Create User
                 </Button>
               </Link>
               <Link to="/admin/bookings">

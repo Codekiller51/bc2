@@ -68,7 +68,7 @@ export interface User {
   id: string
   email: string
   phone?: string
-  name: string
+  full_name: string
   avatar_url?: string
   role: "client" | "creative" | "admin"
   location?: string

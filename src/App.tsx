@@ -48,6 +48,7 @@ import AdminMessagesPage from '@/pages/AdminMessagesPage'
 import AdminAnalyticsPage from '@/pages/AdminAnalyticsPage'
 import AdminReportsPage from '@/pages/AdminReportsPage'
 import AdminSettingsPage from '@/pages/AdminSettingsPage'
+import AdminCreateUserPage from '@/pages/AdminCreateUserPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import ResetPasswordPage from '@/pages/ResetPasswordPage'
 import AuthCallbackPage from '@/pages/AuthCallbackPage'
@@ -130,6 +131,7 @@ function AppContent() {
           <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
           <Route path="/admin/reports" element={<AdminReportsPage />} />
           <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          <Route path="/admin/create-user" element={<AdminCreateUserPage />} />
           
           {/* Auth routes */}
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

@@ -28,7 +28,7 @@ export default function ProfileEditPage() {
   const [avatarPreview, setAvatarPreview] = useState<string>("")
 
   const [formData, setFormData] = useState({
-    name: '',
+    full_name: '',
     phone: '',
     location: '',
     avatar_url: '',
@@ -63,7 +63,7 @@ export default function ProfileEditPage() {
       // Set basic user data
       setFormData(prev => ({
         ...prev,
-        name: user.name || '',
+        full_name: user.full_name || '',
         phone: user.phone || '',
         location: user.location || '',
         avatar_url: user.avatar_url || '',
@@ -71,7 +71,7 @@ export default function ProfileEditPage() {
         industry: user.industry || ''
       }))
 
-      setAvatarPreview(user.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=059669&textColor=ffffff`)
+      setAvatarPreview(user.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${user.full_name}&backgroundColor=059669&textColor=ffffff`)
 
       // Load creative profile if user is creative
       if (user.role === 'creative') {

@@ -6,10 +6,13 @@ export class EnhancedNotificationService {
   // Email notifications using Supabase Edge Functions
   static async sendEmail(to: string, subject: string, content: string): Promise<boolean> {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-email`, {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ahrxwjpfxbmnkaevbwsr.supabase.co'
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFocnh3anBmeGJtbmthZXZid3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNzI3NjUsImV4cCI6MjA2Njk0ODc2NX0.j3be54uL1cugIlbIcmi7eeS1ixrSUMBbnlxmpA-mXpA'
+      
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
         method: "POST",
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${supabaseKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ to, subject, content }),
@@ -25,10 +28,13 @@ export class EnhancedNotificationService {
   // SMS notifications using Supabase Edge Functions
   static async sendSMS(to: string, message: string): Promise<boolean> {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-sms`, {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ahrxwjpfxbmnkaevbwsr.supabase.co'
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFocnh3anBmeGJtbmthZXZid3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNzI3NjUsImV4cCI6MjA2Njk0ODc2NX0.j3be54uL1cugIlbIcmi7eeS1ixrSUMBbnlxmpA-mXpA'
+      
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-sms`, {
         method: "POST",
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${supabaseKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ to, message }),
@@ -63,7 +69,7 @@ export class EnhancedNotificationService {
     const emailContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #059669;">Booking Confirmation - Brand Connect</h2>
-        <p>Dear ${client.name},</p>
+        <p>Dear ${client.full_name},</p>
         <p>Your booking with ${creative.name} has been confirmed!</p>
         
         <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -103,7 +109,7 @@ export class EnhancedNotificationService {
     const emailContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #059669;">Booking Reminder - Brand Connect</h2>
-        <p>Dear ${client.name},</p>
+        <p>Dear ${client.full_name},</p>
         <p>This is a reminder about your upcoming booking:</p>
         
         <div style="background: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -155,14 +161,14 @@ export class EnhancedNotificationService {
   }
 
   static async sendNewMessageNotification(message: any, recipient: any, sender: any): Promise<void> {
-    const smsMessage = `New message from ${sender.name}: ${message.content.substring(0, 100)}${message.content.length > 100 ? '...' : ''}`
+    const smsMessage = `New message from ${sender.full_name}: ${message.content.substring(0, 100)}${message.content.length > 100 ? '...' : ''}`
 
     await Promise.all([
       this.sendSMS(recipient.phone, smsMessage),
       this.createNotification({
         user_id: recipient.id,
         type: "message",
-        title: `New message from ${sender.name}`,
+        title: `New message from ${sender.full_name}`,
         message: message.content,
         data: { 
           conversation_id: message.conversation_id,
