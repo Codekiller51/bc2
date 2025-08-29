@@ -49,10 +49,12 @@ export default function AdminBookingsPage() {
   const handleStatusUpdate = async (bookingId: string, newStatus: string) => {
     try {
       await UnifiedDatabaseService.updateBookingStatus(bookingId, newStatus)
+      const { toast } = await import('sonner')
       toast.success('Booking status updated successfully!')
       loadBookings()
     } catch (error) {
       console.error('Failed to update booking status:', error)
+      const { toast } = await import('sonner')
       toast.error('Failed to update booking status')
     }
   }

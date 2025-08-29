@@ -9,8 +9,8 @@ export const createClient = () => {
     return supabaseInstance
   }
 
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ahrxwjpfxbmnkaevbwsr.supabase.co'
-  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFocnh3anBmeGJtbmthZXZid3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNzI3NjUsImV4cCI6MjA2Njk0ODc2NX0.j3be54uL1cugIlbIcmi7eeS1ixrSUMBbnlxmpA-mXpA'
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error('Missing Supabase environment variables:', {

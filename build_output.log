@@ -94,72 +94,73 @@ src/lib/hooks/use-optimistic-updates.ts(154,22): error TS6133: 'booking' is decl
 src/lib/hooks/use-optimistic-updates.ts(223,15): error TS6133: 'error' is declared but its value is never read.
 src/lib/services/comprehensive-testing-service.ts(788,13): error TS6133: 'buttons' is declared but its value is never read.
 src/lib/services/enhanced-auth-service.ts(287,65): error TS6133: 'full_name' is declared but its value is never read.
-src/lib/services/enhanced-database-service.ts(56,151): error TS2339: Property 'users' does not exist on type '{ client_profiles: { Row: User; Insert: Omit<User, "id" | "created_at" | "updated_at">; Update: Partial<Omit<User, "id">>; }; creative_profiles: { ...; }; ... 7 more ...; reviews: { ...; }; }'.
-src/lib/services/enhanced-database-service.ts(152,15): error TS2345: Argument of type 'Partial<CreativeProfile>' is not assignable to parameter of type 'never'.
-src/lib/services/enhanced-database-service.ts(215,15): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "bookings", never, "POST">', gave the following error.
+src/lib/services/enhanced-database-service.ts(1,1): error TS6192: All imports in import declaration are unused.
+src/lib/services/enhanced-database-service.ts(53,151): error TS2339: Property 'users' does not exist on type '{ client_profiles: { Row: User; Insert: Omit<User, "id" | "created_at" | "updated_at">; Update: Partial<Omit<User, "id">>; }; creative_profiles: { ...; }; ... 7 more ...; reviews: { ...; }; }'.
+src/lib/services/enhanced-database-service.ts(149,15): error TS2345: Argument of type 'Partial<CreativeProfile>' is not assignable to parameter of type 'never'.
+src/lib/services/enhanced-database-service.ts(212,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "bookings", never, "POST">', gave the following error.
     Argument of type 'Omit<Booking, "id" | "created_at" | "updated_at">' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "bookings", never, "POST">', gave the following error.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "bookings", never, "POST">', gave the following error.
     Argument of type 'Omit<Booking, "id" | "created_at" | "updated_at">' is not assignable to parameter of type 'never[]'.
       Type 'Omit<Booking, "id" | "created_at" | "updated_at">' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
-src/lib/services/enhanced-database-service.ts(228,5): error TS2322: Type 'Booking | null' is not assignable to type 'Booking'.
+src/lib/services/enhanced-database-service.ts(225,5): error TS2322: Type 'Booking | null' is not assignable to type 'Booking'.
   Type 'null' is not assignable to type 'Booking'.
-src/lib/services/enhanced-database-service.ts(237,15): error TS2345: Argument of type '{ status: string; updated_at: string; }' is not assignable to parameter of type 'never'.
-src/lib/services/enhanced-database-service.ts(324,15): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "conversations", never, "POST">', gave the following error.
+src/lib/services/enhanced-database-service.ts(234,15): error TS2345: Argument of type '{ status: string; updated_at: string; }' is not assignable to parameter of type 'never'.
+src/lib/services/enhanced-database-service.ts(321,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "conversations", never, "POST">', gave the following error.
     Argument of type 'Omit<Conversation, "id" | "created_at" | "last_message_at">' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "conversations", never, "POST">', gave the following error.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "conversations", never, "POST">', gave the following error.
     Argument of type 'Omit<Conversation, "id" | "created_at" | "last_message_at">' is not assignable to parameter of type 'never[]'.
       Type 'Omit<Conversation, "id" | "created_at" | "last_message_at">' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
-src/lib/services/enhanced-database-service.ts(332,5): error TS2322: Type 'Conversation | null' is not assignable to type 'Conversation'.
+src/lib/services/enhanced-database-service.ts(329,5): error TS2322: Type 'Conversation | null' is not assignable to type 'Conversation'.
   Type 'null' is not assignable to type 'Conversation'.
-src/lib/services/enhanced-database-service.ts(357,15): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "messages", never, "POST">', gave the following error.
+src/lib/services/enhanced-database-service.ts(354,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "messages", never, "POST">', gave the following error.
     Argument of type 'Omit<Message, "id" | "created_at">' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "messages", never, "POST">', gave the following error.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "messages", never, "POST">', gave the following error.
     Argument of type 'Omit<Message, "id" | "created_at">' is not assignable to parameter of type 'never[]'.
       Type 'Omit<Message, "id" | "created_at">' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
-src/lib/services/enhanced-database-service.ts(368,15): error TS2345: Argument of type '{ last_message_at: string; }' is not assignable to parameter of type 'never'.
-src/lib/services/enhanced-database-service.ts(371,5): error TS2322: Type 'Message | null' is not assignable to type 'Message'.
+src/lib/services/enhanced-database-service.ts(365,15): error TS2345: Argument of type '{ last_message_at: string; }' is not assignable to parameter of type 'never'.
+src/lib/services/enhanced-database-service.ts(368,5): error TS2322: Type 'Message | null' is not assignable to type 'Message'.
   Type 'null' is not assignable to type 'Message'.
-src/lib/services/enhanced-database-service.ts(380,15): error TS2345: Argument of type '{ read_at: string; }' is not assignable to parameter of type 'never'.
-src/lib/services/enhanced-database-service.ts(449,15): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "notifications", never, "POST">', gave the following error.
+src/lib/services/enhanced-database-service.ts(377,15): error TS2345: Argument of type '{ read_at: string; }' is not assignable to parameter of type 'never'.
+src/lib/services/enhanced-database-service.ts(446,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "notifications", never, "POST">', gave the following error.
     Argument of type 'Omit<Notification, "id" | "created_at">' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "notifications", never, "POST">', gave the following error.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "notifications", never, "POST">', gave the following error.
     Argument of type 'Omit<Notification, "id" | "created_at">' is not assignable to parameter of type 'never[]'.
       Type 'Omit<Notification, "id" | "created_at">' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
-src/lib/services/enhanced-database-service.ts(457,5): error TS2322: Type 'Notification | null' is not assignable to type 'Notification'.
+src/lib/services/enhanced-database-service.ts(454,5): error TS2322: Type 'Notification | null' is not assignable to type 'Notification'.
   Type 'null' is not assignable to type 'Notification'.
-src/lib/services/enhanced-database-service.ts(463,15): error TS2345: Argument of type '{ read_at: string; }' is not assignable to parameter of type 'never'.
-src/lib/services/enhanced-database-service.ts(499,84): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/lib/services/enhanced-database-service.ts(563,38): error TS2339: Property 'full_name' does not exist on type '{ email?: string | undefined; phone?: string | undefined; raw_user_meta_data?: any; }'.
-src/lib/services/enhanced-database-service.ts(608,15): error TS2352: Conversion of type '{ id: string; email: string; full_name: string; phone?: string | undefined; location?: string | undefined; }' to type 'Omit<User, "id" | "created_at" | "updated_at">' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/lib/services/enhanced-database-service.ts(460,15): error TS2345: Argument of type '{ read_at: string; }' is not assignable to parameter of type 'never'.
+src/lib/services/enhanced-database-service.ts(496,84): error TS2339: Property 'total_amount' does not exist on type 'never'.
+src/lib/services/enhanced-database-service.ts(560,38): error TS2339: Property 'full_name' does not exist on type '{ email?: string | undefined; phone?: string | undefined; raw_user_meta_data?: any; }'.
+src/lib/services/enhanced-database-service.ts(605,15): error TS2352: Conversion of type '{ id: string; email: string; full_name: string; phone?: string | undefined; location?: string | undefined; }' to type 'Omit<User, "id" | "created_at" | "updated_at">' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type '{ id: string; email: string; full_name: string; phone?: string | undefined; location?: string | undefined; }' is missing the following properties from type 'Omit<User, "id" | "created_at" | "updated_at">': role, verified, approved
-src/lib/services/enhanced-database-service.ts(608,15): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "client_profiles", never, "POST">', gave the following error.
+src/lib/services/enhanced-database-service.ts(605,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "client_profiles", never, "POST">', gave the following error.
     Argument of type 'Omit<User, "id" | "created_at" | "updated_at">' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "client_profiles", never, "POST">', gave the following error.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "client_profiles", never, "POST">', gave the following error.
     Argument of type 'Omit<User, "id" | "created_at" | "updated_at">' is not assignable to parameter of type 'never[]'.
       Type 'Omit<User, "id" | "created_at" | "updated_at">' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
-src/lib/services/enhanced-database-service.ts(628,15): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "creative_profiles", never, "POST">', gave the following error.
+src/lib/services/enhanced-database-service.ts(625,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "creative_profiles", never, "POST">', gave the following error.
     Argument of type 'Omit<CreativeProfile, "id" | "created_at" | "updated_at" | "rating" | "reviews_count" | "completed_projects">' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "creative_profiles", never, "POST">', gave the following error.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "creative_profiles", never, "POST">', gave the following error.
     Argument of type 'Omit<CreativeProfile, "id" | "created_at" | "updated_at" | "rating" | "reviews_count" | "completed_projects">' is not assignable to parameter of type 'never[]'.
       Type 'Omit<CreativeProfile, "id" | "created_at" | "updated_at" | "rating" | "reviews_count" | "completed_projects">' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
-src/lib/services/enhanced-database-service.ts(646,9): error TS6133: 'totalRevenue' is declared but its value is never read.
-src/lib/services/enhanced-database-service.ts(660,81): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/lib/services/enhanced-database-service.ts(698,19): error TS2339: Property 'error' does not exist on type '{ data: User | null; }'.
-src/lib/services/enhanced-database-service.ts(700,15): error TS2345: Argument of type 'Partial<Omit<User, "id">>' is not assignable to parameter of type 'never'.
-src/lib/services/enhanced-database-service.ts(712,31): error TS6133: 'currentPassword' is declared but its value is never read.
-src/lib/services/enhanced-database-service.ts(820,54): error TS18046: 'error' is of type 'unknown'.
-src/lib/services/enhanced-database-service.ts(844,15): error TS2304: Cannot find name 'Review'.
-src/lib/services/enhanced-database-service.ts(845,19): error TS2339: Property 'error' does not exist on type '{ data: Review | null; }'.
-src/lib/services/enhanced-database-service.ts(847,15): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "reviews", never, "POST">', gave the following error.
+src/lib/services/enhanced-database-service.ts(643,9): error TS6133: 'totalRevenue' is declared but its value is never read.
+src/lib/services/enhanced-database-service.ts(657,81): error TS2339: Property 'total_amount' does not exist on type 'never'.
+src/lib/services/enhanced-database-service.ts(695,19): error TS2339: Property 'error' does not exist on type '{ data: User | null; }'.
+src/lib/services/enhanced-database-service.ts(697,15): error TS2345: Argument of type 'Partial<Omit<User, "id">>' is not assignable to parameter of type 'never'.
+src/lib/services/enhanced-database-service.ts(709,31): error TS6133: 'currentPassword' is declared but its value is never read.
+src/lib/services/enhanced-database-service.ts(817,54): error TS18046: 'error' is of type 'unknown'.
+src/lib/services/enhanced-database-service.ts(841,15): error TS2304: Cannot find name 'Review'.
+src/lib/services/enhanced-database-service.ts(842,19): error TS2339: Property 'error' does not exist on type '{ data: Review | null; }'.
+src/lib/services/enhanced-database-service.ts(844,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "reviews", never, "POST">', gave the following error.
     Argument of type 'Omit<Review, "id" | "created_at">' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "reviews", never, "POST">', gave the following error.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: string; }, never, never, null, "reviews", never, "POST">', gave the following error.
     Argument of type 'Omit<Review, "id" | "created_at">' is not assignable to parameter of type 'never[]'.
       Type 'Omit<Review, "id" | "created_at">' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
 src/lib/services/enhanced-notification-service.ts(55,17): error TS2769: No overload matches this call.
@@ -216,26 +217,23 @@ src/pages/AdminAnalyticsPage.tsx(320,79): error TS2304: Cannot find name 'Badge'
 src/pages/AdminBookingsPage.tsx(40,19): error TS2345: Argument of type 'Booking[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
   Type 'Booking[]' is not assignable to type 'never[]'.
     Type 'Booking' is not assignable to type 'never'.
-src/pages/AdminBookingsPage.tsx(52,7): error TS2304: Cannot find name 'toast'.
-src/pages/AdminBookingsPage.tsx(56,7): error TS2304: Cannot find name 'toast'.
-src/pages/AdminBookingsPage.tsx(72,55): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(74,15): error TS2339: Property 'client' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(75,15): error TS2339: Property 'creative' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(76,15): error TS2339: Property 'service' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(178,34): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(188,42): error TS2339: Property 'client' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(188,122): error TS2339: Property 'client' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(189,42): error TS2339: Property 'client' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(197,38): error TS2339: Property 'service' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(200,38): error TS2339: Property 'client' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(200,63): error TS2339: Property 'creative' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(208,51): error TS2339: Property 'booking_date' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(212,42): error TS2339: Property 'start_time' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(217,53): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(224,64): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/AdminBookingsPage.tsx(225,34): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(74,55): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(76,15): error TS2339: Property 'client' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(77,15): error TS2339: Property 'creative' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(78,15): error TS2339: Property 'service' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(180,34): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(190,42): error TS2339: Property 'client' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(190,122): error TS2339: Property 'client' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(191,42): error TS2339: Property 'client' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(199,38): error TS2339: Property 'service' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(202,38): error TS2339: Property 'client' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(202,63): error TS2339: Property 'creative' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(210,51): error TS2339: Property 'booking_date' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(214,42): error TS2339: Property 'start_time' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(219,53): error TS2339: Property 'total_amount' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(226,64): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/AdminBookingsPage.tsx(227,34): error TS2339: Property 'status' does not exist on type 'never'.
 src/pages/AdminCreateUserPage.tsx(3,20): error TS6133: 'AlertTriangle' is declared but its value is never read.
-src/pages/AdminCreateUserPage.tsx(55,46): error TS2339: Property 'full_name' does not exist on type '{ name: string; email: string; password: string; }'.
 src/pages/AdminMessagesPage.tsx(3,48): error TS6133: 'Eye' is declared but its value is never read.
 src/pages/AdminMessagesPage.tsx(3,53): error TS6133: 'Users' is declared but its value is never read.
 src/pages/AdminMessagesPage.tsx(5,41): error TS6133: 'CardTitle' is declared but its value is never read.
@@ -317,10 +315,6 @@ src/pages/AdminUsersPage.tsx(271,33): error TS2339: Property 'role' does not exi
 src/pages/AdminUsersPage.tsx(271,66): error TS2339: Property 'approved' does not exist on type 'never'.
 src/pages/AdminUsersPage.tsx(274,75): error TS2339: Property 'id' does not exist on type 'never'.
 src/pages/AdminUsersPage.tsx(282,74): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/AuthCallbackPage.tsx(123,12): error TS2304: Cannot find name 'CardFooter'.
-src/pages/AuthCallbackPage.tsx(127,14): error TS2304: Cannot find name 'Link'.
-src/pages/AuthCallbackPage.tsx(131,15): error TS2304: Cannot find name 'Link'.
-src/pages/AuthCallbackPage.tsx(132,13): error TS2304: Cannot find name 'CardFooter'.
 src/pages/BlogPage.tsx(1,20): error TS6133: 'useEffect' is declared but its value is never read.
 src/pages/BlogPage.tsx(3,46): error TS6133: 'Filter' is declared but its value is never read.
 src/pages/BlogPage.tsx(6,29): error TS6133: 'CardHeader' is declared but its value is never read.
@@ -345,327 +339,3 @@ src/pages/BookingDetailsPage.tsx(156,57): error TS2339: Property 'status' does n
 src/pages/BookingDetailsPage.tsx(157,38): error TS2339: Property 'status' does not exist on type 'never'.
 src/pages/BookingDetailsPage.tsx(158,24): error TS2339: Property 'status' does not exist on type 'never'.
 src/pages/BookingDetailsPage.tsx(183,75): error TS2339: Property 'service' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(187,75): error TS2339: Property 'service' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(203,43): error TS2339: Property 'booking_date' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(212,34): error TS2339: Property 'start_time' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(212,57): error TS2339: Property 'end_time' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(229,47): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(235,24): error TS2339: Property 'notes' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(241,80): error TS2339: Property 'notes' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(322,34): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(379,43): error TS2339: Property 'created_at' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(384,28): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(387,33): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(388,33): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(393,44): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(396,45): error TS2339: Property 'updated_at' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(402,28): error TS2339: Property 'status' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(402,71): error TS2339: Property 'booking_date' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(408,48): error TS2339: Property 'booking_date' does not exist on type 'never'.
-src/pages/BookingDetailsPage.tsx(408,72): error TS2339: Property 'start_time' does not exist on type 'never'.
-src/pages/BookingPage.tsx(3,10): error TS6133: 'Calendar' is declared but its value is never read.
-src/pages/BookingPage.tsx(3,20): error TS6133: 'Clock' is declared but its value is never read.
-src/pages/BookingPage.tsx(3,33): error TS6133: 'DollarSign' is declared but its value is never read.
-src/pages/BookingPage.tsx(8,1): error TS6133: 'Input' is declared but its value is never read.
-src/pages/BookingPage.tsx(58,19): error TS2345: Argument of type 'CreativeProfile' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/BookingPage.tsx(59,19): error TS2345: Argument of type 'Service[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
-  Type 'Service[]' is not assignable to type 'never[]'.
-    Type 'Service' is not assignable to type 'never'.
-src/pages/BookingPage.tsx(68,65): error TS6133: 'timezone' is declared but its value is never read.
-src/pages/BookingPage.tsx(92,37): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/BookingPage.tsx(96,39): error TS2339: Property 'price' does not exist on type 'never'.
-src/pages/BookingPage.tsx(150,60): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/BookingPage.tsx(167,36): error TS2339: Property 'avatar_url' does not exist on type 'never'.
-src/pages/BookingPage.tsx(167,110): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/BookingPage.tsx(168,36): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/BookingPage.tsx(176,30): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/BookingPage.tsx(180,30): error TS2339: Property 'category' does not exist on type 'never'.
-src/pages/BookingPage.tsx(185,36): error TS2339: Property 'location' does not exist on type 'never'.
-src/pages/BookingPage.tsx(194,52): error TS2339: Property 'rating' does not exist on type 'never'.
-src/pages/BookingPage.tsx(204,32): error TS2339: Property 'rating' does not exist on type 'never'.
-src/pages/BookingPage.tsx(204,64): error TS2339: Property 'reviews_count' does not exist on type 'never'.
-src/pages/BookingPage.tsx(209,26): error TS2339: Property 'bio' does not exist on type 'never'.
-src/pages/BookingPage.tsx(213,31): error TS2339: Property 'bio' does not exist on type 'never'.
-src/pages/BookingPage.tsx(231,15): error TS2322: Type 'Dispatch<SetStateAction<null>>' is not assignable to type '(service: Service) => void'.
-  Types of parameters 'value' and 'service' are incompatible.
-    Type 'Service' is not assignable to type 'SetStateAction<null>'.
-      Type 'Service' provides no match for the signature '(prevState: null): null'.
-src/pages/BookingPage.tsx(279,73): error TS2339: Property 'name' does not exist on type 'never'.
-src/pages/BookingPage.tsx(291,73): error TS2339: Property 'duration' does not exist on type 'never'.
-src/pages/BookingPage.tsx(295,93): error TS2339: Property 'price' does not exist on type 'never'.
-src/pages/ChatPage.tsx(3,25): error TS6133: 'Search' is declared but its value is never read.
-src/pages/ChatPage.tsx(3,33): error TS6133: 'User' is declared but its value is never read.
-src/pages/ChatPage.tsx(3,39): error TS6133: 'Clock' is declared but its value is never read.
-src/pages/ChatPage.tsx(3,46): error TS6133: 'Send' is declared but its value is never read.
-src/pages/ChatPage.tsx(5,29): error TS6133: 'CardHeader' is declared but its value is never read.
-src/pages/ChatPage.tsx(5,41): error TS6133: 'CardTitle' is declared but its value is never read.
-src/pages/ChatPage.tsx(7,1): error TS6133: 'Input' is declared but its value is never read.
-src/pages/ChatPage.tsx(8,1): error TS6192: All imports in import declaration are unused.
-src/pages/ChatPage.tsx(9,1): error TS6133: 'Badge' is declared but its value is never read.
-src/pages/ChatPage.tsx(12,1): error TS6133: 'UnifiedDatabaseService' is declared but its value is never read.
-src/pages/ChatPage.tsx(13,1): error TS6133: 'formatRelativeTime' is declared but its value is never read.
-src/pages/ChatPage.tsx(21,17): error TS6133: 'setError' is declared but its value is never read.
-src/pages/ChatPage.tsx(29,37): error TS7006: Parameter 'conversation' implicitly has an 'any' type.
-src/pages/ChatPage.tsx(87,59): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/DashboardAvailabilityPage.tsx(3,10): error TS6133: 'Clock' is declared but its value is never read.
-src/pages/DashboardAvailabilityPage.tsx(5,1): error TS6192: All imports in import declaration are unused.
-src/pages/DashboardAvailabilityPage.tsx(31,18): error TS2345: Argument of type 'CreativeProfile | null' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' is not assignable to type 'SetStateAction<null>'.
-    Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/DashboardAvailabilityPage.tsx(106,51): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/DashboardBookingsPage.tsx(3,10): error TS6133: 'Calendar' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(3,20): error TS6133: 'Clock' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(3,27): error TS6133: 'User' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(3,33): error TS6133: 'MapPin' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(3,41): error TS6133: 'DollarSign' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(3,53): error TS6133: 'Filter' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(3,61): error TS6133: 'Search' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(4,1): error TS6133: 'Link' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(6,1): error TS6192: All imports in import declaration are unused.
-src/pages/DashboardBookingsPage.tsx(8,1): error TS6133: 'Input' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(9,1): error TS6133: 'Badge' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(10,1): error TS6192: All imports in import declaration are unused.
-src/pages/DashboardBookingsPage.tsx(14,1): error TS6133: 'formatCurrency' is declared but its value is never read.
-src/pages/DashboardBookingsPage.tsx(36,18): error TS2345: Argument of type 'CreativeProfile | null' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' is not assignable to type 'SetStateAction<null>'.
-    Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/DashboardBookingsPage.tsx(97,34): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(8,3): error TS6133: 'Users' is declared but its value is never read.
-src/pages/DashboardCreativePage.tsx(59,18): error TS2345: Argument of type 'CreativeProfile | null' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' is not assignable to type 'SetStateAction<null>'.
-    Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/DashboardCreativePage.tsx(84,11): error TS2322: Type '{ type: string; message: string; time: string; }' is not assignable to type 'never'.
-src/pages/DashboardCreativePage.tsx(85,11): error TS2322: Type '{ type: string; message: string; time: string; }' is not assignable to type 'never'.
-src/pages/DashboardCreativePage.tsx(86,11): error TS2322: Type '{ type: string; message: string; time: string; }' is not assignable to type 'never'.
-src/pages/DashboardCreativePage.tsx(102,15): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(103,15): error TS2339: Property 'bio' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(104,15): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(104,33): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(105,15): error TS2339: Property 'hourly_rate' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(105,38): error TS2339: Property 'hourly_rate' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(106,15): error TS2339: Property 'portfolio_items' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(106,42): error TS2339: Property 'portfolio_items' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(107,15): error TS2339: Property 'avatar_url' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(160,17): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(445,34): error TS2339: Property 'type' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(446,34): error TS2339: Property 'type' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(449,35): error TS2339: Property 'type' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(450,35): error TS2339: Property 'type' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(451,35): error TS2339: Property 'type' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(455,37): error TS2339: Property 'message' does not exist on type 'never'.
-src/pages/DashboardCreativePage.tsx(458,37): error TS2339: Property 'time' does not exist on type 'never'.
-src/pages/DashboardMessagesPage.tsx(3,25): error TS6133: 'Search' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(3,33): error TS6133: 'User' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(3,39): error TS6133: 'Clock' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(3,46): error TS6133: 'Send' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(5,29): error TS6133: 'CardHeader' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(5,41): error TS6133: 'CardTitle' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(7,1): error TS6133: 'Input' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(8,1): error TS6192: All imports in import declaration are unused.
-src/pages/DashboardMessagesPage.tsx(9,1): error TS6133: 'Badge' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(12,1): error TS6133: 'UnifiedDatabaseService' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(13,1): error TS6133: 'formatRelativeTime' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(21,17): error TS6133: 'setError' is declared but its value is never read.
-src/pages/DashboardMessagesPage.tsx(29,37): error TS7006: Parameter 'conversation' implicitly has an 'any' type.
-src/pages/DashboardMessagesPage.tsx(87,59): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/DashboardOverviewPage.tsx(17,1): error TS6133: 'Badge' is declared but its value is never read.
-src/pages/DashboardPortfolioPage.tsx(3,10): error TS6133: 'Award' is declared but its value is never read.
-src/pages/DashboardPortfolioPage.tsx(5,1): error TS6192: All imports in import declaration are unused.
-src/pages/DashboardPortfolioPage.tsx(14,17): error TS6133: 'setError' is declared but its value is never read.
-src/pages/DashboardSettingsPage.tsx(3,10): error TS6133: 'Settings' is declared but its value is never read.
-src/pages/DashboardSettingsPage.tsx(18,17): error TS6133: 'updateProfile' is declared but its value is never read.
-src/pages/DashboardSettingsPage.tsx(60,20): error TS2345: Argument of type 'CreativeProfile' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/DashboardSettingsPage.tsx(66,11): error TS2322: Type 'string[]' is not assignable to type 'never[]'.
-  Type 'string' is not assignable to type 'never'.
-src/pages/DashboardSettingsPage.tsx(84,66): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(135,57): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
-src/pages/DashboardSettingsPage.tsx(136,22): error TS2345: Argument of type '(prev: { title: string; category: string; bio: string; hourly_rate: number; skills: never[]; location: string; phone: string; }) => { skills: string[]; title: string; category: string; bio: string; hourly_rate: number; location: string; phone: string; }' is not assignable to parameter of type 'SetStateAction<{ title: string; category: string; bio: string; hourly_rate: number; skills: never[]; location: string; phone: string; }>'.
-  Type '(prev: { title: string; category: string; bio: string; hourly_rate: number; skills: never[]; location: string; phone: string; }) => { skills: string[]; title: string; category: string; bio: string; hourly_rate: number; location: string; phone: string; }' is not assignable to type '(prevState: { title: string; category: string; bio: string; hourly_rate: number; skills: never[]; location: string; phone: string; }) => { title: string; category: string; bio: string; hourly_rate: number; skills: never[]; location: string; phone: string; }'.
-    Call signature return types '{ skills: string[]; title: string; category: string; bio: string; hourly_rate: number; location: string; phone: string; }' and '{ title: string; category: string; bio: string; hourly_rate: number; skills: never[]; location: string; phone: string; }' are incompatible.
-      The types of 'skills' are incompatible between these types.
-        Type 'string[]' is not assignable to type 'never[]'.
-          Type 'string' is not assignable to type 'never'.
-src/pages/DashboardSettingsPage.tsx(301,24): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(308,25): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(461,20): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(462,30): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(463,30): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(466,31): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(467,21): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(472,20): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(472,46): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(473,31): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(474,21): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(479,20): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(479,46): error TS2339: Property 'availability_status' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(480,31): error TS2339: Property 'availability_status' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(481,21): error TS2304: Cannot find name 'Badge'.
-src/pages/DashboardSettingsPage.tsx(500,31): error TS2339: Property 'rating' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(509,31): error TS2339: Property 'completed_projects' does not exist on type 'never'.
-src/pages/DashboardSettingsPage.tsx(518,31): error TS2339: Property 'reviews_count' does not exist on type 'never'.
-src/pages/ForgotPasswordPage.tsx(18,9): error TS6133: 'navigate' is declared but its value is never read.
-src/pages/HomePage.tsx(16,1): error TS6133: 'InlineLoading' is declared but its value is never read.
-src/pages/HomePage.tsx(21,10): error TS6133: 'testimonials' is declared but its value is never read.
-src/pages/LoginPage.tsx(49,13): error TS6133: 'redirectTo' is declared but its value is never read.
-src/pages/PaymentPage.tsx(3,30): error TS6133: 'CheckCircle' is declared but its value is never read.
-src/pages/PaymentPage.tsx(10,1): error TS6192: All imports in import declaration are unused.
-src/pages/PaymentPage.tsx(12,1): error TS6133: 'Badge' is declared but its value is never read.
-src/pages/PaymentPage.tsx(22,10): error TS6133: 'searchParams' is declared but its value is never read.
-src/pages/PaymentPage.tsx(60,18): error TS2345: Argument of type 'Booking' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'Booking' provides no match for the signature '(prevState: null): null'.
-src/pages/PaymentPage.tsx(81,66): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(84,38): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(330,56): error TS2339: Property 'service' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(332,33): error TS2339: Property 'creative' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(341,49): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(345,49): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(349,49): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(358,43): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(365,48): error TS2339: Property 'booking_date' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(366,39): error TS2339: Property 'start_time' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(366,62): error TS2339: Property 'end_time' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(367,43): error TS2339: Property 'service' does not exist on type 'never'.
-src/pages/PaymentPage.tsx(384,49): error TS2339: Property 'total_amount' does not exist on type 'never'.
-src/pages/ProfileEditPage.tsx(3,16): error TS6133: 'Upload' is declared but its value is never read.
-src/pages/ProfileEditPage.tsx(80,22): error TS2345: Argument of type 'CreativeProfile' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/ProfileEditPage.tsx(151,9): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'Partial<User>'.
-src/pages/ProfileEditPage.tsx(151,24): error TS2339: Property 'name' does not exist on type '{ full_name: string; phone: string; location: string; avatar_url: string; company_name: string; industry: string; title: string; category: string; bio: string; hourly_rate: number; skills: string[]; }'.
-src/pages/ProfileEditPage.tsx(161,68): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/ProfileEditPage.tsx(174,31): error TS2339: Property 'name' does not exist on type '{ full_name: string; phone: string; location: string; avatar_url: string; company_name: string; industry: string; title: string; category: string; bio: string; hourly_rate: number; skills: string[]; }'.
-src/pages/ProfileEditPage.tsx(252,31): error TS2339: Property 'name' does not exist on type '{ full_name: string; phone: string; location: string; avatar_url: string; company_name: string; industry: string; title: string; category: string; bio: string; hourly_rate: number; skills: string[]; }'.
-src/pages/ProfileEditPage.tsx(294,39): error TS2339: Property 'name' does not exist on type '{ full_name: string; phone: string; location: string; avatar_url: string; company_name: string; industry: string; title: string; category: string; bio: string; hourly_rate: number; skills: string[]; }'.
-src/pages/ProfileEditPage.tsx(336,12): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfileEditPage.tsx(435,12): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(3,22): error TS6133: 'Camera' is declared but its value is never read.
-src/pages/ProfilePage.tsx(3,61): error TS6133: 'Award' is declared but its value is never read.
-src/pages/ProfilePage.tsx(43,20): error TS2345: Argument of type 'CreativeProfile | null' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' is not assignable to type 'SetStateAction<null>'.
-    Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/ProfilePage.tsx(144,26): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(144,54): error TS2339: Property 'avatar_url' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(144,118): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(145,26): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(148,22): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(157,18): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(161,18): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(163,30): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(169,26): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(174,26): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(177,18): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(180,28): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(187,19): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(188,19): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(191,20): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(192,20): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(197,16): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(205,29): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(206,29): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(209,30): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(210,30): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(219,42): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(263,22): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(268,16): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(294,18): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(300,77): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(307,77): error TS2339: Property 'category' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(310,30): error TS2339: Property 'bio' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(315,79): error TS2339: Property 'bio' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(319,30): error TS2339: Property 'hourly_rate' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(325,51): error TS2339: Property 'hourly_rate' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(330,30): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(330,48): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(336,36): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/ProfilePage.tsx(336,48): error TS7006: Parameter 'skill' implicitly has an 'any' type.
-src/pages/ProfilePage.tsx(336,55): error TS7006: Parameter 'index' implicitly has an 'any' type.
-src/pages/ProfilePage.tsx(347,18): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(349,22): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(354,71): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(358,22): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(363,71): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(373,44): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(376,22): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(402,29): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfilePage.tsx(402,64): error TS18047: 'user' is possibly 'null'.
-src/pages/ProfileViewPage.tsx(6,3): error TS6133: 'Phone' is declared but its value is never read.
-src/pages/ProfileViewPage.tsx(7,3): error TS6133: 'Mail' is declared but its value is never read.
-src/pages/ProfileViewPage.tsx(54,19): error TS2345: Argument of type 'CreativeProfile' is not assignable to parameter of type 'SetStateAction<null>'.
-  Type 'CreativeProfile' provides no match for the signature '(prevState: null): null'.
-src/pages/ProfileViewPage.tsx(58,18): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
-  Type 'any[]' is not assignable to type 'never[]'.
-    Type 'any' is not assignable to type 'never'.
-src/pages/ProfileViewPage.tsx(108,29): error TS2339: Property 'avatar_url' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(108,102): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(109,29): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(112,25): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(119,27): error TS2339: Property 'title' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(121,25): error TS2339: Property 'approval_status' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(127,25): error TS2339: Property 'category' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(133,33): error TS2339: Property 'location' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(138,57): error TS2339: Property 'rating' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(138,88): error TS2339: Property 'reviews_count' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(143,33): error TS2339: Property 'completed_projects' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(149,53): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(179,29): error TS2339: Property 'bio' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(186,21): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(186,40): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(198,31): error TS2339: Property 'skills' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(198,43): error TS7006: Parameter 'skill' implicitly has an 'any' type.
-src/pages/ProfileViewPage.tsx(198,50): error TS7006: Parameter 'index' implicitly has an 'any' type.
-src/pages/ProfileViewPage.tsx(210,21): error TS2339: Property 'portfolio_items' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(210,49): error TS2339: Property 'portfolio_items' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(222,31): error TS2339: Property 'portfolio_items' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(222,52): error TS7006: Parameter 'item' implicitly has an 'any' type.
-src/pages/ProfileViewPage.tsx(222,58): error TS6133: 'index' is declared but its value is never read.
-src/pages/ProfileViewPage.tsx(222,58): error TS7006: Parameter 'index' implicitly has an 'any' type.
-src/pages/ProfileViewPage.tsx(285,21): error TS2339: Property 'services' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(285,42): error TS2339: Property 'services' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(296,29): error TS2339: Property 'services' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(296,43): error TS7006: Parameter 'service' implicitly has an 'any' type.
-src/pages/ProfileViewPage.tsx(296,52): error TS6133: 'index' is declared but its value is never read.
-src/pages/ProfileViewPage.tsx(296,52): error TS7006: Parameter 'index' implicitly has an 'any' type.
-src/pages/ProfileViewPage.tsx(317,65): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(343,31): error TS2339: Property 'rating' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(352,31): error TS2339: Property 'completed_projects' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(361,31): error TS2339: Property 'reviews_count' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(370,30): error TS2339: Property 'availability_status' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(371,30): error TS2339: Property 'availability_status' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(374,31): error TS2339: Property 'availability_status' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(375,31): error TS2339: Property 'availability_status' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(394,57): error TS2339: Property 'id' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(406,27): error TS2339: Property 'portfolio_url' does not exist on type 'never'.
-src/pages/ProfileViewPage.tsx(408,57): error TS2339: Property 'portfolio_url' does not exist on type 'never'.
-src/pages/RegisterPage.tsx(109,16): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { onConflict?: string | undefined; ignoreDuplicates?: boolean | undefined; count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ ...; }, ... 5 more ..., "POST">', gave the following error.
-    Argument of type '{ user_id: string; title: string; category: string; bio: string; location: string; phone: string; email: string; approval_status: string; rating: number; reviews_count: number; completed_projects: number; hourly_rate: number; availability_status: string; }' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { onConflict?: string | undefined; ignoreDuplicates?: boolean | undefined; count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<...>', gave the following error.
-    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
-src/pages/RegisterPage.tsx(138,14): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(values: never, options?: { onConflict?: string | undefined; ignoreDuplicates?: boolean | undefined; count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ ...; }, ... 5 more ..., "POST">', gave the following error.
-    Argument of type '{ user_id: string; full_name: string; email: string; phone: string; location: string; }' is not assignable to parameter of type 'never'.
-  Overload 2 of 2, '(values: never[], options?: { onConflict?: string | undefined; ignoreDuplicates?: boolean | undefined; count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<...>', gave the following error.
-    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
-src/pages/ResetPasswordPage.tsx(226,18): error TS2304: Cannot find name 'ArrowLeft'.
-src/pages/SearchPage.tsx(4,18): error TS6133: 'SlidersHorizontal' is declared but its value is never read.
-src/pages/SearchPage.tsx(4,37): error TS6133: 'MapPin' is declared but its value is never read.
-src/pages/SearchPage.tsx(4,45): error TS6133: 'Star' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(3,10): error TS6133: 'Star' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(3,16): error TS6133: 'Quote' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(3,23): error TS6133: 'Play' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(3,29): error TS6133: 'MapPin' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(3,37): error TS6133: 'Filter' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(5,29): error TS6133: 'CardHeader' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(5,41): error TS6133: 'CardTitle' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(9,1): error TS6133: 'Badge' is declared but its value is never read.
-src/pages/TestimonialsPage.tsx(10,1): error TS6192: All imports in import declaration are unused.
-src/pages/TestimonialsPage.tsx(119,23): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
-  Type 'any[]' is not assignable to type 'never[]'.
-    Type 'any' is not assignable to type 'never'.
-src/pages/TestimonialsPage.tsx(133,19): error TS2339: Property 'name' does not exist on type 'never'.
-src/pages/TestimonialsPage.tsx(134,19): error TS2339: Property 'company' does not exist on type 'never'.
-src/pages/TestimonialsPage.tsx(135,19): error TS2339: Property 'content' does not exist on type 'never'.
-src/pages/TestimonialsPage.tsx(137,71): error TS2339: Property 'category' does not exist on type 'never'.
-src/pages/TestimonialsPage.tsx(138,67): error TS2339: Property 'rating' does not exist on type 'never'.
-src/pages/TestimonialsPage.tsx(253,32): error TS2339: Property 'id' does not exist on type 'never'.

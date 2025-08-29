@@ -23,4 +23,16 @@ export default defineConfig({
     exclude: ['fsevents'],
     include: ['react', 'react-dom', '@supabase/supabase-js']
   },
+  build: {
+    rollupOptions: {
+      external: [],
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          supabase: ['@supabase/supabase-js'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu']
+        }
+      }
+    }
+  }
 })

@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { CheckCircle, AlertTriangle, Loader2 } from "lucide-react"
+import { Link } from "react-router-dom"
 
 import { supabase } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { CardFooter } from "@/components/ui/card"
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate()

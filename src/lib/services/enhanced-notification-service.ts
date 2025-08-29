@@ -6,8 +6,8 @@ export class EnhancedNotificationService {
   // Email notifications using Supabase Edge Functions
   static async sendEmail(to: string, subject: string, content: string): Promise<boolean> {
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ahrxwjpfxbmnkaevbwsr.supabase.co'
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFocnh3anBmeGJtbmthZXZid3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNzI3NjUsImV4cCI6MjA2Njk0ODc2NX0.j3be54uL1cugIlbIcmi7eeS1ixrSUMBbnlxmpA-mXpA'
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
       
       const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
         method: "POST",
@@ -28,8 +28,8 @@ export class EnhancedNotificationService {
   // SMS notifications using Supabase Edge Functions
   static async sendSMS(to: string, message: string): Promise<boolean> {
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ahrxwjpfxbmnkaevbwsr.supabase.co'
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFocnh3anBmeGJtbmthZXZid3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNzI3NjUsImV4cCI6MjA2Njk0ODc2NX0.j3be54uL1cugIlbIcmi7eeS1ixrSUMBbnlxmpA-mXpA'
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
       
       const response = await fetch(`${supabaseUrl}/functions/v1/send-sms`, {
         method: "POST",

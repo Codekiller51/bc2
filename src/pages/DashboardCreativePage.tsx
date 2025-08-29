@@ -111,6 +111,8 @@ export default function DashboardCreativePage() {
     return Math.round(completeness)
   }
 
+  const profileCompleteness = getProfileCompleteness()
+
   if (loading) {
     return (
       <div className="container px-4 py-8 md:px-6 md:py-12">

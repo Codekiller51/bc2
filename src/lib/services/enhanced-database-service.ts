@@ -9,13 +9,10 @@ import type {
   Database
 } from '@/lib/database/types'
 
-const supabase = createClient<Database>(
-  import.meta.env.VITE_NEXT_PUBLIC_SUPABASE_URL!,
-  import.meta.env.VITE_NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabase } from '@/lib/supabase/client'
 
 export class EnhancedDatabaseService {
-  private static supabase: SupabaseClient<Database> = supabase
+  private static supabase = supabase
 
   // User Management
   static async getCurrentUser(): Promise<User | null> {

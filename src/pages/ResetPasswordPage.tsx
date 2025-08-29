@@ -2,7 +2,7 @@
 
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { Eye, EyeOff, Lock, CheckCircle } from "lucide-react"
+import { Eye, EyeOff, Lock, CheckCircle, ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
 import { AlertCircle } from "lucide-react"
 

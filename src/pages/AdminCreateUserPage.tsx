@@ -52,7 +52,7 @@ export default function AdminCreateUserPage() {
       );
 
       if (result.success) {
-        toast.success(`Admin user ${formData.full_name} created successfully!`);
+        toast.success(`Admin user ${formData.name} created successfully!`);
         setFormData({ name: '', email: '', password: '' });
       } else {
         throw new Error(result.error || 'Failed to create admin user.');
