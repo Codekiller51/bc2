@@ -103,15 +103,15 @@ export function RecentBookings() {
           <div className="flex items-center gap-3">
             <Avatar>
               <AvatarImage 
-                src={otherUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${otherUser?.full_name || otherUser?.title || 'User'}&backgroundColor=059669&textColor=ffffff`} 
-                alt={otherUser?.full_name || otherUser?.title || "User"} 
+                src={otherUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${otherUser?.full_name || 'User'}&backgroundColor=059669&textColor=ffffff`} 
+                alt={otherUser?.full_name || "User"} 
               />
               <AvatarFallback>
                 <User className="h-4 w-4" />
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium">{otherUser?.full_name || otherUser?.title || "Unknown User"}</p>
+              <p className="font-medium">{otherUser?.full_name || "Unknown User"}</p>
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                 <Calendar className="h-3 w-3" />
                 <span>{new Date(booking.booking_date).toLocaleDateString()}</span>

@@ -202,9 +202,9 @@ export function RealTimeChat({ conversation, currentUserId }: RealTimeChatProps)
                             <Avatar className="h-6 w-6">
                               <AvatarImage
                                 src={message.sender?.avatar_url || "/placeholder.svg"}
-                                alt={message.sender?.name}
+                                alt={message.sender?.full_name}
                               />
-                              <AvatarFallback className="text-xs">{message.sender?.name?.charAt(0)}</AvatarFallback>
+                              <AvatarFallback className="text-xs">{message.sender?.full_name?.charAt(0)}</AvatarFallback>
                             </Avatar>
                           )}
                           {!isCurrentUser && !showAvatar && <div className="w-6" />}

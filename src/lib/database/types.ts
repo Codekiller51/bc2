@@ -79,6 +79,8 @@ export interface User {
   user_metadata?: { [key: string]: any }
   company_name?: string
   industry?: string
+  creative_profiles?: CreativeProfile[]
+  client_profiles?: User[]
 }
 
 export interface CreativeProfile {
@@ -111,6 +113,8 @@ export interface CreativeProfile {
   services?: Service[]
   portfolio_items?: PortfolioItem[]
   testimonials?: any[]
+  recurring_availability?: Record<string, { start: string; end: string; isAvailable: boolean; }>
+  buffer_time?: number
 }
 
 export interface Service {

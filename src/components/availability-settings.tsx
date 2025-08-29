@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Clock, Save } from "lucide-react"
 import { supabase } from "@/lib/supabase/client"
+import { CreativeProfile } from "@/lib/database/types"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -44,7 +45,7 @@ export function AvailabilitySettings({ creativeId }: AvailabilitySettingsProps) 
         
         // Get availability from database
         const { data, error } = await supabase
-          .from('creative_availability')
+          .from('creative_profiles')
           .select('*')
           .eq('creative_id', creativeId)
           .maybeSingle()
@@ -83,11 +84,11 @@ export function AvailabilitySettings({ creativeId }: AvailabilitySettingsProps) 
       // Save to database using upsert
       const { error } = await supabase
         .from('creative_availability')
-        .upsert({
+        .upsert<Partial<CreativeProfile>>({
           creative_id: creativeId,
           recurring_availability: availability,
           buffer_time: bufferTime,
-        })
+        } as Partial<CreativeProfile>)
 
       if (error) throw error
       toast.success("Your availability settings have been updated successfully.")

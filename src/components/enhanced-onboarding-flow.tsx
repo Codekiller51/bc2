@@ -233,7 +233,7 @@ export function EnhancedOnboardingFlow({ onComplete, userType }: OnboardingFlowP
       } else {
         // Update client profile
         await UnifiedDatabaseService.updateClientProfile(user.id, {
-          full_name: profileData.name,
+          full_name: profileData.full_name,
           phone: profileData.phone,
           location: profileData.location,
           company_name: profileData.company_name,
@@ -382,7 +382,7 @@ export function EnhancedOnboardingFlow({ onComplete, userType }: OnboardingFlowP
                         <Avatar className="h-32 w-32 mx-auto border-4 border-emerald-200 dark:border-emerald-800">
                           <AvatarImage src={avatarPreview} alt="Profile" />
                           <AvatarFallback className="text-3xl bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300">
-                            {profileData.name.charAt(0) || 'U'}
+                            {profileData.full_name.charAt(0) || 'U'}
                           </AvatarFallback>
                         </Avatar>
                         <input
@@ -410,8 +410,8 @@ export function EnhancedOnboardingFlow({ onComplete, userType }: OnboardingFlowP
                         <Label htmlFor="name">Full Name *</Label>
                         <Input
                           id="name"
-                          value={profileData.name}
-                          onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
+                          value={profileData.full_name}
+                          onChange={(e) => setProfileData(prev => ({ ...prev, full_name: e.target.value }))}
                           placeholder="Enter your full name"
                           className="mt-2"
                         />

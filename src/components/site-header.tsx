@@ -123,7 +123,7 @@ export function SiteHeader() {
                   <Avatar className="h-10 w-10">
                     <AvatarImage src={user.avatar_url} alt={user.full_name} />
                     <AvatarFallback className="bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 font-semibold">
-                      {user.name ? user.name[0].toUpperCase() : 'U'}
+                      {user.full_name ? user.full_name[0].toUpperCase() : 'U'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">

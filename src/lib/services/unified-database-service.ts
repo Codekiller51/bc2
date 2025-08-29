@@ -77,7 +77,7 @@ export class UnifiedDatabaseService {
         return {
           id: user.id,
           email: clientProfile.email || user.email || '',
-          name: clientProfile.full_name || 'User',
+          full_name: clientProfile.full_name || 'User',
           phone: clientProfile.phone,
           role: 'client',
           location: clientProfile.location,
@@ -105,7 +105,7 @@ export class UnifiedDatabaseService {
         return {
           id: user.id,
           email: creativeProfile.email || user.email || '',
-          name: creativeProfile.title || 'Creative',
+          full_name: creativeProfile.title || 'Creative',
           phone: creativeProfile.phone || user.user_metadata?.phone,
           role: 'creative',
           location: creativeProfile.location || user.user_metadata?.location,
@@ -152,7 +152,7 @@ export class UnifiedDatabaseService {
           users.push({
             id: profile.id,
             email: profile.email || 'N/A',
-            name: profile.full_name || 'Client User',
+            full_name: profile.full_name || 'Client User',
             phone: profile.phone,
             role: 'client',
             location: profile.location,
@@ -176,7 +176,7 @@ export class UnifiedDatabaseService {
           users.push({
             id: profile.user_id || profile.id,
             email: profile.email || 'N/A',
-            name: profile.title || 'Creative User',
+            full_name: profile.title || 'Creative User',
             phone: profile.phone,
             role: 'creative',
             location: profile.location,
@@ -402,6 +402,72 @@ export class UnifiedDatabaseService {
           updated_at: new Date().toISOString()
         })
         .eq('id', userId)
+        .select('*')
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async ensureClientProfile(userData: {
+    id: string
+    email: string
+    full_name: string
+    phone?: string
+    location?: string
+  }) {
+    try {
+      const { data, error } = await this.getTable('client_profiles')
+        .upsert({
+          id: userData.id,
+          full_name: userData.full_name,
+          email: userData.email,
+          phone: userData.phone,
+          location: userData.location
+        }, {
+          onConflict: 'id'
+        })
+        .select('*')
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async ensureCreativeProfile(userData: {
+    user_id: string
+    title: string
+    category: string
+    bio?: string
+    location?: string
+    phone?: string
+    email?: string
+  }) {
+    try {
+      const { data, error } = await this.getTable('creative_profiles')
+        .upsert({
+          user_id: userData.user_id,
+          title: userData.title,
+          category: userData.category,
+          bio: userData.bio,
+          location: userData.location,
+          phone: userData.phone,
+          email: userData.email,
+          approval_status: 'pending',
+          rating: 0,
+          reviews_count: 0,
+          completed_projects: 0,
+          hourly_rate: 50000,
+          availability_status: 'available'
+        }, {
+          onConflict: 'user_id'
+        })
         .select('*')
         .single()
 

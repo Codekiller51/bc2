@@ -81,7 +81,7 @@ export default function RegisterPage() {
             user_type: formData.userType,
             role: formData.userType, // Add role to metadata
             category: formData.userType === 'creative' ? 'General' : undefined,
-            ...(formData.userType === 'creative' && { profession: validatedData.profession })
+            ...(formData.userType === 'creative' && { profession: (validatedData as z.infer<typeof creativeSchema>).profession })
           }
         }
       });
@@ -99,54 +99,64 @@ export default function RegisterPage() {
         // Wait a moment for the trigger to potentially create the profile
         await new Promise(resolve => setTimeout(resolve, 1000))
         
-        // Check if profile was created and create manually if needed
+        // Always create creative profile manually to ensure it exists
         const { data: { user } } = await supabase.auth.getUser();
-        
-        if (user) {
-          // Check if creative profile was created by trigger
-          const { data: existingProfile } = await supabase
-            .from('creative_profiles')
-            .select('id')
-            .eq('user_id', user.id)
-            .maybeSingle();
           
-          // If no profile exists, create it manually
-          if (!existingProfile) {
+          if (user) {
+            // Create creative profile
             const { error: profileError } = await supabase
               .from('creative_profiles')
-              .insert({
+              .upsert({
                 user_id: user.id,
-                title: validatedData.profession,
-                category: 'General', // Default category
-                bio: `Professional ${validatedData.profession} based in ${validatedData.location}`,
+                title: (validatedData as z.infer<typeof creativeSchema>).profession,
+                category: 'General',
+                bio: `Professional ${(validatedData as z.infer<typeof creativeSchema>).profession} based in ${validatedData.location}`,
+                location: validatedData.location,
+                phone: validatedData.phone,
+                email: validatedData.email,
                 approval_status: 'pending',
                 rating: 0,
                 reviews_count: 0,
                 completed_projects: 0,
-                hourly_rate: 50000, // Default rate in TZS
+                hourly_rate: 50000,
                 availability_status: 'available'
+              }, {
+                onConflict: 'user_id'
               });
-            
-            if (profileError) {
-              console.error('Failed to create creative profile:', profileError);
-              // Don't throw error here as user is already created
-            }
+          
+          if (profileError) {
+            console.error('Failed to create creative profile:', profileError);
+          }
+        }
+      } else {
+        // Create client profile manually
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          const { error: profileError } = await supabase
+            .from('client_profiles')
+            .upsert({
+              user_id: user.id,
+              full_name: validatedData.name,
+              email: validatedData.email,
+              phone: validatedData.phone,
+              location: validatedData.location
+            }, {
+              onConflict: 'user_id'
+            });
+          
+          if (profileError) {
+            console.error('Failed to create client profile:', profileError);
           }
         }
       }
       if (formData.userType === 'creative') {
         toast.success("Account created successfully! Your profile will be reviewed by our admin team before becoming visible to clients.");
-        
-        setTimeout(() => {
-          navigate("/profile/complete");
-        }, 2000);
       } else {
         toast.success("Account created successfully! Please check your email to verify your account.");
-        
-        setTimeout(() => {
-          navigate("/profile/complete");
-        }, 2000);
       }
+      // Redirect to dashboard, which will handle profile completeness check
+      navigate("/dashboard");
       
     } catch (error: any) {
       // Handle zod validation errors

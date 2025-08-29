@@ -17,8 +17,8 @@ export default function DashboardPage() {
       return
     }
     
-    // Check if profile is complete
-    if (!isProfileComplete()) {
+    // Check if profile is complete, but skip for admin users
+    if (user.user_metadata?.user_type !== 'admin' && !isProfileComplete()) {
       navigate('/profile/complete')
       return
     }

@@ -74,13 +74,13 @@ export function BookingDetailsModal({ booking, open, onClose, onStatusUpdate }: 
               <h3 className="font-semibold mb-3">Client Information</h3>
               <div className="flex items-center gap-3 mb-3">
                 <Avatar>
-                  <AvatarImage src={booking.client?.avatar_url || "/placeholder.svg"} alt={booking.client?.name} />
+                  <AvatarImage src={booking.client?.avatar_url || "/placeholder.svg"} alt={booking.client?.full_name} />
                   <AvatarFallback>
                     <User className="h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium">{booking.client?.name || "Unknown Client"}</p>
+                  <p className="font-medium">{booking.client?.full_name || "Unknown Client"}</p>
                   <p className="text-sm text-gray-500">{booking.client?.email}</p>
                 </div>
               </div>
@@ -100,13 +100,13 @@ export function BookingDetailsModal({ booking, open, onClose, onStatusUpdate }: 
               <h3 className="font-semibold mb-3">Creative Professional</h3>
               <div className="flex items-center gap-3 mb-3">
                 <Avatar>
-                  <AvatarImage src={booking.creative?.avatar_url || "/placeholder.svg"} alt={booking.creative?.name} />
+                  <AvatarImage src={booking.creative?.avatar_url || "/placeholder.svg"} alt={booking.creative?.full_name} />
                   <AvatarFallback>
                     <User className="h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium">{booking.creative?.name || "Unknown Creative"}</p>
+                  <p className="font-medium">{booking.creative?.full_name || "Unknown Creative"}</p>
                   <p className="text-sm text-gray-500">{booking.creative?.email}</p>
                 </div>
               </div>
