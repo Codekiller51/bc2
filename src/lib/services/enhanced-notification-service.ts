@@ -52,7 +52,7 @@ export class EnhancedNotificationService {
     try {
       const { data, error } = await supabase
         .from('notifications')
-        .insert(notification)
+        .insert(notification as any)
         .select()
         .single()
 
@@ -183,9 +183,9 @@ export class EnhancedNotificationService {
       // Get creative profile and user data
       const { data: profile } = await supabase
         .from('creative_profiles')
-        .select('*, user:auth.users(*)')
+        .select('*')
         .eq('id', profileId)
-        .single()
+        .maybeSingle()
 
       if (!profile) return
 

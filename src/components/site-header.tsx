@@ -2,14 +2,14 @@
 
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import { Bell, MessageSquare, Settings, LogOut, User, Crown } from "lucide-react"
+import { MessageSquare, Settings, LogOut, User, Crown } from "lucide-react"
 
 import { MainNav } from "@/components/main-nav"
 import { ModeToggle } from "@/components/mode-toggle"
 import { NotificationSystem } from "@/components/notification-system"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/components/enhanced-auth-provider"
 import { SessionStatusBadge } from "@/components/session-status-indicator"
@@ -49,6 +49,17 @@ export function SiteHeader() {
             Client
           </Badge>
         )
+    }
+  }
+
+  const getDashboardLink = (userRole: string) => {
+    switch (userRole) {
+      case 'admin':
+        return '/admin'
+      case 'creative':
+        return '/dashboard/creative'
+      default:
+        return '/dashboard/overview'
     }
   }
 
@@ -145,11 +156,7 @@ export function SiteHeader() {
                 <div className="space-y-1">
                   <DropdownMenuItem asChild>
                     <Link 
-                      to={
-                        user.role === 'admin' ? '/admin' :
-                        user.role === 'creative' ? '/dashboard/creative' :
-                        '/dashboard'
-                      }
+                      to={getDashboardLink(user.role)}
                       className="flex items-center gap-3 p-2 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors cursor-pointer"
                     >
                       <div className="w-6 h-6 bg-emerald-100 dark:bg-emerald-900 rounded-md flex items-center justify-center">
@@ -186,7 +193,7 @@ export function SiteHeader() {
                   
                   <DropdownMenuItem asChild>
                     <Link 
-                      to="/profile/edit"
+                      to={user.role === 'admin' ? '/admin/settings' : '/dashboard/settings'}
                       className="flex items-center gap-3 p-2 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors cursor-pointer"
                     >
                       <div className="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">

@@ -10,8 +10,8 @@ interface RealTimeState<T> {
   connectionStatus: 'connecting' | 'connected' | 'disconnected'
 }
 
-export function useRealTimeBookings(userId?: string) {
-  const [state, setState] = useState<RealTimeState<Booking>>({
+export function useRealTimeBookings<T = Booking>(userId?: string) {
+  const [state, setState] = useState<RealTimeState<T>>({
     data: [],
     loading: true,
     error: null,
@@ -24,7 +24,7 @@ export function useRealTimeBookings(userId?: string) {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }))
       const bookings = await UnifiedDatabaseService.getBookings({ userId })
-      setState(prev => ({ ...prev, data: bookings, loading: false }))
+      setState(prev => ({ ...prev, data: bookings as T[], loading: false }))
     } catch (error: any) {
       setState(prev => ({ 
         ...prev, 

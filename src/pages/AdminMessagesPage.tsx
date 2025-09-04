@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { MessageSquare, Search, AlertTriangle, Eye, Users } from 'lucide-react'
+import { MessageSquare, Search, AlertTriangle } from 'lucide-react'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -11,20 +11,20 @@ import { useAuth } from '@/components/enhanced-auth-provider'
 import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
 import { InlineLoading } from '@/components/ui/global-loading'
 import { formatRelativeTime } from '@/lib/utils/format'
+import { toast } from 'sonner'
+import type { Conversation, Message } from '@/lib/database/types'
 
 export default function AdminMessagesPage() {
   const { user } = useAuth()
-  const [conversations, setConversations] = useState([])
-  const [messages, setMessages] = useState([])
-  const [selectedConversation, setSelectedConversation] = useState(null)
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      loadConversations()
-    }
+    loadConversations()
   }, [user])
 
   const loadConversations = async () => {
@@ -51,7 +51,7 @@ export default function AdminMessagesPage() {
     }
   }
 
-  const handleConversationSelect = (conversation) => {
+  const handleConversationSelect = (conversation: Conversation) => {
     setSelectedConversation(conversation)
     loadMessages(conversation.id)
   }
@@ -158,14 +158,12 @@ export default function AdminMessagesPage() {
                           <Avatar className="h-8 w-8 border-2 border-white">
                             <AvatarImage 
                               src={conversation.client?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${conversation.client?.full_name || 'Client'}&backgroundColor=059669&textColor=ffffff`} 
-                              alt={conversation.client?.full_name} 
                             />
                             <AvatarFallback>C</AvatarFallback>
                           </Avatar>
                           <Avatar className="h-8 w-8 border-2 border-white">
                             <AvatarImage 
                               src={conversation.creative?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${conversation.creative?.title || 'Creative'}&backgroundColor=059669&textColor=ffffff`} 
-                              alt={conversation.creative?.title} 
                             />
                             <AvatarFallback>P</AvatarFallback>
                           </Avatar>
@@ -247,9 +245,9 @@ export default function AdminMessagesPage() {
                         <p className="text-gray-500">No messages in this conversation</p>
                       </div>
                     ) : (
-                      messages.map((message, index) => (
+                      messages.map((message) => (
                         <div key={message.id} className="flex justify-start">
-                          <div className="max-w-xs lg:max-w-md px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                          <div className="max-w-[80%] rounded-lg p-3 bg-gray-100 dark:bg-gray-800">
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
                                 {message.sender_id === selectedConversation.client_id ? 'Client' : 'Creative'}

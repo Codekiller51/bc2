@@ -8,24 +8,32 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { DataTable } from '@/components/ui/data-table'
 import { useAuth } from '@/components/enhanced-auth-provider'
 import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
 import { InlineLoading } from '@/components/ui/global-loading'
 import { toast } from 'sonner'
 
+interface UserData {
+  id: string
+  full_name: string
+  email: string
+  role: 'client' | 'creative' | 'admin'
+  location?: string
+  avatar_url?: string
+  approved: boolean
+  created_at: string
+}
+
 export default function AdminUsersPage() {
   const { user } = useAuth()
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState<UserData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      loadUsers()
-    }
+    loadUsers()
   }, [user])
 
   const loadUsers = async () => {
@@ -47,11 +55,6 @@ export default function AdminUsersPage() {
 
   const handleApproveCreative = async (userId: string) => {
     try {
-      // Find the creative profile
-      const creative = users.find(u => u.id === userId && u.role === 'creative')
-      if (!creative) return
-
-      // Get the creative profile ID
       const creativeProfile = await UnifiedDatabaseService.getCreativeProfileByUserId(userId)
       if (!creativeProfile) return
 
@@ -71,9 +74,6 @@ export default function AdminUsersPage() {
 
   const handleRejectCreative = async (userId: string) => {
     try {
-      const creative = users.find(u => u.id === userId && u.role === 'creative')
-      if (!creative) return
-
       const creativeProfile = await UnifiedDatabaseService.getCreativeProfileByUserId(userId)
       if (!creativeProfile) return
 
@@ -116,9 +116,9 @@ export default function AdminUsersPage() {
     }
   }
 
-  const getStatusBadge = (user: any) => {
-    if (user.role === 'creative') {
-      if (user.approved) {
+  const getStatusBadge = (userData: UserData) => {
+    if (userData.role === 'creative') {
+      if (userData.approved) {
         return <Badge className="bg-green-100 text-green-800">Approved</Badge>
       } else {
         return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
@@ -127,11 +127,11 @@ export default function AdminUsersPage() {
     return <Badge className="bg-green-100 text-green-800">Active</Badge>
   }
 
-  const filteredUsers = users.filter(user => {
-    const matchesFilter = filter === 'all' || user.role === filter
+  const filteredUsers = users.filter(userData => {
+    const matchesFilter = filter === 'all' || userData.role === filter
     const matchesSearch = !searchTerm || 
-      user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      userData.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      userData.email.toLowerCase().includes(searchTerm.toLowerCase())
     return matchesFilter && matchesSearch
   })
 

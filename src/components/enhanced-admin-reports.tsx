@@ -6,12 +6,10 @@ import { motion } from "framer-motion"
 import { 
   FileText, 
   Download, 
-  Calendar, 
   Users, 
   DollarSign, 
   BarChart3, 
   TrendingUp,
-  Filter,
   RefreshCw
 } from "lucide-react"
 
@@ -19,7 +17,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DatePickerWithRange } from "@/components/ui/date-range-picker"
-import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
@@ -177,18 +174,6 @@ export function EnhancedAdminReports() {
       toast.error('Failed to download report')
     } finally {
       setGeneratingPDF(false)
-    }
-  }
-
-
-
-  const getReportIcon = (type: string) => {
-    switch (type) {
-      case 'financial': return DollarSign
-      case 'user': return Users
-      case 'activity': return BarChart3
-      case 'performance': return TrendingUp
-      default: return FileText
     }
   }
 

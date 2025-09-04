@@ -10,7 +10,6 @@ import {
   BarChart3,
   RefreshCw,
   Download,
-  AlertTriangle
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -189,7 +188,7 @@ export function AdminTestRunner() {
               <TabsTrigger value="accessibility">A11y</TabsTrigger>
             </TabsList>
 
-            {testSuites.map((suite, index) => (
+            {testSuites.map((suite) => (
               <TabsContent key={suite.name} value={suite.name.toLowerCase().split(' ')[0]}>
                 <Card>
                   <CardHeader>

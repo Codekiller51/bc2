@@ -1,25 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Settings, DollarSign, Users, Bell, Shield, Save, AlertTriangle, TestTube } from 'lucide-react'
+import { DollarSign, Users, Bell, Shield, Save, TestTube } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
 import { useAuth } from '@/components/enhanced-auth-provider'
-import { InlineLoading } from '@/components/ui/global-loading'
 import { AdminTestRunner } from '@/components/admin-test-runner'
 import { toast } from 'sonner'
 
 export default function AdminSettingsPage() {
   const { user } = useAuth()
-  const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const [platformSettings, setPlatformSettings] = useState({
     // Commission Settings
@@ -44,9 +38,7 @@ export default function AdminSettingsPage() {
     // Content Settings
     platformName: 'Brand Connect',
     supportEmail: 'support@brandconnect.co.tz',
-    supportPhone: '+255 123 456 789',
-    termsOfService: '',
-    privacyPolicy: ''
+    supportPhone: '+255 123 456 789'
   })
 
   const handleSaveSettings = async () => {
@@ -391,7 +383,6 @@ export default function AdminSettingsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.7 }}
-        className="lg:col-span-2"
       >
         <Card className="professional-card">
           <CardHeader>
@@ -411,7 +402,7 @@ export default function AdminSettingsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="mt-8 flex justify-end lg:col-span-2"
+        className="mt-8 flex justify-end"
       >
         <Button
           onClick={handleSaveSettings}

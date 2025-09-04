@@ -59,7 +59,8 @@ export class UnifiedDatabaseService {
           verified: true,
           approved: true,
           created_at: user.created_at,
-          updated_at: user.updated_at || user.created_at
+          updated_at: user.updated_at || user.created_at,
+          user_metadata: user.user_metadata
         }
       }
 
@@ -87,7 +88,8 @@ export class UnifiedDatabaseService {
           updated_at: clientProfile.updated_at,
           company_name: clientProfile.company_name,
           industry: clientProfile.industry,
-          avatar_url: clientProfile.avatar_url
+          avatar_url: clientProfile.avatar_url,
+          user_metadata: user.user_metadata
         }
       }
 
@@ -112,7 +114,8 @@ export class UnifiedDatabaseService {
           verified: user.email_confirmed_at !== null,
           approved: creativeProfile.approval_status === 'approved',
           created_at: creativeProfile.created_at,
-          updated_at: creativeProfile.updated_at
+          updated_at: creativeProfile.updated_at,
+          user_metadata: user.user_metadata
         }
       }
 
@@ -127,7 +130,8 @@ export class UnifiedDatabaseService {
         verified: user.email_confirmed_at !== null,
         approved: true,
         created_at: user.created_at,
-        updated_at: user.updated_at || user.created_at
+        updated_at: user.updated_at || user.created_at,
+        user_metadata: user.user_metadata
       }
     } catch (error) {
       console.error('Error fetching current user:', error)

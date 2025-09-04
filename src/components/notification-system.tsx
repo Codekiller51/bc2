@@ -1,8 +1,7 @@
-import { useEffect, useState, useCallback } from 'react'
-import { Bell, Check, X } from 'lucide-react'
+import { useState } from 'react'
+import { Bell, Check } from 'lucide-react'
 import { useAuth } from '@/components/enhanced-auth-provider'
 import { useRealTimeNotifications } from '@/hooks/use-real-time-notifications'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -49,6 +48,7 @@ export function NotificationSystem() {
       return date.toLocaleDateString()
     }
   }
+  
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>

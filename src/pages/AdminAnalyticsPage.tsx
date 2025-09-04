@@ -11,6 +11,7 @@ import { InlineLoading } from '@/components/ui/global-loading'
 import { RevenueChart } from '@/components/revenue-chart'
 import { UserGrowthChart } from '@/components/user-growth-chart'
 import { formatCurrency } from '@/lib/utils/format'
+import { Badge } from '@/components/ui/badge'
 
 export default function AdminAnalyticsPage() {
   const { user } = useAuth()
@@ -27,9 +28,7 @@ export default function AdminAnalyticsPage() {
   const [timeRange, setTimeRange] = useState('6months')
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      loadAnalytics()
-    }
+    loadAnalytics()
   }, [user, timeRange])
 
   const loadAnalytics = async () => {
@@ -254,7 +253,7 @@ export default function AdminAnalyticsPage() {
                   { name: 'Photography', percentage: 28 },
                   { name: 'Digital Marketing', percentage: 20 },
                   { name: 'Web Design', percentage: 17 }
-                ].map((category, index) => (
+                ].map((category) => (
                   <div key={category.name} className="flex items-center justify-between">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       {category.name}
@@ -291,7 +290,7 @@ export default function AdminAnalyticsPage() {
                   { city: 'Arusha', users: 23 },
                   { city: 'Mwanza', users: 18 },
                   { city: 'Dodoma', users: 14 }
-                ].map((region, index) => (
+                ].map((region) => (
                   <div key={region.city} className="flex items-center justify-between">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       {region.city}

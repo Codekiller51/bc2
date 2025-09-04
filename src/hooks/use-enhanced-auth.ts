@@ -229,31 +229,21 @@ export function useEnhancedAuth() {
     if (!user) return false
     
     // Admin users do not need to complete a profile
-    if (user.user_metadata?.user_type === 'admin') {
+    if (user.role === 'admin') {
       return true
     }
-    // Implement actual profile completeness check based on user_metadata or related profile tables for non-admin users.
-    if (user.user_metadata?.user_type === 'creative') {
-      // For creative users, check if all required fields in creative_profiles are filled
-      const creativeProfile = user.creative_profiles?.[0];
-      return !!creativeProfile &&
-             !!creativeProfile.title &&
-             !!creativeProfile.category &&
-             !!creativeProfile.bio &&
-             !!creativeProfile.location &&
-             !!creativeProfile.phone &&
-             !!creativeProfile.email &&
-             creativeProfile.approval_status === 'approved';
-    } else if (user.user_metadata?.user_type === 'client') {
-      // For client users, check if all required fields in client_profiles are filled
-      const clientProfile = user.client_profiles?.[0];
-      return !!clientProfile &&
-             !!clientProfile.full_name &&
-             !!clientProfile.email &&
-             !!clientProfile.phone &&
-             !!clientProfile.location;
+    
+    // For creative users, check basic profile completeness
+    if (user.role === 'creative') {
+      return !!(user.full_name && user.email && user.location)
+    } 
+    
+    // For client users, check basic profile completeness
+    if (user.role === 'client') {
+      return !!(user.full_name && user.email && user.location)
     }
-    // Default to true if user type is not creative or client (should not happen for non-admin)
+    
+    // Default to true for other cases
     return true
   }, [user])
 

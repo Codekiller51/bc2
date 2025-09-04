@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { UserPlus, AlertTriangle, AlertCircle } from 'lucide-react'
+import { UserPlus, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -29,46 +29,46 @@ export default function AdminCreateUserPage() {
     name: '',
     email: '',
     password: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.id]: e.target.value })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+    e.preventDefault()
+    setError(null)
+    setIsLoading(true)
 
     try {
-      adminUserSchema.parse(formData);
+      adminUserSchema.parse(formData)
 
       const result = await EnhancedAuthService.createAdminUser(
         formData.email,
         formData.password,
         formData.name
-      );
+      )
 
       if (result.success) {
-        toast.success(`Admin user ${formData.name} created successfully!`);
-        setFormData({ name: '', email: '', password: '' });
+        toast.success(`Admin user ${formData.name} created successfully!`)
+        setFormData({ name: '', email: '', password: '' })
       } else {
-        throw new Error(result.error || 'Failed to create admin user.');
+        throw new Error(result.error || 'Failed to create admin user.')
       }
     } catch (err: any) {
       if (err instanceof z.ZodError) {
-        setError(err.errors[0].message);
-        toast.error(err.errors[0].message);
+        setError(err.errors[0].message)
+        toast.error(err.errors[0].message)
       } else {
-        setError(err.message);
-        toast.error(err.message);
+        setError(err.message)
+        toast.error(err.message)
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="container px-4 py-8 md:px-6 md:py-12">
@@ -138,5 +138,5 @@ export default function AdminCreateUserPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

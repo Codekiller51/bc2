@@ -148,10 +148,10 @@ export function useOptimisticUpdates<T extends { id: string }>(
 // Specialized hook for booking optimistic updates
 export function useOptimisticBookings() {
   const optimisticHook = useOptimisticUpdates({
-    onSuccess: (booking) => {
+    onSuccess: () => {
       toast.success('Booking confirmed!')
     },
-    onError: (error, booking) => {
+    onError: (error) => {
       toast.error(`Booking failed: ${error.message}`)
     }
   })

@@ -1,4 +1,3 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import type {
   User,
   CreativeProfile,
@@ -16,56 +15,54 @@ export class EnhancedDatabaseService {
 
   // User Management
   static async getCurrentUser(): Promise<User | null> {
-    const { data: { user }, error } = await this.supabase.auth.getUser();
-    if (error || !user) return null;
+    const { data: { user }, error } = await this.supabase.auth.getUser()
+    if (error || !user) return null
 
     // Get additional user data from profiles
     const { data: clientProfileData } = await this.supabase
       .from('client_profiles')
       .select('*')
       .eq('id', user.id)
-      .single();
+      .maybeSingle()
 
     if (clientProfileData) {
-      const profile = clientProfileData as Database['public']['Tables']['client_profiles']['Row'];
       return {
         id: user.id,
         email: user.email!,
-        full_name: profile.full_name || 'User',
-        phone: profile.phone,
+        full_name: clientProfileData.full_name || 'User',
+        phone: clientProfileData.phone,
         role: 'client',
-        location: profile.location,
+        location: clientProfileData.location,
         verified: user.email_confirmed_at !== null,
-        approved: false,
+        approved: true,
         created_at: user.created_at,
-        updated_at: profile.updated_at
-      };
+        updated_at: clientProfileData.updated_at
+      }
     }
 
     // Check creative profile
     const { data: creativeProfileData } = await this.supabase
       .from('creative_profiles')
-      .select('*, users(*)')
+      .select('*')
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle()
 
     if (creativeProfileData) {
-      const creativeProfile = creativeProfileData as Database['public']['Tables']['creative_profiles']['Row'] & { users: Database['public']['Tables']['users']['Row'] };
       return {
         id: user.id,
         email: user.email!,
-        full_name: creativeProfile.users?.full_name || 'Creative',
-        phone: creativeProfile.users?.phone,
+        full_name: creativeProfileData.title || 'Creative',
+        phone: creativeProfileData.phone,
         role: 'creative',
-        location: creativeProfile.users?.location,
+        location: creativeProfileData.location,
         verified: user.email_confirmed_at !== null,
-        approved: false,
+        approved: creativeProfileData.approval_status === 'approved',
         created_at: user.created_at,
-        updated_at: creativeProfile.updated_at
-      };
+        updated_at: creativeProfileData.updated_at
+      }
     }
 
-    return null;
+    return null
   }
 
   // Creative Profiles
@@ -75,6 +72,7 @@ export class EnhancedDatabaseService {
     rating?: number
     search?: string
     approvalStatus?: string
+    limit?: number
   }): Promise<CreativeProfile[]> {
     let query = this.supabase
       .from('creative_profiles')
@@ -101,6 +99,10 @@ export class EnhancedDatabaseService {
 
     if (filters?.search) {
       query = query.or(`title.ilike.%${filters.search}%,bio.ilike.%${filters.search}%`)
+    }
+
+    if (filters?.limit) {
+      query = query.limit(filters.limit)
     }
 
     const { data, error } = await query.order('rating', { ascending: false })
@@ -197,6 +199,7 @@ export class EnhancedDatabaseService {
   static async createBooking(bookingData: {
     creative_id: string
     service_id: string
+    booking_date: string
     start_time: string
     end_time: string
     total_amount: number
@@ -209,20 +212,24 @@ export class EnhancedDatabaseService {
 
     const { data, error } = await this.supabase
       .from('bookings')
-      .insert(bookingData as Database['public']['Tables']['bookings']['Insert'])
+      .insert({
+        ...bookingData,
+        client_id: user.id,
+        status: 'pending'
+      })
       .select(`
         *,
         client:client_profiles(*),
         creative:creative_profiles(*),
         service:services(*)
       `)
-      .single() as { data: Booking | null; error: Error | null }
+      .single()
 
     if (error) {
       throw new Error(`Failed to create booking: ${error.message}`)
     }
 
-    return data
+    return data as Booking
   }
 
   static async updateBookingStatus(
@@ -231,7 +238,10 @@ export class EnhancedDatabaseService {
   ): Promise<Booking> {
     const { data, error } = await this.supabase
       .from('bookings')
-      .update({ status, updated_at: new Date().toISOString() })
+      .update({ 
+        status, 
+        updated_at: new Date().toISOString() 
+      })
       .eq('id', bookingId)
       .select(`
         *,
@@ -318,15 +328,18 @@ export class EnhancedDatabaseService {
   }): Promise<Conversation> {
     const { data: conversation, error } = await this.supabase
       .from('conversations')
-      .insert(data as Database['public']['Tables']['conversations']['Insert'])
+      .insert({
+        ...data,
+        last_message_at: new Date().toISOString()
+      })
       .select('*')
-      .single() as { data: Conversation | null; error: Error | null }
+      .single()
 
     if (error) {
       throw new Error(`Failed to create conversation: ${error.message}`)
     }
 
-    return conversation
+    return conversation as Conversation
   }
 
   static async getMessages(conversationId: string): Promise<Message[]> {
@@ -351,9 +364,9 @@ export class EnhancedDatabaseService {
   }): Promise<Message> {
     const { data, error } = await this.supabase
       .from('messages')
-      .insert(messageData as Database['public']['Tables']['messages']['Insert'])
+      .insert(messageData)
       .select('*')
-      .single() as { data: Message | null; error: Error | null }
+      .single()
 
     if (error) {
       throw new Error(`Failed to send message: ${error.message}`)
@@ -365,7 +378,7 @@ export class EnhancedDatabaseService {
       .update({ last_message_at: new Date().toISOString() })
       .eq('id', messageData.conversation_id)
 
-    return data
+    return data as Message
   }
 
   static async markMessagesAsRead(
@@ -443,15 +456,15 @@ export class EnhancedDatabaseService {
   ): Promise<Notification> {
     const { data, error } = await this.supabase
       .from('notifications')
-      .insert(notificationData as Database['public']['Tables']['notifications']['Insert'])
+      .insert(notificationData)
       .select()
-      .single() as { data: Notification | null; error: Error | null }
+      .single()
 
     if (error) {
       throw new Error(`Failed to create notification: ${error.message}`)
     }
 
-    return data
+    return data as Notification
   }
 
   static async markNotificationAsRead(notificationId: string): Promise<void> {
@@ -643,18 +656,20 @@ export class EnhancedDatabaseService {
         totalRevenue
       ] = await Promise.all([
         this.supabase.from('bookings').select('count', { count: 'exact' }),
+      ]
+      )
       this.supabase.from('creative_profiles').select('count', { count: 'exact' }),
       this.supabase.from('client_profiles').select('count', { count: 'exact' }),
       this.supabase.from('creative_profiles').select('count', { count: 'exact' }).eq('approval_status', 'pending'),
       this.supabase.from('bookings').select('total_amount').eq('status', 'completed')
-      ])
+        .single()
 
       const { data: totalRevenueData } = await this.supabase
         .from('bookings')
         .select('total_amount')
-        .eq('status', 'completed');
+        .eq('status', 'completed')
 
-      const revenue = totalRevenueData?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0;
+      const revenue = totalRevenueData?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0
 
       return {
         totalBookings: totalBookings.count || 0,
@@ -664,7 +679,7 @@ export class EnhancedDatabaseService {
         totalRevenue: revenue,
         monthlyGrowth: 12.5, // This would be calculated from historical data
         averageRating: 4.8 // This would be calculated from reviews
-      };
+      }
     } catch (error) {
       console.error('Error loading dashboard stats:', error)
       // Return default stats to prevent app crash
@@ -692,12 +707,15 @@ export class EnhancedDatabaseService {
       avatar_url?: string
     }
   ) {
-    const { data, error } = await this.supabase
+        .select('*')
       .from('client_profiles')
-      .update(updates as Database['public']['Tables']['client_profiles']['Update'])
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString()
+      })
       .eq('id', userId)
       .select()
-      .single() as { data: Database['public']['Tables']['client_profiles']['Row'] | null }
+      .single()
 
     if (error) {
       throw new Error(`Failed to update client profile: ${error.message}`)
@@ -706,7 +724,7 @@ export class EnhancedDatabaseService {
     return data
   }
 
-  static async updatePassword(currentPassword: string, newPassword: string) {
+  static async updatePassword(_currentPassword: string, newPassword: string) {
     const { error } = await this.supabase.auth.updateUser({
       password: newPassword
     })
@@ -782,7 +800,7 @@ export class EnhancedDatabaseService {
       } else {
         const { data: creativeProfile } = await this.supabase
           .from('creative_profiles')
-          .select('*')
+        .select('*')
           .eq('user_id', userId)
           .single()
         userData.profile = creativeProfile
@@ -802,7 +820,7 @@ export class EnhancedDatabaseService {
         .select('*')
         .eq('sender_id', userId)
 
-      userData.messages = messages || []
+            full_name: profile.title || 'Creative User',
 
       // Get reviews
       const { data: reviews } = await this.supabase
@@ -838,12 +856,12 @@ export class EnhancedDatabaseService {
     creative_id: string
     rating: number
     comment?: string
-  }): Promise<Review> {
+  }): Promise<any> {
     const { data, error } = await this.supabase
       .from('reviews')
-      .insert(reviewData as Database['public']['Tables']['reviews']['Insert'])
+      .insert(reviewData)
       .select()
-      .single() as { data: Database['public']['Tables']['reviews']['Row'] | null }
+      .single()
 
     if (error) {
       throw new Error(`Failed to create review: ${error.message}`)
@@ -861,9 +879,17 @@ export class EnhancedDatabaseService {
       `)
       .eq('creative_id', creativeId)
       .order('created_at', { ascending: false })
-
+      .insert({
+        ...userData,
+        approval_status: 'pending',
+        rating: 0,
+        reviews_count: 0,
+        completed_projects: 0,
+        availability_status: 'available'
+      })
     if (error) {
       throw new Error(`Failed to fetch reviews: ${error.message}`)
+      .single()
     }
 
     return data || []

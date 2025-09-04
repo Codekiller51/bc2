@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'sonner'
 
 import { ThemeProvider } from '@/components/theme-provider'
+import { RouteGuard } from '@/components/route-guard'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { AIChatBot } from '@/components/ai-chat-bot'
@@ -9,9 +10,6 @@ import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { EnhancedAuthProvider } from '@/components/enhanced-auth-provider'
 import { LoadingProvider } from '@/components/loading-provider'
 import { SessionStatusIndicator } from '@/components/session-status-indicator'
-import { useAuth } from '@/components/enhanced-auth-provider'
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 
 // Import pages
 import HomePage from '@/pages/HomePage'
@@ -58,27 +56,6 @@ import PrivacyPage from '@/pages/PrivacyPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
 function AppContent() {
-  const { user, loading, isProfileComplete } = useAuth()
-  const location = useLocation()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    // Don't redirect if still loading or user is not authenticated
-    if (loading || !user) return
-    
-    // Don't redirect if already on profile completion page
-    if (location.pathname === '/profile/complete') return
-    
-    // Don't redirect if on auth pages
-    const authPages = ['/login', '/register', '/forgot-password', '/auth/callback', '/auth/reset-password', '/']
-    if (authPages.includes(location.pathname)) return
-    
-    // Redirect to profile completion if profile is incomplete
-    if (!isProfileComplete()) {
-      navigate('/profile/complete')
-    }
-  }, [user, loading, isProfileComplete, location.pathname, navigate])
-
   return (
     <div className="relative flex min-h-screen flex-col">
       <SiteHeader />
@@ -99,39 +76,127 @@ function AppContent() {
           <Route path="/privacy" element={<PrivacyPage />} />
           
           {/* Booking routes */}
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/booking/:id" element={<BookingDetailsPage />} />
-          <Route path="/booking/:id/payment" element={<PaymentPage />} />
+          <Route path="/booking" element={
+            <RouteGuard requireProfileComplete>
+              <BookingPage />
+            </RouteGuard>
+          } />
+          <Route path="/booking/:id" element={
+            <RouteGuard requireProfileComplete>
+              <BookingDetailsPage />
+            </RouteGuard>
+          } />
+          <Route path="/booking/:id/payment" element={
+            <RouteGuard requireProfileComplete>
+              <PaymentPage />
+            </RouteGuard>
+          } />
           
           {/* Profile routes */}
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/profile/edit" element={<ProfileEditPage />} />
+          <Route path="/profile" element={
+            <RouteGuard>
+              <ProfilePage />
+            </RouteGuard>
+          } />
+          <Route path="/profile/edit" element={
+            <RouteGuard>
+              <ProfileEditPage />
+            </RouteGuard>
+          } />
           <Route path="/profile/complete" element={<ProfileCompletePage />} />
           <Route path="/profile/:slug" element={<ProfileViewPage />} />
           
           {/* Chat */}
-          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat" element={
+            <RouteGuard requireProfileComplete>
+              <ChatPage />
+            </RouteGuard>
+          } />
           
           {/* Dashboard routes */}
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/dashboard/overview" element={<DashboardOverviewPage />} />
-          <Route path="/dashboard/creative" element={<DashboardCreativePage />} />
-          <Route path="/dashboard/bookings" element={<DashboardBookingsPage />} />
-          <Route path="/dashboard/messages" element={<DashboardMessagesPage />} />
-          <Route path="/dashboard/portfolio" element={<DashboardPortfolioPage />} />
-          <Route path="/dashboard/availability" element={<DashboardAvailabilityPage />} />
-          <Route path="/dashboard/settings" element={<DashboardSettingsPage />} />
+          <Route path="/dashboard" element={
+            <RouteGuard requireProfileComplete>
+              <DashboardPage />
+            </RouteGuard>
+          } />
+          <Route path="/dashboard/overview" element={
+            <RouteGuard requiredRole="client" requireProfileComplete>
+              <DashboardOverviewPage />
+            </RouteGuard>
+          } />
+          <Route path="/dashboard/creative" element={
+            <RouteGuard requiredRole="creative" requireProfileComplete>
+              <DashboardCreativePage />
+            </RouteGuard>
+          } />
+          <Route path="/dashboard/bookings" element={
+            <RouteGuard requiredRole="creative" requireProfileComplete>
+              <DashboardBookingsPage />
+            </RouteGuard>
+          } />
+          <Route path="/dashboard/messages" element={
+            <RouteGuard requireProfileComplete>
+              <DashboardMessagesPage />
+            </RouteGuard>
+          } />
+          <Route path="/dashboard/portfolio" element={
+            <RouteGuard requiredRole="creative" requireProfileComplete>
+              <DashboardPortfolioPage />
+            </RouteGuard>
+          } />
+          <Route path="/dashboard/availability" element={
+            <RouteGuard requiredRole="creative" requireProfileComplete>
+              <DashboardAvailabilityPage />
+            </RouteGuard>
+          } />
+          <Route path="/dashboard/settings" element={
+            <RouteGuard requireProfileComplete>
+              <DashboardSettingsPage />
+            </RouteGuard>
+          } />
           
           {/* Admin routes */}
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={
+            <RouteGuard requiredRole="admin">
+              <AdminPage />
+            </RouteGuard>
+          } />
           <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route path="/admin/users" element={<AdminUsersPage />} />
-          <Route path="/admin/bookings" element={<AdminBookingsPage />} />
-          <Route path="/admin/messages" element={<AdminMessagesPage />} />
-          <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
-          <Route path="/admin/reports" element={<AdminReportsPage />} />
-          <Route path="/admin/settings" element={<AdminSettingsPage />} />
-          <Route path="/admin/create-user" element={<AdminCreateUserPage />} />
+          <Route path="/admin/users" element={
+            <RouteGuard requiredRole="admin">
+              <AdminUsersPage />
+            </RouteGuard>
+          } />
+          <Route path="/admin/bookings" element={
+            <RouteGuard requiredRole="admin">
+              <AdminBookingsPage />
+            </RouteGuard>
+          } />
+          <Route path="/admin/messages" element={
+            <RouteGuard requiredRole="admin">
+              <AdminMessagesPage />
+            </RouteGuard>
+          } />
+          <Route path="/admin/analytics" element={
+            <RouteGuard requiredRole="admin">
+              <AdminAnalyticsPage />
+            </RouteGuard>
+          } />
+          <Route path="/admin/reports" element={
+            <RouteGuard requiredRole="admin">
+              <AdminReportsPage />
+            </RouteGuard>
+          } />
+          <Route path="/admin/settings" element={
+            <RouteGuard requiredRole="admin">
+              <AdminSettingsPage />
+            </RouteGuard>
+          } />
+          <Route path="/admin/create-user" element={
+            <RouteGuard requiredRole="admin">
+              <AdminCreateUserPage />
+            </RouteGuard>
+          } />
           
           {/* Auth routes */}
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

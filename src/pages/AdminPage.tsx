@@ -9,7 +9,6 @@ import {
   CheckCircle,
   Clock,
   MessageSquare,
-  Award,
   Shield,
   UserPlus
 } from 'lucide-react'
@@ -36,19 +35,16 @@ export default function AdminPage() {
     monthlyGrowth: 0,
     averageRating: 0
   })
-  interface RecentActivityItem {
-    type: string;
-    message: string;
-    time: string;
-  }
-  const [recentActivity, setRecentActivity] = useState<RecentActivityItem[]>([])
+  const [recentActivity, setRecentActivity] = useState<Array<{
+    type: string
+    message: string
+    time: string
+  }>>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      loadAdminDashboardData()
-    }
+    loadAdminDashboardData()
   }, [user])
 
   const loadAdminDashboardData = async () => {

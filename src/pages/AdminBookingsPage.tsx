@@ -13,21 +13,20 @@ import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
 import { InlineLoading } from '@/components/ui/global-loading'
 import { formatCurrency } from '@/lib/utils/format'
 import { BookingDetailsModal } from '@/components/booking-details-modal'
+import type { Booking } from '@/lib/database/types'
 
 export default function AdminBookingsPage() {
   const { user } = useAuth()
-  const [bookings, setBookings] = useState([])
+  const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedBooking, setSelectedBooking] = useState(null)
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      loadBookings()
-    }
+    loadBookings()
   }, [user])
 
   const loadBookings = async () => {
@@ -49,12 +48,10 @@ export default function AdminBookingsPage() {
   const handleStatusUpdate = async (bookingId: string, newStatus: string) => {
     try {
       await UnifiedDatabaseService.updateBookingStatus(bookingId, newStatus)
-      const { toast } = await import('sonner')
       toast.success('Booking status updated successfully!')
       loadBookings()
     } catch (error) {
       console.error('Failed to update booking status:', error)
-      const { toast } = await import('sonner')
       toast.error('Failed to update booking status')
     }
   }
@@ -73,7 +70,7 @@ export default function AdminBookingsPage() {
   const filteredBookings = bookings.filter(booking => {
     const matchesFilter = filter === 'all' || booking.status === filter
     const matchesSearch = !searchTerm || 
-      booking.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booking.client?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.creative?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.service?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     return matchesFilter && matchesSearch
@@ -187,8 +184,8 @@ export default function AdminBookingsPage() {
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
                           <AvatarImage 
-                            src={booking.client?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${booking.client?.name || 'User'}&backgroundColor=059669&textColor=ffffff`} 
-                            alt={booking.client?.name} 
+                            src={booking.client?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${booking.client?.full_name || 'User'}&backgroundColor=059669&textColor=ffffff`} 
+                            alt={booking.client?.full_name} 
                           />
                           <AvatarFallback>
                             <User className="h-4 w-4" />
@@ -199,7 +196,7 @@ export default function AdminBookingsPage() {
                             {booking.service?.name || 'Service'}
                           </h4>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {booking.client?.name} → {booking.creative?.title}
+                            {booking.client?.full_name} → {booking.creative?.title}
                           </p>
                         </div>
                       </div>

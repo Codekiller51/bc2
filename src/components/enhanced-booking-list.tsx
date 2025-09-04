@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { Calendar, Clock, User, DollarSign, RefreshCw, AlertCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -32,19 +32,16 @@ export function EnhancedBookingList({ userId, filters }: EnhancedBookingListProp
 
   // Real-time data hook
   const {
-    data: realtimeBookings,
-    loading: realtimeLoading,
-    error: realtimeError,
-    connectionStatus,
-    refresh
-  } = useRealTimeBookings(userId)
+    data: realtimeBookings = [],
+    connectionStatus = 'disconnected'
+  } = useRealTimeBookings<Booking>(userId) || {}
 
   // Optimistic updates hook
   const {
     applyOptimisticUpdates,
     updateBookingOptimistically,
     hasPendingUpdate
-  } = useOptimisticBookings<Booking>()
+  } = useOptimisticBookings()
 
   // Load initial bookings
   const loadBookings = useCallback(async () => {
@@ -113,7 +110,7 @@ export function EnhancedBookingList({ userId, filters }: EnhancedBookingListProp
   }
 
   // Apply optimistic updates to bookings
-  const displayBookings = applyOptimisticUpdates<Booking>(bookings)
+  const displayBookings = applyOptimisticUpdates(bookings)
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -214,7 +211,7 @@ export function EnhancedBookingList({ userId, filters }: EnhancedBookingListProp
                   
                   <div>
                     <h3 className="font-semibold">
-                      {booking.client?.name || booking.creative?.name || 'Unknown User'}
+                      {booking.client?.full_name || booking.creative?.title || 'Unknown User'}
                     </h3>
                     <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                       <div className="flex items-center gap-1">

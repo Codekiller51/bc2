@@ -286,11 +286,51 @@ export class EnhancedAuthService {
 
   static async createAdminUser(email: string, password: string, full_name: string): Promise<AuthResult> {
     try {
-      const { data, error } = await supabase.auth.admin.createUser({
+      // Use regular signup for admin user creation since admin.createUser requires service role key
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name,
+            role: 'admin',
+            user_type: 'admin'
+          }
+        }
+      })
+
+      if (error) throw error
+
+      // Update user metadata to set admin role
+      if (data.user) {
+        const { error: updateError } = await supabase.auth.updateUser({
+          data: {
+            full_name,
+            role: 'admin',
+            user_type: 'admin'
+          }
+        })
+
+        if (updateError) {
+          console.warn('Failed to update user metadata:', updateError)
+        }
+      }
+
+      return { success: true, user: data.user }
+    } catch (error) {
+      const apiError = ApiErrorHandler.handle(error)
+      return { success: false, error: apiError.message }
+    }
+  }
+
+  static async createAdminUserDirect(email: string, password: string, full_name: string): Promise<AuthResult> {
+    try {
+      // This would require service role key - for now we'll use the regular signup method
+      const { data, error } = await supabase.auth.admin?.createUser({
         email,
         password,
         user_metadata: {
-          full_name: name,
+          full_name,
           role: 'admin'
         }
       })

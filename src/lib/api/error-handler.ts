@@ -146,7 +146,7 @@ export class ApiErrorHandler {
       retries?: number
       retryDelay?: number
     }
-  ): Promise<T | null> {
+  ): Promise<T> {
     const { showToast = true, retries = 0, retryDelay = 1000 } = options || {}
     
     let lastError: ApiError | null = null
@@ -171,9 +171,10 @@ export class ApiErrorHandler {
 
     if (lastError) {
       this.showError(lastError, { showToast })
+      throw lastError
     }
 
-    return null
+    throw new Error('Operation failed')
   }
 
   private static shouldNotRetry(error: ApiError): boolean {

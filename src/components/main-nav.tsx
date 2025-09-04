@@ -1,49 +1,52 @@
 import * as React from "react"
 import { Link, useLocation } from "react-router-dom"
-import { Menu, X, ChevronDown } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { Menu, ChevronDown } from "lucide-react"
 import { useAuth } from "@/components/enhanced-auth-provider"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
+interface NavItem {
+  href?: string
+  label: string
+  submenu?: Array<{ href: string; label: string }>
+}
+
 export function MainNav() {
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
   const { user } = useAuth()
 
-  const getNavigationItems = () => {
+  const getNavigationItems = (): NavItem[] => {
     const baseItems = [
-    { href: "/", label: "Home" },
-    { href: "/search", label: "Find Creatives" },
-    { 
-      label: "Services",
-      submenu: [
-        { href: "/search?category=graphic-design", label: "Graphic Design" },
-        { href: "/search?category=photography", label: "Photography" },
-        { href: "/search?category=videography", label: "Videography" },
-        { href: "/search?category=digital-marketing", label: "Digital Marketing" },
-        { href: "/search?category=web-design", label: "Web Design" },
-        { href: "/search?category=ui-ux-design", label: "UI/UX Design" }
-      ]
-    },
-    { href: "/blog", label: "Blog" },
-    { href: "/about", label: "About" },
-    { href: "/testimonials", label: "Success Stories" },
-    { href: "/help", label: "Help" }
+      { href: "/", label: "Home" },
+      { href: "/search", label: "Find Creatives" },
+      { 
+        label: "Services",
+        submenu: [
+          { href: "/search?category=graphic-design", label: "Graphic Design" },
+          { href: "/search?category=photography", label: "Photography" },
+          { href: "/search?category=videography", label: "Videography" },
+          { href: "/search?category=digital-marketing", label: "Digital Marketing" },
+          { href: "/search?category=web-design", label: "Web Design" },
+          { href: "/search?category=ui-ux-design", label: "UI/UX Design" }
+        ]
+      },
+      { href: "/blog", label: "Blog" },
+      { href: "/about", label: "About" },
+      { href: "/testimonials", label: "Success Stories" },
+      { href: "/help", label: "Help" }
     ]
 
     // Add authenticated user navigation
     if (user) {
-      const dashboardItem = {
-        href: user.role === 'admin' ? '/admin' : 
-              user.role === 'creative' ? '/dashboard/creative' : 
-              '/dashboard/overview',
+      const dashboardItem: NavItem = {
+        href: user.role === 'admin' ? '/admin' : '/dashboard',
         label: "Dashboard"
       }
       
-      const userItems = [
+      const userItems: NavItem[] = [
         dashboardItem,
         { href: "/chat", label: "Messages" },
         { href: "/profile", label: "Profile" }
@@ -86,18 +89,15 @@ export function MainNav() {
           
           <nav className="flex flex-col gap-1 text-base font-medium mt-8 px-7">
             {navigationItems.map((item, index) => (
-              <motion.div
+              <div
                 key={item.label}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                {item.submenu ? (
+                {'submenu' in item && item.submenu ? (
                   <div className="space-y-2">
                     <div className="font-semibold text-gray-900 dark:text-white py-2 text-sm">
                       {item.label}
                     </div>
-                    {item.submenu.map((subItem) => (
+                    {item.submenu.map((subItem: { href: string; label: string }) => (
                       <Link
                         key={subItem.href}
                         to={subItem.href}
@@ -121,7 +121,7 @@ export function MainNav() {
                     {item.label}
                   </Link>
                 )}
-              </motion.div>
+              </div>
             ))}
           </nav>
         </SheetContent>
@@ -131,7 +131,7 @@ export function MainNav() {
       <nav className="hidden lg:flex items-center gap-1 ml-8">
         {navigationItems.map((item) => (
           <div key={item.label}>
-            {item.submenu ? (
+            {'submenu' in item && item.submenu ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950 rounded-md transition-colors group">
@@ -140,7 +140,7 @@ export function MainNav() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56 p-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg">
-                  {item.submenu.map((subItem) => (
+                  {item.submenu.map((subItem: { href: string; label: string }) => (
                     <DropdownMenuItem key={subItem.href} asChild>
                       <Link 
                         to={subItem.href}
